@@ -1,0 +1,29 @@
+{
+  "name": "cocos-utils",
+  "version": "0.0.1",
+  "description": "The package template for getting started.",
+  "author": "JohnSmith",
+  "main": "main.js",
+  "main-menu": {
+    "i18n:MAIN_MENU.package.title/cocos-utils/open": {
+      "message": "cocos-utils:open"
+    },
+    "i18n:MAIN_MENU.package.title/cocos-utils/hello": {
+      "message": "cocos-utils:say-hello"
+    }
+  },
+  "panel": {
+    "main": "panel/index.js",
+    "type": "dockable",
+    "title": "cocos-utils",
+    "width": 400,
+    "height": 300
+  },
+  "runtime-resource": {
+    "path": "runtime",
+    "name": "runtime"
+  },
+  "reload": {
+    "ignore": ["runtime/**/*"]
+  }
+}
