@@ -54,21 +54,21 @@
   // },
   // "include": ["./runtime"], //编译需要编译的文件或目录
   //"exclude": ["./runtime"] // 编译器需要排除的文件或文件夹
+
   "compilerOptions": {
     "target": "es6",
-    "outDir": "./build/js/",
-    "sourceMap": false,
-    "declaration": true,
-    "declarationDir": "./build/d.ts/",
-    "typeRoots": ["./runtime/scripts/"],
+    "outFile": "./build/cocos-utils.js",
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "removeComments": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "allowUnreachableCode": true,
     "allowUnusedLabels": true,
+    "stripInternal": true,
   },
   "include": [
-    "./runtime/scripts/",
+    "./runtime/scripts/creator.d.ts",
+    "./build/d.ts/"
   ],
   "exclude": []
 }
