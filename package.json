@@ -8,8 +8,8 @@
     "i18n:MAIN_MENU.package.title/cocos-utils/open": {
       "message": "cocos-utils:open"
     },
-    "i18n:MAIN_MENU.package.title/cocos-utils/hello": {
-      "message": "cocos-utils:say-hello"
+    "i18n:MAIN_MENU.package.title/cocos-utils/add interface": {
+      "message": "cocos-utils:addInterface"
     }
   },
   "panel": {

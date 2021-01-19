@@ -22,7 +22,7 @@ Editor.Panel.extend({
   },
 
   // method executed when template and styles are successfully loaded and initialized
-  ready () {
+  ready() {
     this.$btn.addEventListener('confirm', () => {
       Editor.Ipc.sendToMain('cocos-utils:clicked');
     });
@@ -30,7 +30,7 @@ Editor.Panel.extend({
 
   // register your ipc messages here
   messages: {
-    'cocos-utils:hello' (event) {
+    'cocos-utils:addInterface'(event) {
       this.$label.innerText = 'Hello!';
     }
   }

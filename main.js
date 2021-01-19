@@ -1,5 +1,8 @@
 'use strict';
 
+const Fs = require("fire-fs");
+const Path = require("fire-path");
+
 module.exports = {
   load() {
     // execute when package loaded
@@ -15,13 +18,30 @@ module.exports = {
       // open entry panel registered in package.json
       Editor.Panel.open('cocos-utils');
     },
-    'say-hello'() {
-      Editor.log('Hello World!');
-      // send ipc message to panel
-      Editor.Ipc.sendToPanel('cocos-utils', 'cocos-utils:hello');
+    'addInterface'() {
+      let origination = Editor.Package.packagePath("cocos-utils");
+      let destination = Editor.Project.path;
+
+      // remove
+      let destinalFile = Path.join(destination, "cocos_utils.d.ts");
+      if (Fs.existsSync(destinalFile)) {
+        Fs.removeSync(destinalFile);
+        Editor.log("remove cocos_utils.d.ts complete.");
+      };
+
+      // copy
+      Fs.copySync(Path.join(origination, "release"), destination);
+
+      // Fs.readdirSync(y)["forEach"](A => {
+      //   showInfo('copied "' + A + '" to "' + z + '"');
+      // });
+      Editor.log('add Interface complete!');
     },
+
     'clicked'() {
       Editor.log('Button clicked!');
+      // send ipc message to panel
+      Editor.Ipc.sendToPanel('cocos-utils', 'cocos-utils:addInterface');
     }
   },
 };

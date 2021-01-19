@@ -62,7 +62,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "typeRoots": [
-      "./runtime/scripts/**/*",
+      // "./runtime/scripts/**/*",
       "./node_modules/@types"
     ],
     "allowUnreachableCode": true,
@@ -71,7 +71,10 @@
   },
   "include": [
     "./creator.d.ts",
-    "./runtime/scripts/**/*"
+    // "./runtime/scripts/**/*"
+  ],
+  "files": [
+    "./runtime/scripts/cu.All.ts"
   ],
   "exclude": []
 }
