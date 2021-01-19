@@ -56,14 +56,12 @@
   "compilerOptions": {
     "target": "es6",
     "module": "amd",
-    // "outFile": "./release/cocos-utils.d.ts",
+    "outFile": "./release/cocos_utils.js",
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "declaration": true,
-    "declarationDir": "./release/d.ts/",
     "emitDeclarationOnly": true,
     "typeRoots": [
-      "./creator.d.ts",
       "./runtime/scripts/**/*",
       "./node_modules/@types"
     ],
@@ -72,6 +70,7 @@
     "stripInternal": true,
   },
   "include": [
+    "./creator.d.ts",
     "./runtime/scripts/**/*"
   ],
   "exclude": []
