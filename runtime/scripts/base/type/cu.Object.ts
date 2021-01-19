@@ -1,4 +1,3 @@
-
 export class cu_Object extends Object {
     static isValid(obj: any) {
         let isVal = false;

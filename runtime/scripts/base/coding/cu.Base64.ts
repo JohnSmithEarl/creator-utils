@@ -55,18 +55,3 @@ export class cu_Base64 {
         return output;
     }
 };
-
-let test = function () {
-    console.log("\n\n===> test start.", "Base64");
-
-    let str = "123456";
-    let eStr = cu_Base64.encode(str);
-    let str2 = cu_Base64.decode(eStr);
-
-    console.log("str:", str);
-    console.log("eStr:", eStr);
-    console.log("str2:", str2);
-
-    console.log("===> test ended.\n\n");
-};
-test();

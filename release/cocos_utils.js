@@ -1,3 +1,157 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+define("base/coding/cu.UTF8", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_UTF8 {
+        static encode(str) {
+            str = str.replace(/\r\n/g, "\n");
+            var utftext = "";
+            for (var n = 0; n < str.length; n++) {
+                var c = str.charCodeAt(n);
+                if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                }
+                else if ((c > 127) && (c < 2048)) {
+                    utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+                else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+            }
+            return utftext;
+        }
+        static decode(utftext) {
+            let str = "";
+            let i = 0;
+            let c = 0;
+            let c1 = 0;
+            let c2 = 0;
+            let c3 = 0;
+            while (i < utftext.length) {
+                c = utftext.charCodeAt(i);
+                if (c < 128) {
+                    str += String.fromCharCode(c);
+                    i++;
+                }
+                else if ((c > 191) && (c < 224)) {
+                    c2 = utftext.charCodeAt(i + 1);
+                    str += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                    i += 2;
+                }
+                else {
+                    c2 = utftext.charCodeAt(i + 1);
+                    c3 = utftext.charCodeAt(i + 2);
+                    str += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+            }
+            return str;
+        }
+    }
+    exports.cu_UTF8 = cu_UTF8;
+    ;
+});
+define("base/coding/cu.Base64", ["require", "exports", "base/coding/cu.UTF8"], function (require, exports, cu_UTF8_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_Base64 {
+        static encode(input) {
+            let output = "";
+            let chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+            let i = 0;
+            input = cu_UTF8_1.cu_UTF8.encode(input);
+            while (i < input.length) {
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                }
+                else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+                output = output +
+                    cu_Base64.keyStr.charAt(enc1) +
+                    cu_Base64.keyStr.charAt(enc2) +
+                    cu_Base64.keyStr.charAt(enc3) +
+                    cu_Base64.keyStr.charAt(enc4);
+            }
+            return output;
+        }
+        static decode(input) {
+            let output = "";
+            let chr1, chr2, chr3;
+            let enc1, enc2, enc3, enc4;
+            let i = 0;
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            while (i < input.length) {
+                enc1 = cu_Base64.keyStr.indexOf(input.charAt(i++));
+                enc2 = cu_Base64.keyStr.indexOf(input.charAt(i++));
+                enc3 = cu_Base64.keyStr.indexOf(input.charAt(i++));
+                enc4 = cu_Base64.keyStr.indexOf(input.charAt(i++));
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+                output = output + String.fromCharCode(chr1);
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+            }
+            output = cu_UTF8_1.cu_UTF8.decode(output);
+            return output;
+        }
+    }
+    cu_Base64.keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    exports.cu_Base64 = cu_Base64;
+    ;
+});
+define("base/coding/cu.Bencode", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_Bencode {
+    }
+    exports.cu_Bencode = cu_Bencode;
+    ;
+});
+define("base/coding/test", ["require", "exports", "base/coding/cu.Base64", "base/coding/cu.UTF8"], function (require, exports, cu_Base64_1, cu_UTF8_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    (function () {
+        console.log("\n\n===> test start.", "Base64");
+        let str = "123456";
+        let eStr = cu_Base64_1.cu_Base64.encode(str);
+        let str2 = cu_Base64_1.cu_Base64.decode(eStr);
+        console.log("str:", str);
+        console.log("eStr:", eStr);
+        console.log("str2:", str2);
+        console.log("===> test ended.\n\n");
+    })();
+    (function () {
+        console.log("\n\n===> test start.", "UTF8");
+        let str = "你好, 世界!";
+        let eStr = cu_UTF8_2.cu_UTF8.encode(str);
+        let str2 = cu_UTF8_2.cu_UTF8.decode(eStr);
+        console.log("str:", str);
+        console.log("eStr:", eStr);
+        console.log("str2:", str2);
+        console.log("===> test ended.\n\n");
+    })();
+});
 let UtilSerial = {};
 UtilSerial.encrypt = function (plaintext, key) {
     let result = String.fromCharCode(plaintext.charCodeAt(0) + plaintext.length);
@@ -4033,6 +4187,283 @@ var ZeroPadding = {
     }
 };
 module.exports = ZeroPadding;
+define("base/graphics/cu.Graphics", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_Graphics {
+        constructor() {
+        }
+    }
+    exports.cu_Graphics = cu_Graphics;
+    ;
+});
+define("base/net/cu.Net", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class NetBase {
+        constructor() {
+            this.parse = function (httpResponse) {
+                let response = {};
+                response.code = -1;
+                response.http_status = httpResponse.status;
+                response.http_status_message = httpResponse.status_message;
+                response.duration = httpResponse.duration;
+                try {
+                    let bodyObj = JSON.parse(httpResponse.body);
+                    response.code = bodyObj.code;
+                    response.data = bodyObj.data;
+                }
+                catch (err) {
+                    console.error(err);
+                }
+                return response;
+            };
+            this.getQueryString = function (urlParams, name) {
+                try {
+                    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                    let res = urlParams.substr(1).match(reg);
+                    if (res) {
+                        return unescape(res[2]);
+                    }
+                }
+                catch (err) {
+                    console.error(err);
+                }
+                return null;
+            };
+            this.getQueryInt = function (urlParams, name) {
+                try {
+                    let value = Number.parseInt(this.getQueryString(urlParams, name));
+                    if (isNaN(value)) {
+                        return null;
+                    }
+                }
+                catch (err) {
+                    console.error(err);
+                }
+                return null;
+            };
+        }
+        quest(options, callback) {
+            let url = options.url;
+            let method = options.method;
+            let data = options.data;
+            let timeout = options.timeout || 0;
+            let xhr = new XMLHttpRequest();
+            let response = {};
+            response.xhr = xhr;
+            if (timeout > 0) {
+                xhr.timeout = timeout;
+            }
+            let time_begin = new Date().getTime();
+            if (cc.sys.platform == cc.sys.MACOS ||
+                cc.sys.platform == cc.sys.IPHONE ||
+                cc.sys.platform == cc.sys.IPAD) {
+            }
+            else {
+                xhr.withCredentials = true;
+            }
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4) {
+                    response.status = xhr.status;
+                    response.status_message = xhr.statusText;
+                    if (xhr.status >= 200 && xhr.status < 400) {
+                        response.body = xhr.responseText;
+                    }
+                    if (callback) {
+                        let time_end = new Date().getTime();
+                        response.duration = time_end - time_begin;
+                        callback(response);
+                        callback = null;
+                    }
+                }
+            };
+            xhr.open(method, url, options.async);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            if (options.cookie && options.cookie.length > 0) {
+                xhr.setRequestHeader('cookie', options.cookie);
+            }
+            if (typeof data === 'object') {
+                try {
+                    data = JSON.stringify(data);
+                }
+                catch (err) {
+                    console.error(err);
+                }
+            }
+            xhr.send(data);
+            xhr.ontimeout = () => {
+                response.status = xhr.status;
+                response.status_message = xhr.statusText;
+                if (callback) {
+                    let time_end = new Date().getTime();
+                    response.duration = time_end - time_begin;
+                    callback(response);
+                    callback = null;
+                }
+            };
+        }
+        get(url, cookie, callback) {
+            let options = {
+                timeout: 10000,
+                async: true,
+            };
+            if (typeof url === 'object') {
+                Object.assign(options, url);
+            }
+            else if (typeof url === 'string') {
+                options.url = url;
+            }
+            options.method = 'get';
+            options.cookie = cookie;
+            this.quest(options, callback);
+        }
+        post(url, data, cookie, callback) {
+            let options = {
+                timeout: 10000,
+                async: true,
+            };
+            if (typeof url === 'object') {
+                Object.assign(options, url);
+            }
+            else if (typeof url === 'string') {
+                options.url = url;
+            }
+            options.method = 'post';
+            options.data = data;
+            options.cookie = cookie;
+            this.quest(options, callback);
+        }
+    }
+    exports.NetBase = NetBase;
+    ;
+    class Net {
+        constructor() {
+            this.cookie = null;
+            this.netBase = null;
+            this.netBase = new NetBase();
+            this.cookie = {};
+        }
+        get(url, callback) {
+            this.netBase.get(url, this.cookie, (httpResponse) => {
+                this.cookie = httpResponse.xhr.getResponseHeader('Set-Cookie');
+                let data = this.netBase.parse(httpResponse);
+                if (typeof callback == "function") {
+                    callback(data);
+                }
+            });
+        }
+        post(url, data, callback) {
+            this.netBase.post(url, data, this.cookie, (httpResponse) => {
+                this.cookie = httpResponse.xhr.getResponseHeader('Set-Cookie');
+                let data = this.netBase.parse(httpResponse);
+                if (typeof callback == "function") {
+                    callback(data);
+                }
+            });
+        }
+    }
+    exports.Net = Net;
+    ;
+});
+define("base/storage/cu.Storage", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_Storage {
+        static collectGarbage() {
+            cc.sys.garbageCollect();
+        }
+        static clear() {
+            cc.sys.localStorage.clear();
+        }
+        static get(key) {
+            try {
+                if (!key) {
+                    throw new Error("key is empty.");
+                }
+                let value = cc.sys.localStorage.getItem(key);
+                return value;
+            }
+            catch (err) {
+                console.error("get - err:", err && err.message);
+            }
+        }
+        ;
+        static remove(key) {
+            try {
+                if (!key) {
+                    throw new Error("key is empty.");
+                }
+                setTimeout(() => {
+                    cc.sys.localStorage.removeItem(key);
+                }, 1);
+            }
+            catch (err) {
+                console.error("remove - err:", err && err.message);
+            }
+        }
+        ;
+        static multiGet(keys = []) {
+            let values = [];
+            if (keys && keys.length > 0) {
+                for (let i = 0; i < keys.length; i++) {
+                    let key = keys[i];
+                    let value = cu_Storage.get(key);
+                    values.push(value);
+                }
+            }
+            return values;
+        }
+        ;
+    }
+    cu_Storage.set = function (key, value) {
+        try {
+            if (!key) {
+                throw new Error("key is empty.");
+            }
+            if (typeof value != "string") {
+                value = value.toString();
+            }
+            setTimeout(() => {
+                cc.sys.localStorage.setItem(key, value);
+            }, 1);
+        }
+        catch (err) {
+            console.error("set - err:", err && err.message);
+        }
+    };
+    cu_Storage.multiSet = function (keysOrPairs = [{
+            key: "k",
+            value: "v"
+        }], values = []) {
+        if (values && values.length === 0) {
+            for (let i = 0; i < keysOrPairs.length; i++) {
+                let pair = keysOrPairs[i];
+                let key = pair.key;
+                let value = pair.value;
+                cu_Storage.set(key, value);
+            }
+        }
+        else {
+            let minLength = keysOrPairs.length < values.length ? keysOrPairs.length : values.length;
+            for (let i = 0; i < minLength; i++) {
+                let key = keysOrPairs[i];
+                let value = values[i];
+                cu_Storage.set(key, value);
+            }
+        }
+    };
+    cu_Storage.mutilRemove = function (keys = []) {
+        if (keys && keys.length > 0) {
+            for (let i = 0; i < keys.length; i++) {
+                let key = keys[i];
+                cu_Storage.remove(key);
+            }
+        }
+    };
+    exports.cu_Storage = cu_Storage;
+    ;
+});
 let Queue = {};
 Queue.create = function () {
     let _data = [];
@@ -4696,3 +5127,2058 @@ Unordered_map.create = function () {
     return new unordered_map();
 };
 module.exports = Unordered_map;
+define("base/type/cu.Object", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_Object extends Object {
+        static isValid(obj) {
+            let isVal = false;
+            if (obj && typeof obj === "object") {
+                isVal = cc.sys.isObjectValid(obj);
+            }
+            return isVal;
+        }
+        static clone(obj) {
+            let objClone = Array.isArray(obj) ? [] : {};
+            if (obj && typeof obj === "object") {
+                for (let key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        if (obj[key] && typeof obj[key] === "object") {
+                            objClone[key] = cu_Object.clone(obj[key]);
+                        }
+                        else {
+                            objClone[key] = obj[key];
+                        }
+                    }
+                }
+            }
+            else {
+                return obj;
+            }
+            return objClone;
+        }
+        static copy(toObj, fromObj, isCopyUnknow = true) {
+            if (typeof toObj == "object" && typeof fromObj == "object") {
+                for (let key in fromObj) {
+                    if (fromObj.hasOwnProperty(key)) {
+                        if (isCopyUnknow || toObj.hasOwnProperty(key)) {
+                            let value = fromObj[key];
+                            toObj[key] = value;
+                        }
+                    }
+                }
+            }
+        }
+        ;
+    }
+    exports.cu_Object = cu_Object;
+    ;
+});
+define("base/type/cu.Array", ["require", "exports", "base/type/cu.Object"], function (require, exports, cu_Object_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Array1 {
+        constructor(arr_len, initVal = 0) {
+            this.data = undefined;
+            if (arr_len instanceof Array) {
+                this.data = arr_len;
+            }
+            else {
+                let len = arr_len > 0 ? arr_len : 0;
+                let arr = new Array(len);
+                for (let i = 0; i < arr.length; i++) {
+                    this.data[i] = initVal;
+                }
+                this.data = arr;
+            }
+        }
+        getData() {
+            return this.data;
+        }
+        get(idx) {
+            let item = this.data[idx] || 0;
+            return item;
+        }
+        set(idx, val) {
+            if (this.data[idx]) {
+                this.data[idx] = val;
+            }
+        }
+        toString() {
+            let str = JSON.stringify(this.data);
+            return str;
+        }
+        clone() {
+            let arr1 = new Array1();
+            arr1.copy(this);
+            return arr1;
+        }
+        copy(arr1) {
+            let data = arr1.getData();
+            for (let i = 0; i < data.length; i++) {
+                let item = data[i];
+                if (item) {
+                    let copyItem = cu_Object_1.cu_Object.clone(item);
+                    this.data[i] = copyItem;
+                }
+            }
+        }
+        clear() {
+            this.data.splice(0, this.data.length);
+        }
+        reverse() {
+            this.data.reverse();
+        }
+        sort(sortFunc) {
+            if (typeof sortFunc == "function") {
+                this.data.sort(sortFunc);
+            }
+            else {
+                this.data.sort();
+            }
+        }
+        contact(arr1) {
+            let data = arr1.getData();
+            this.data = this.data.concat(data);
+        }
+        distinct(arr1) {
+            let newData = this.data;
+            if (arr1) {
+                let data = arr1.getData();
+                newData = newData.concat(data);
+            }
+            let result = [];
+            let keyObj = {};
+            for (let key in newData) {
+                if (!keyObj[key]) {
+                    keyObj[key] = true;
+                    result.push(key);
+                }
+            }
+            return result;
+        }
+        flatten(arr) {
+            let newArr = arr.reduce((pre, cur) => pre.concat(Array.isArray(cur) ? newArr(cur) : cur), []);
+            this.copy(newArr);
+            return newArr;
+        }
+        sum(sunFunc = (a, b) => { return a + b; }) {
+            let sum = this.data.reduce(sunFunc);
+            return sum;
+        }
+        mul(mulFunc = (a, b) => { return a * b; }) {
+            let mul = this.data.reduce(mulFunc);
+            return mul;
+        }
+        linesIdx(row = 3, col = 3) {
+            let lineIdxs = [];
+            for (let j = 0; j < row; j++) {
+                let horizontal = [];
+                for (let i = 0; i < col; i++) {
+                    let idx = j * col + i;
+                    horizontal[horizontal.length] = idx;
+                }
+                lineIdxs[lineIdxs.length] = horizontal;
+            }
+            for (let i = 0; i < row; i++) {
+                let vertical = [];
+                for (let j = 0; j < col; j++) {
+                    let idx = j * col + i;
+                    vertical[vertical.length] = idx;
+                }
+                lineIdxs[lineIdxs.length] = vertical;
+            }
+            if (row == col) {
+                let diag_left_to_right = [];
+                for (let k = 0, initVal = 0, interval = col + 1; k < row; k++) {
+                    let idx = initVal + k * interval;
+                    diag_left_to_right[diag_left_to_right.length] = idx;
+                }
+                lineIdxs[lineIdxs.length] = diag_left_to_right;
+                let diag_right_to_left = [];
+                for (let k = 0, initVal = col - 1, interval = initVal; k < row; k++) {
+                    let idx = initVal + k * interval;
+                    diag_right_to_left[diag_right_to_left.length] = idx;
+                }
+                lineIdxs[lineIdxs.length] = diag_right_to_left;
+            }
+            return lineIdxs;
+        }
+        lines(row = 3, col = 3) {
+            let lines = this.linesIdx(row, col);
+            for (let j = 0; j < lines.length; j++) {
+                if (lines[j]) {
+                    for (let i = 0; i < lines[j].length; i++) {
+                        let idx = lines[i];
+                        lines[i] = this.data[idx] || 0;
+                    }
+                }
+            }
+            ;
+            return lines;
+        }
+    }
+    exports.Array1 = Array1;
+    ;
+    class Array2 {
+        constructor(arr_row, col, initVal = 0) {
+            this.data = undefined;
+            if (arr_row instanceof Array) {
+                this.data = arr_row;
+            }
+            else {
+                let row = arr_row > 0 ? arr_row : 0;
+                col = col > 0 ? col : 0;
+                let arr = new Array();
+                for (let j = 0; j < row; j++) {
+                    if (!arr[j]) {
+                        arr[j] = [];
+                    }
+                    for (let i = 0; i < col; i++) {
+                        arr[j][i] = initVal;
+                    }
+                }
+                this.data = arr;
+            }
+        }
+        getData() {
+            return this.data;
+        }
+        getRowCount() {
+            return this.data.length;
+        }
+        getColCount() {
+            for (let i = 0; i < this.data.length; i++) {
+                if (this.data[i]) {
+                    return this.data[i].length;
+                }
+            }
+            return 0;
+        }
+        get(x_pos, y = 0) {
+            let x = undefined;
+            if (typeof x_pos == "object") {
+                x = x_pos.x;
+                y = x_pos.y;
+            }
+            else {
+                x = x_pos || 0;
+            }
+            let val = this.data && this.data[y] && this.data[y][x] || 0;
+            return val;
+        }
+        set(x_pos, y_val = 0, val = 0) {
+            let x = undefined;
+            let y = undefined;
+            let value = undefined;
+            if (typeof x_pos == "object") {
+                x = x_pos.x;
+                y = x_pos.y;
+                value = y_val;
+            }
+            else {
+                x = x_pos || 0;
+                y = y_val || 0;
+                value = val;
+            }
+            if (this.data && this.data[y]) {
+                this.data[y][x] = value;
+            }
+        }
+        toString() {
+            let str = JSON.stringify(this.data);
+            return str;
+        }
+        clone() {
+            let newArr2 = new Array2();
+            newArr2.copy(this);
+            return newArr2;
+        }
+        copy(arr2) {
+            let data = arr2.getData();
+            for (let j = 0; j < data.length; j++) {
+                let items = data[j];
+                if (items) {
+                    if (!this.data[j]) {
+                        this.data[j] = [];
+                    }
+                    for (let i = 0; i < items[j]; i++) {
+                        let item = items[i];
+                        let copyItem = cu_Object_1.cu_Object.clone(item);
+                        this.data[j][i] = copyItem;
+                    }
+                }
+            }
+        }
+        clear() {
+            if (this.data instanceof Array) {
+                for (let j = 0; j < this.data.length; j++) {
+                    let items = this.data[j];
+                    if (items instanceof Array) {
+                        items.splice(0, items.length);
+                    }
+                }
+                this.data.splice(0, this.data.length);
+            }
+        }
+        rotate90() {
+            let row = this.getRowCount();
+            let col = this.getColCount();
+            let temp = new Array2(col, row);
+            for (let j = 0; j < col; j++) {
+                let k = col - 1 - j;
+                for (let i = 0; i < row; i++) {
+                    temp[j][i] = this.data[i][k];
+                }
+            }
+            return temp;
+        }
+        ;
+        rotate180() {
+            let row = this.getRowCount();
+            let col = this.getColCount();
+            let temp = new Array2(row, col);
+            for (let j = 0; j < row; j++) {
+                for (let i = 0; i < col; i++) {
+                    temp[j][i] = this.data[row - 1 - j][col - 1 - i];
+                }
+            }
+            return temp;
+        }
+        ;
+        rotate270() {
+            let row = this.getRowCount();
+            let col = this.getColCount();
+            let temp = new Array2(col, row);
+            for (let j = 0; j < col; j++) {
+                for (let i = 0; i < row; i++) {
+                    temp[j][i] = this.data[row - 1 - i][j];
+                }
+            }
+            return temp;
+        }
+        ;
+        flipX() {
+            let temp = this.clone();
+            let data = temp.getData();
+            for (let j = 0; j < data.length; j++) {
+                let items = data[j];
+                if (items) {
+                    items.reverse();
+                }
+            }
+            return temp;
+        }
+        ;
+        flipY() {
+            let temp = this.clone();
+            let data = temp.getData();
+            data.reverse();
+            return temp;
+        }
+        ;
+        flipXY() {
+            let temp = this.clone();
+            let data = this.getData();
+            for (let j = 0; j < data.length; j++) {
+                let items = data[j];
+                if (items) {
+                    items.reverse();
+                }
+            }
+            data.reverse();
+            return temp;
+        }
+        ;
+        flipBackslash() {
+            let row = this.getRowCount();
+            let col = this.getColCount();
+            let temp = new Array2(col, row);
+            for (let i = 0; i < col; i++) {
+                for (let j = 0; j < row; j++) {
+                    temp[i][j] = this.data[j][i];
+                }
+            }
+            return temp;
+        }
+        ;
+        flipPositiveSlash() {
+            let row = this.getRowCount();
+            let col = this.getColCount();
+            let temp = new Array2(col, row);
+            for (let i = 0; i < col; i++) {
+                for (let j = 0; j < row; j++) {
+                    temp[i][j] = this.data[row - 1 - j][col - 1 - i];
+                }
+            }
+            return temp;
+        }
+        ;
+        linesIdx() {
+            let row = this.getRowCount();
+            let col = this.getColCount();
+            let lineIdxs = [];
+            for (let j = 0; j < row; j++) {
+                let horizontal = [];
+                for (let i = 0; i < col; i++) {
+                    horizontal[horizontal.length] = { x: i, y: j };
+                }
+                lineIdxs[lineIdxs.length] = horizontal;
+            }
+            for (let i = 0; i < row; i++) {
+                let vertical = [];
+                for (let j = 0; j < col; j++) {
+                    vertical[vertical.length] = { x: i, y: j };
+                }
+                lineIdxs[lineIdxs.length] = vertical;
+            }
+            if (row == col) {
+                let diag_left_to_right = [];
+                for (let j = 0, initVal = 0, interval = col + 1; j < row; j++) {
+                    let i = (initVal + j * interval) % col;
+                    diag_left_to_right[diag_left_to_right.length] = { x: i, y: j };
+                }
+                lineIdxs[lineIdxs.length] = diag_left_to_right;
+                let diag_right_to_left = [];
+                for (let j = 0, initVal = col - 1, interval = initVal; j < row; j++) {
+                    let i = (initVal + j * interval);
+                    diag_right_to_left[diag_right_to_left.length] = { x: i, y: j };
+                }
+                lineIdxs[lineIdxs.length] = diag_right_to_left;
+            }
+            return lineIdxs;
+        }
+        ;
+        lines() {
+            let lines = this.linesIdx();
+            for (let j = 0; j < lines.length; j++) {
+                if (lines[j]) {
+                    for (let i = 0; i < lines[j].length; i++) {
+                        let pos = lines[j][i];
+                        lines[j][i] = this.data && this.data[pos.y] && this.data[pos.y][pos.x] || 0;
+                    }
+                }
+            }
+            return lines;
+        }
+        ;
+    }
+    exports.Array2 = Array2;
+    ;
+});
+define("base/type/cu.Number", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_Number {
+        static isOdd(num) {
+            let isOdd = num % 2 == 1;
+            return isOdd;
+        }
+        static isEven(num) {
+            let isEven = (num % 2) == 0;
+            return isEven;
+        }
+    }
+    exports.cu_Number = cu_Number;
+    ;
+});
+define("base/type/cu.String", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_String {
+        constructor(str) {
+            this.str = "";
+            this.isWhitespace = function () {
+                return /^\s*$/.test(this.str);
+            };
+            this.isAllLowerCase = function () {
+                return /^[a-z]+$/.test(this.str);
+            };
+            this.isAllUpperCase = function () {
+                return /^[A-Z]+$/.test(this.str);
+            };
+            this.str = str;
+        }
+        static repeat(ch = "a", repeatTimes = 0) {
+            var result = "";
+            for (var i = 0; i < repeatTimes; i++) {
+                result += ch;
+            }
+            return result;
+        }
+        static checkPwd(str) {
+            var Lv = 0;
+            if (str.length < 6) {
+                return Lv;
+            }
+            if (/[0-9]/.test(str)) {
+                Lv++;
+            }
+            if (/[a-z]/.test(str)) {
+                Lv++;
+            }
+            if (/[A-Z]/.test(str)) {
+                Lv++;
+            }
+            if (/[\.|-|_]/.test(str)) {
+                Lv++;
+            }
+            return Lv;
+        }
+        static format(message, arr) {
+            return message.replace(/{(\d+)}/g, function (matchStr, group1) {
+                return arr[group1];
+            });
+        }
+        static filterTag(str) {
+            str = str.replace(/&/ig, "&amp;");
+            str = str.replace(/</ig, "&lt;");
+            str = str.replace(/>/ig, "&gt;");
+            str = str.replace(" ", "&nbsp;");
+            return str;
+        }
+        ;
+        toString() {
+            return this.str;
+        }
+        isEmpty() {
+            return this.str == null || this.str == "";
+        }
+        isNotEmpty() {
+            return !this.isEmpty();
+        }
+        isBlank() {
+            return this.str == null || /^\s*$/.test(this.str);
+        }
+        isNotBlank() {
+            return !this.isBlank();
+        }
+        trim() {
+            return this.str.trim();
+        }
+        startsWith(prefix) {
+            return this.str.indexOf(prefix) === 0;
+        }
+        endsWith(suffix) {
+            return this.str.lastIndexOf(suffix) === 0;
+        }
+        contains(searchSeq) {
+            return this.str.indexOf(searchSeq) >= 0;
+        }
+        equals(str) {
+            return this.str == str;
+        }
+        equalsIgnoreCase(str) {
+            return this.str.toLocaleLowerCase() == str.toLocaleLowerCase();
+        }
+        containsWhitespace() {
+            return this.contains(" ");
+        }
+        deleteWhitespace(input) {
+            return input.replace(/\s+/g, '');
+        }
+        rightPad(size, padStr) {
+            return this.str + cu_String.repeat(padStr, size);
+        }
+        leftPad(size, padStr) {
+            return cu_String.repeat(padStr, size) + this.str;
+        }
+        capitalize() {
+            if (this.str == null || this.str.length == 0) {
+                return this.str;
+            }
+            return this.str.replace(/^[a-z]/, function (matchStr) {
+                return matchStr.toLocaleUpperCase();
+            });
+        }
+        uncapitalize() {
+            if (this.str == null || this.str.length == 0) {
+                return this.str;
+            }
+            return this.str.replace(/^[A-Z]/, function (matchStr) {
+                return matchStr.toLocaleLowerCase();
+            });
+        }
+        swapCase() {
+            return this.str.replace(/[a-z]/ig, function (matchStr) {
+                if (matchStr >= 'A' && matchStr <= 'Z') {
+                    return matchStr.toLocaleLowerCase();
+                }
+                else if (matchStr >= 'a' && matchStr <= 'z') {
+                    return matchStr.toLocaleUpperCase();
+                }
+            });
+        }
+        countMatches(sub) {
+            if (this.isEmpty()) {
+                return 0;
+            }
+            let Str = new cu_String(sub);
+            if (Str.isEmpty()) {
+                return 0;
+            }
+            var count = 0;
+            var index = 0;
+            while ((index = this.str.indexOf(sub, index)) != -1) {
+                index += sub.length;
+                count++;
+            }
+            return count;
+        }
+        isAlpha() {
+            return /^[a-z]+$/i.test(this.str);
+        }
+        isAlphaSpace() {
+            return /^[a-z\s]*$/i.test(this.str);
+        }
+        isAlphanumeric() {
+            return /^[a-z0-9]+$/i.test(this.str);
+        }
+        isAlphanumericSpace() {
+            return /^[a-z0-9\s]*$/i.test(this.str);
+        }
+        isNumeric() {
+            return /^(?:[1-9]\d*|0)(?:\.\d+)?$/.test(this.str);
+        }
+        isDecimal() {
+            return /^[-+]?(?:0|[1-9]\d*)\.\d+$/.test(this.str);
+        }
+        isNegativeDecimal() {
+            return /^\-?(?:0|[1-9]\d*)\.\d+$/.test(this.str);
+        }
+        isPositiveDecimal() {
+            return /^\+?(?:0|[1-9]\d*)\.\d+$/.test(this.str);
+        }
+        isInteger() {
+            return /^[-+]?(?:0|[1-9]\d*)$/.test(this.str);
+        }
+        isPositiveInteger() {
+            return /^\+?(?:0|[1-9]\d*)$/.test(this.str);
+        }
+        isNegativeInteger() {
+            return /^\-?(?:0|[1-9]\d*)$/.test(this.str);
+        }
+        isNumericSpace() {
+            return /^[\d\s]*$/.test(this.str);
+        }
+        reverse() {
+            if (this.isBlank()) {
+                return this.str;
+            }
+            return this.str.split("").reverse().join("");
+        }
+        removeSpecialCharacter() {
+            return this.str.replace(/[!-/:-@\[-`{-~]/g, "");
+        }
+        isSpecialCharacterAlphanumeric() {
+            return /^[!-~]+$/.test(this.str);
+        }
+        compressRepeatedStr(ignoreCase = false) {
+            var pattern = new RegExp("([a-z])\\1+", ignoreCase ? "ig" : "g");
+            return this.str.replace(pattern, function (matchStr, group1) {
+                return matchStr.length + group1;
+            });
+        }
+        isChinese() {
+            return /^[\u4E00-\u9FA5]+$/.test(this.str);
+        }
+        removeChinese() {
+            return this.str.replace(/[\u4E00-\u9FA5]+/gm, "");
+        }
+        escapeMetacharacter() {
+            var metacharacter = "^$()*+.[]|\\-?{}|";
+            if (metacharacter.indexOf(this.str) >= 0) {
+                this.str = "\\" + this.str;
+            }
+            return this.str;
+        }
+        escapeMetacharacterOfStr() {
+            return this.str.replace(/[\^\$\*\+\.\|\\\-\?\{\}\|]/gm, "\\$&");
+        }
+    }
+    exports.cu_String = cu_String;
+    ;
+});
+define("utils/cu.Adapter", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let _NOTCH_RATE = 1.86;
+    let _NOTCH_ADJUST_Y = 70;
+    class cu_Adapter {
+        static adapterScreen() {
+            let canvas = cc.Canvas.instance;
+            let rateR = canvas.designResolution.height / canvas.designResolution.width;
+            let rateV = cc.winSize.height / cc.winSize.width;
+            if (rateV > rateR) {
+                canvas.fitHeight = false;
+                canvas.fitWidth = true;
+            }
+            else {
+                canvas.fitHeight = true;
+                canvas.fitWidth = false;
+            }
+        }
+        ;
+        static isNotch() {
+            let rateV = cc.winSize.height / cc.winSize.width;
+            let isNotchScreen = rateV > _NOTCH_RATE;
+            return isNotchScreen;
+        }
+        ;
+    }
+    cu_Adapter.adapterNotch = function (nodes = [], offsetY = _NOTCH_ADJUST_Y) {
+        let isNotch = cu_Adapter.isNotch();
+        if (isNotch) {
+            if (nodes && nodes.length > 0) {
+                for (let i = 0; i < nodes.length; i++) {
+                    let node = nodes[i];
+                    if (node && typeof node.y == "number") {
+                        node.y = node.y - offsetY;
+                    }
+                }
+            }
+        }
+    };
+    exports.cu_Adapter = cu_Adapter;
+});
+define("utils/cu.Audio", ["require", "exports", "base/storage/cu.Storage", "base/type/cu.Object"], function (require, exports, cu_Storage_1, cu_Object_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let _AUDIO_KEY = "cu.audio.object";
+    class Audio {
+        constructor() {
+            this.audioObj = {
+                _inited: false,
+                musicStatus: true,
+                musicVolume: 1.0,
+                effectStatus: true,
+                effectVolume: 1.0,
+                vibrateStatus: true,
+            };
+        }
+        getAudioObj() {
+            if (!this.audioObj._inited) {
+                let str = cu_Storage_1.cu_Storage.get(_AUDIO_KEY);
+                if (!str) {
+                    this.audioObj._inited = true;
+                    this.saveAudioObj(this.audioObj);
+                }
+                else {
+                    let audioObj = JSON.parse(str);
+                    cu_Object_2.cu_Object.copy(this.audioObj, audioObj);
+                    this.audioObj._inited = true;
+                }
+            }
+            return this.audioObj;
+        }
+        saveAudioObj(obj) {
+            setTimeout(() => {
+                let str = JSON.stringify(obj);
+                cu_Storage_1.cu_Storage.set(_AUDIO_KEY, str);
+            }, 1);
+        }
+        ;
+        init() {
+            let musicStatus = this.getMusicStatus();
+            this.setMusicStatus(musicStatus);
+            let musicVolume = this.getMusicVolume();
+            this.setMusicVolume(musicVolume);
+            let effectStatus = this.getEffectStatus();
+            this.setEffectStatus(effectStatus);
+            let effectVolume = this.getEffectVolume();
+            this.setEffectVolume(effectVolume);
+        }
+        getMusicStatus() {
+            this.audioObj = this.getAudioObj();
+            return this.audioObj.musicStatus;
+        }
+        setMusicStatus(musicStatus) {
+            this.audioObj = this.getAudioObj();
+            if (this.audioObj.musicStatus != musicStatus) {
+                this.audioObj.musicStatus = musicStatus;
+                this.saveAudioObj(this.audioObj);
+            }
+            if (musicStatus) {
+                this.pauseMusic();
+            }
+            else {
+                this.pauseMusic();
+            }
+        }
+        getMusicVolume() {
+            this.audioObj = this.getAudioObj();
+            return this.audioObj.musicVolume;
+        }
+        setMusicVolume(musicVolume) {
+            this.audioObj = this.getAudioObj();
+            if (this.audioObj.musicVolume != musicVolume) {
+                this.audioObj.musicVolume = musicVolume;
+                cc.audioEngine.setMusicVolume(musicVolume);
+                this.saveAudioObj(this.audioObj);
+            }
+        }
+        getEffectStatus() {
+            this.audioObj = this.getAudioObj();
+            return this.audioObj.effectStatus;
+        }
+        setEffectStatus(effectStatus) {
+            this.audioObj = this.getAudioObj();
+            if (this.audioObj.effectStatus != effectStatus) {
+                this.audioObj.effectStatus = effectStatus;
+                this.saveAudioObj(this.audioObj);
+            }
+            if (effectStatus) {
+                this.resumeAllEffects();
+            }
+            else {
+                this.pauseAllEffects();
+            }
+        }
+        getEffectVolume() {
+            this.audioObj = this.getAudioObj();
+            return this.audioObj.effectVolume;
+        }
+        setEffectVolume(effectVolume) {
+            this.audioObj = this.getAudioObj();
+            if (this.audioObj.effectVolume != effectVolume) {
+                this.audioObj.effectVolume = effectVolume;
+                this.saveAudioObj(this.audioObj);
+            }
+        }
+        getVibrateStatus() {
+            this.audioObj = this.getAudioObj();
+            return this.audioObj.vibrateStatus;
+        }
+        setVibrateStatus(vibrateStatus) {
+            this.audioObj = this.getAudioObj();
+            if (this.audioObj.vibrateStatus != vibrateStatus) {
+                this.audioObj.vibrateStatus = vibrateStatus;
+                this.saveAudioObj(this.audioObj);
+            }
+            if (vibrateStatus) {
+                this.startVibrate(1);
+            }
+            else {
+                this.stopVibrate();
+            }
+        }
+        stopAll() {
+            cc.audioEngine.stopAll();
+        }
+        pauseAll() {
+            cc.audioEngine.pauseAll();
+        }
+        resumeAll() {
+            cc.audioEngine.resumeAll();
+        }
+        isMusicPlaying() {
+            return cc.audioEngine.isMusicPlaying();
+        }
+        playMusic(clip, loop = true) {
+            if (!clip) {
+                return;
+            }
+            let isOpen = this.getMusicStatus();
+            if (isOpen) {
+                let audioID = cc.audioEngine.playMusic(clip, loop);
+                return audioID;
+            }
+            return null;
+        }
+        stopMusic() {
+            cc.audioEngine.stopMusic();
+        }
+        pauseMusic() {
+            cc.audioEngine.pauseMusic();
+        }
+        resumeMusic() {
+            cc.audioEngine.resumeMusic();
+        }
+        playEffect(clip, loop = false) {
+            if (!clip) {
+                return;
+            }
+            let isOpen = this.getEffectStatus();
+            if (isOpen && clip) {
+                let audioID = cc.audioEngine.playEffect(clip, loop);
+                return audioID;
+            }
+            return null;
+        }
+        stopEffect(audioId) {
+            if (audioId) {
+                cc.audioEngine.stopEffect(audioId);
+            }
+        }
+        pauseEffect(audioId) {
+            if (audioId) {
+                cc.audioEngine.pauseEffect(audioId);
+            }
+        }
+        resumeEffect(audioId) {
+            let isOpen = this.getEffectStatus();
+            if (audioId || isOpen) {
+                cc.audioEngine.resumeEffect(audioId);
+            }
+        }
+        stopAllEffects() {
+            cc.audioEngine.stopAllEffects();
+        }
+        pauseAllEffects() {
+            cc.audioEngine.pauseAllEffects();
+        }
+        resumeAllEffects() {
+            let isOpen = this.getEffectStatus();
+            if (isOpen) {
+                cc.audioEngine.resumeAllEffects();
+            }
+        }
+        startVibrate(duration) {
+            if (!cc.sys.isNative) {
+                navigator.vibrate(duration * 1000);
+                return;
+            }
+            else if (cc.sys.os === cc.sys.OS_ANDROID) {
+            }
+            else if (cc.sys.os === cc.sys.OS_IOS) {
+            }
+        }
+        stopVibrate() {
+            if (!cc.sys.isNative) {
+                navigator.vibrate(0);
+                return;
+            }
+            else if (cc.sys.os === cc.sys.OS_ANDROID) {
+            }
+            else if (cc.sys.os === cc.sys.OS_IOS) {
+            }
+        }
+    }
+    exports.Audio = Audio;
+});
+define("utils/cu.Convert", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_Convert {
+        static localConvertWorldPointAR(node) {
+            if (node) {
+                let pos = node.convertToWorldSpaceAR(cc.v2(0, 0));
+                return pos;
+            }
+            return null;
+        }
+        static localConvertWorldPoint(node) {
+            if (node) {
+                let pos = node.convertToWorldSpace(cc.v2(0, 0));
+                return pos;
+            }
+            return null;
+        }
+        ;
+        static worldConvertLocalPointAR(node, worldPos) {
+            if (node) {
+                let pos = node.convertToNodeSpaceAR(worldPos);
+                return pos;
+            }
+            return null;
+        }
+        ;
+        static worldConvertLocalPoint(node, worldPos) {
+            if (node) {
+                let pos = node.convertToNodeSpace(worldPos);
+                return pos;
+            }
+            return null;
+        }
+        ;
+        static convetOtherNodeSpace(node, targetNode) {
+            if (!node || !targetNode) {
+                return null;
+            }
+            let worldPos = cu_Convert.localConvertWorldPoint(node);
+            let pos = cu_Convert.worldConvertLocalPoint(targetNode, worldPos);
+            return pos;
+        }
+        static convetOtherNodeSpaceAR(node, targetNode) {
+            if (!node || !targetNode) {
+                return null;
+            }
+            let worldPos = cu_Convert.localConvertWorldPointAR(node);
+            let pos = cu_Convert.worldConvertLocalPointAR(targetNode, worldPos);
+            return pos;
+        }
+    }
+    exports.cu_Convert = cu_Convert;
+    ;
+});
+define("utils/cu.Platform", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var cu_LANGUAGE;
+    (function (cu_LANGUAGE) {
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_ENGLISH"] = 0] = "LANGUAGE_ENGLISH";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_CHINESE"] = 1] = "LANGUAGE_CHINESE";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_FRENCH"] = 2] = "LANGUAGE_FRENCH";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_ITALIAN"] = 3] = "LANGUAGE_ITALIAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_GERMAN"] = 4] = "LANGUAGE_GERMAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_SPANISH"] = 5] = "LANGUAGE_SPANISH";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_DUTCH"] = 6] = "LANGUAGE_DUTCH";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_RUSSIAN"] = 7] = "LANGUAGE_RUSSIAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_KOREAN"] = 8] = "LANGUAGE_KOREAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_JAPANESE"] = 9] = "LANGUAGE_JAPANESE";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_HUNGARIAN"] = 10] = "LANGUAGE_HUNGARIAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_PORTUGUESE"] = 11] = "LANGUAGE_PORTUGUESE";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_ARABIC"] = 12] = "LANGUAGE_ARABIC";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_NORWEGIAN"] = 13] = "LANGUAGE_NORWEGIAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_POLISH"] = 14] = "LANGUAGE_POLISH";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_TURKISH"] = 15] = "LANGUAGE_TURKISH";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_UKRAINIAN"] = 16] = "LANGUAGE_UKRAINIAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_ROMANIAN"] = 17] = "LANGUAGE_ROMANIAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_BULGARIAN"] = 18] = "LANGUAGE_BULGARIAN";
+        cu_LANGUAGE[cu_LANGUAGE["LANGUAGE_UNKNOWN"] = 19] = "LANGUAGE_UNKNOWN";
+    })(cu_LANGUAGE = exports.cu_LANGUAGE || (exports.cu_LANGUAGE = {}));
+    ;
+    var cu_OS;
+    (function (cu_OS) {
+        cu_OS[cu_OS["OS_IOS"] = 10001] = "OS_IOS";
+        cu_OS[cu_OS["OS_ANDROID"] = 10002] = "OS_ANDROID";
+        cu_OS[cu_OS["OS_WINDOWS"] = 10003] = "OS_WINDOWS";
+        cu_OS[cu_OS["OS_MARMALADE"] = 10004] = "OS_MARMALADE";
+        cu_OS[cu_OS["OS_LINUX"] = 10005] = "OS_LINUX";
+        cu_OS[cu_OS["OS_BADA"] = 10006] = "OS_BADA";
+        cu_OS[cu_OS["OS_BLACKBERRY"] = 10007] = "OS_BLACKBERRY";
+        cu_OS[cu_OS["OS_OSX"] = 10008] = "OS_OSX";
+        cu_OS[cu_OS["OS_WP8"] = 10009] = "OS_WP8";
+        cu_OS[cu_OS["OS_WINRT"] = 10010] = "OS_WINRT";
+        cu_OS[cu_OS["OS_UNKNOWN"] = 10011] = "OS_UNKNOWN";
+    })(cu_OS = exports.cu_OS || (exports.cu_OS = {}));
+    ;
+    var cu_PLATFORM;
+    (function (cu_PLATFORM) {
+        cu_PLATFORM[cu_PLATFORM["UNKNOWN"] = 20001] = "UNKNOWN";
+        cu_PLATFORM[cu_PLATFORM["WIN32"] = 20002] = "WIN32";
+        cu_PLATFORM[cu_PLATFORM["LINUX"] = 20003] = "LINUX";
+        cu_PLATFORM[cu_PLATFORM["MACOS"] = 20004] = "MACOS";
+        cu_PLATFORM[cu_PLATFORM["ANDROID"] = 20005] = "ANDROID";
+        cu_PLATFORM[cu_PLATFORM["IPHONE"] = 20006] = "IPHONE";
+        cu_PLATFORM[cu_PLATFORM["IPAD"] = 20007] = "IPAD";
+        cu_PLATFORM[cu_PLATFORM["BLACKBERRY"] = 20008] = "BLACKBERRY";
+        cu_PLATFORM[cu_PLATFORM["NACL"] = 20009] = "NACL";
+        cu_PLATFORM[cu_PLATFORM["EMSCRIPTEN"] = 20010] = "EMSCRIPTEN";
+        cu_PLATFORM[cu_PLATFORM["TIZEN"] = 20011] = "TIZEN";
+        cu_PLATFORM[cu_PLATFORM["WINRT"] = 20012] = "WINRT";
+        cu_PLATFORM[cu_PLATFORM["WP8"] = 20013] = "WP8";
+        cu_PLATFORM[cu_PLATFORM["MOBILE_BROWSER"] = 20014] = "MOBILE_BROWSER";
+        cu_PLATFORM[cu_PLATFORM["DESKTOP_BROWSER"] = 20015] = "DESKTOP_BROWSER";
+        cu_PLATFORM[cu_PLATFORM["EDITOR_PAGE"] = 20016] = "EDITOR_PAGE";
+        cu_PLATFORM[cu_PLATFORM["EDITOR_CORE"] = 20017] = "EDITOR_CORE";
+        cu_PLATFORM[cu_PLATFORM["WECHAT_GAME"] = 20018] = "WECHAT_GAME";
+        cu_PLATFORM[cu_PLATFORM["QQ_PLAY"] = 20019] = "QQ_PLAY";
+        cu_PLATFORM[cu_PLATFORM["FB_PLAYABLE_ADS"] = 20020] = "FB_PLAYABLE_ADS";
+        cu_PLATFORM[cu_PLATFORM["BAIDU_GAME"] = 20021] = "BAIDU_GAME";
+        cu_PLATFORM[cu_PLATFORM["VIVO_GAME"] = 20022] = "VIVO_GAME";
+        cu_PLATFORM[cu_PLATFORM["OPPO_GAME"] = 20023] = "OPPO_GAME";
+        cu_PLATFORM[cu_PLATFORM["HUAWEI_GAME"] = 20024] = "HUAWEI_GAME";
+        cu_PLATFORM[cu_PLATFORM["XIAOMI_GAME"] = 20025] = "XIAOMI_GAME";
+        cu_PLATFORM[cu_PLATFORM["JKW_GAME"] = 20026] = "JKW_GAME";
+        cu_PLATFORM[cu_PLATFORM["ALIPAY_GAME"] = 20027] = "ALIPAY_GAME";
+        cu_PLATFORM[cu_PLATFORM["WECHAT_GAME_SUB"] = 20029] = "WECHAT_GAME_SUB";
+        cu_PLATFORM[cu_PLATFORM["BAIDU_GAME_SUB"] = 20030] = "BAIDU_GAME_SUB";
+        cu_PLATFORM[cu_PLATFORM["QTT_GAME"] = 20031] = "QTT_GAME";
+        cu_PLATFORM[cu_PLATFORM["BYTEDANCE_GAME"] = 200032] = "BYTEDANCE_GAME";
+        cu_PLATFORM[cu_PLATFORM["BYTEDANCE_GAME_SUB"] = 20033] = "BYTEDANCE_GAME_SUB";
+        cu_PLATFORM[cu_PLATFORM["LINKSURE"] = 20034] = "LINKSURE";
+    })(cu_PLATFORM = exports.cu_PLATFORM || (exports.cu_PLATFORM = {}));
+    var cu_BROWSER;
+    (function (cu_BROWSER) {
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_WECHAT"] = 30035] = "BROWSER_TYPE_WECHAT";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_ANDROID"] = 30036] = "BROWSER_TYPE_ANDROID";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_IE"] = 30037] = "BROWSER_TYPE_IE";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_EDGE"] = 30038] = "BROWSER_TYPE_EDGE";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_QQ"] = 30039] = "BROWSER_TYPE_QQ";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_MOBILE_QQ"] = 30040] = "BROWSER_TYPE_MOBILE_QQ";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_UC"] = 30041] = "BROWSER_TYPE_UC";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_UCBS"] = 30042] = "BROWSER_TYPE_UCBS";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_360"] = 30043] = "BROWSER_TYPE_360";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_BAIDU_APP"] = 30044] = "BROWSER_TYPE_BAIDU_APP";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_BAIDU"] = 30045] = "BROWSER_TYPE_BAIDU";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_MAXTHON"] = 30046] = "BROWSER_TYPE_MAXTHON";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_OPERA"] = 30047] = "BROWSER_TYPE_OPERA";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_OUPENG"] = 30048] = "BROWSER_TYPE_OUPENG";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_MIUI"] = 30049] = "BROWSER_TYPE_MIUI";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_FIREFOX"] = 30050] = "BROWSER_TYPE_FIREFOX";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_SAFARI"] = 30051] = "BROWSER_TYPE_SAFARI";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_CHROME"] = 30052] = "BROWSER_TYPE_CHROME";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_LIEBAO"] = 30053] = "BROWSER_TYPE_LIEBAO";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_QZONE"] = 30054] = "BROWSER_TYPE_QZONE";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_SOUGOU"] = 30055] = "BROWSER_TYPE_SOUGOU";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_HUAWEI"] = 30056] = "BROWSER_TYPE_HUAWEI";
+        cu_BROWSER[cu_BROWSER["BROWSER_TYPE_UNKNOWN"] = 30057] = "BROWSER_TYPE_UNKNOWN";
+    })(cu_BROWSER = exports.cu_BROWSER || (exports.cu_BROWSER = {}));
+    var cu_NETWORK;
+    (function (cu_NETWORK) {
+        cu_NETWORK[cu_NETWORK["NONE"] = 40001] = "NONE";
+        cu_NETWORK[cu_NETWORK["LAN"] = 40002] = "LAN";
+        cu_NETWORK[cu_NETWORK["WWAN"] = 40003] = "WWAN";
+    })(cu_NETWORK = exports.cu_NETWORK || (exports.cu_NETWORK = {}));
+    ;
+    class cu_Platform {
+        static getLanguage() {
+            if (!this.language) {
+                if (cc.sys.languageCode == cc.sys.LANGUAGE_ENGLISH) {
+                    this.language = cu_LANGUAGE.LANGUAGE_ENGLISH;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_CHINESE) {
+                    this.language = cu_LANGUAGE.LANGUAGE_CHINESE;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_FRENCH) {
+                    this.language = cu_LANGUAGE.LANGUAGE_FRENCH;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_ITALIAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_ITALIAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_GERMAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_GERMAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_SPANISH) {
+                    this.language = cu_LANGUAGE.LANGUAGE_SPANISH;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_DUTCH) {
+                    this.language = cu_LANGUAGE.LANGUAGE_DUTCH;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_RUSSIAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_RUSSIAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_KOREAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_KOREAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_JAPANESE) {
+                    this.language = cu_LANGUAGE.LANGUAGE_JAPANESE;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_HUNGARIAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_HUNGARIAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_PORTUGUESE) {
+                    this.language = cu_LANGUAGE.LANGUAGE_PORTUGUESE;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_ARABIC) {
+                    this.language = cu_LANGUAGE.LANGUAGE_ARABIC;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_NORWEGIAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_NORWEGIAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_POLISH) {
+                    this.language = cu_LANGUAGE.LANGUAGE_POLISH;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_TURKISH) {
+                    this.language = cu_LANGUAGE.LANGUAGE_TURKISH;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_UKRAINIAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_UKRAINIAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_ROMANIAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_ROMANIAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_BULGARIAN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_BULGARIAN;
+                }
+                else if (cc.sys.languageCode == cc.sys.LANGUAGE_UNKNOWN) {
+                    this.language = cu_LANGUAGE.LANGUAGE_UNKNOWN;
+                }
+            }
+            return this.language;
+        }
+        static getOS() {
+            if (!this.os) {
+                if (cc.sys.os == cc.sys.OS_IOS) {
+                    this.os = cu_OS.OS_IOS;
+                }
+                else if (cc.sys.os == cc.sys.OS_ANDROID) {
+                    this.os = cu_OS.OS_ANDROID;
+                }
+                else if (cc.sys.os == cc.sys.OS_WINDOWS) {
+                    this.os = cu_OS.OS_WINDOWS;
+                }
+                else if (cc.sys.os == cc.sys.OS_MARMALADE) {
+                    this.os = cu_OS.OS_MARMALADE;
+                }
+                else if (cc.sys.os == cc.sys.OS_LINUX) {
+                    this.os = cu_OS.OS_LINUX;
+                }
+                else if (cc.sys.os == cc.sys.OS_BADA) {
+                    this.os = cu_OS.OS_BADA;
+                }
+                else if (cc.sys.os == cc.sys.OS_BLACKBERRY) {
+                    this.os = cu_OS.OS_BLACKBERRY;
+                }
+                else if (cc.sys.os == cc.sys.OS_OSX) {
+                    this.os = cu_OS.OS_OSX;
+                }
+                else if (cc.sys.os == cc.sys.OS_WP8) {
+                    this.os = cu_OS.OS_WP8;
+                }
+                else if (cc.sys.os == cc.sys.OS_WINRT) {
+                    this.os = cu_OS.OS_WINRT;
+                }
+                else if (cc.sys.os == cc.sys.OS_UNKNOWN) {
+                    this.os = cu_OS.OS_UNKNOWN;
+                }
+            }
+            return this.os;
+        }
+        static getPlatform() {
+            if (!this.platform) {
+                if (cc.sys.platform == cc.sys.WIN32) {
+                    this.platform = cu_PLATFORM.WIN32;
+                }
+                else if (cc.sys.platform == cc.sys.LINUX) {
+                    this.platform = cu_PLATFORM.LINUX;
+                }
+                else if (cc.sys.platform == cc.sys.MACOS) {
+                    this.platform = cu_PLATFORM.MACOS;
+                }
+                else if (cc.sys.platform == cc.sys.ANDROID) {
+                    this.platform = cu_PLATFORM.ANDROID;
+                }
+                else if (cc.sys.platform == cc.sys.IPHONE) {
+                    this.platform = cu_PLATFORM.IPHONE;
+                }
+                else if (cc.sys.platform == cc.sys.IPAD) {
+                    this.platform = cu_PLATFORM.IPAD;
+                }
+                else if (cc.sys.platform == cc.sys.BLACKBERRY) {
+                    this.platform = cu_PLATFORM.BLACKBERRY;
+                }
+                else if (cc.sys.platform == cc.sys.NACL) {
+                    this.platform = cu_PLATFORM.NACL;
+                }
+                else if (cc.sys.platform == cc.sys.EMSCRIPTEN) {
+                    this.platform = cu_PLATFORM.EMSCRIPTEN;
+                }
+                else if (cc.sys.platform == cc.sys.TIZEN) {
+                    this.platform = cu_PLATFORM.TIZEN;
+                }
+                else if (cc.sys.platform == cc.sys.WINRT) {
+                    this.platform = cu_PLATFORM.WINRT;
+                }
+                else if (cc.sys.platform == cc.sys.WP8) {
+                    this.platform = cu_PLATFORM.WP8;
+                }
+                else if (cc.sys.platform == cc.sys.MOBILE_BROWSER) {
+                    this.platform = cu_PLATFORM.MOBILE_BROWSER;
+                }
+                else if (cc.sys.platform == cc.sys.DESKTOP_BROWSER) {
+                    this.platform = cu_PLATFORM.DESKTOP_BROWSER;
+                }
+                else if (cc.sys.platform == cc.sys.EDITOR_PAGE) {
+                    this.platform = cu_PLATFORM.EDITOR_PAGE;
+                }
+                else if (cc.sys.platform == cc.sys.EDITOR_CORE) {
+                    this.platform = cu_PLATFORM.EDITOR_CORE;
+                }
+                else if (cc.sys.platform == cc.sys.WECHAT_GAME) {
+                    this.platform = cu_PLATFORM.WECHAT_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.QQ_PLAY) {
+                    this.platform = cu_PLATFORM.QQ_PLAY;
+                }
+                else if (cc.sys.platform == cc.sys.FB_PLAYABLE_ADS) {
+                    this.platform = cu_PLATFORM.FB_PLAYABLE_ADS;
+                }
+                else if (cc.sys.platform == cc.sys.BAIDU_GAME) {
+                    this.platform = cu_PLATFORM.BAIDU_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.VIVO_GAME) {
+                    this.platform = cu_PLATFORM.VIVO_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.OPPO_GAME) {
+                    this.platform = cu_PLATFORM.OPPO_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.HUAWEI_GAME) {
+                    this.platform = cu_PLATFORM.HUAWEI_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.XIAOMI_GAME) {
+                    this.platform = cu_PLATFORM.XIAOMI_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.JKW_GAME) {
+                    this.platform = cu_PLATFORM.JKW_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.ALIPAY_GAME) {
+                    this.platform = cu_PLATFORM.ALIPAY_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.WECHAT_GAME_SUB) {
+                    this.platform = cu_PLATFORM.WECHAT_GAME_SUB;
+                }
+                else if (cc.sys.platform == cc.sys.BAIDU_GAME_SUB) {
+                    this.platform = cu_PLATFORM.BAIDU_GAME_SUB;
+                }
+                else if (cc.sys.platform == cc.sys.QTT_GAME) {
+                    this.platform = cu_PLATFORM.QTT_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.BYTEDANCE_GAME) {
+                    this.platform = cu_PLATFORM.BYTEDANCE_GAME;
+                }
+                else if (cc.sys.platform == cc.sys.BYTEDANCE_GAME_SUB) {
+                    this.platform = cu_PLATFORM.BYTEDANCE_GAME_SUB;
+                }
+                else if (cc.sys.platform == cc.sys.LINKSURE) {
+                    this.platform = cu_PLATFORM.LINKSURE;
+                }
+                else if (cc.sys.platform == cc.sys.UNKNOWN) {
+                    this.platform = cu_PLATFORM.UNKNOWN;
+                }
+                return this.platform;
+            }
+            return this.platform;
+        }
+        static getBrowerType() {
+            if (!this.browserType) {
+                if (cc.sys.browserType = cc.sys.BROWSER_TYPE_WECHAT) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_WECHAT;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_ANDROID) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_ANDROID;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_IE) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_IE;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_EDGE) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_EDGE;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_QQ) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_QQ;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_MOBILE_QQ) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_MOBILE_QQ;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_UC) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_UC;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_UCBS) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_UCBS;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_360) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_360;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_BAIDU_APP) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_BAIDU_APP;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_BAIDU) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_BAIDU;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_MAXTHON) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_MAXTHON;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_OPERA) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_OPERA;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_OUPENG) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_OUPENG;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_MIUI) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_MIUI;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_FIREFOX) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_FIREFOX;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_SAFARI) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_SAFARI;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_CHROME) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_CHROME;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_LIEBAO) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_LIEBAO;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_QZONE) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_QZONE;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_SOUGOU) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_SOUGOU;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_HUAWEI) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_HUAWEI;
+                }
+                else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_UNKNOWN) {
+                    this.browserType = cu_BROWSER.BROWSER_TYPE_UNKNOWN;
+                }
+            }
+            return this.browserType;
+        }
+        static getNetwork() {
+            if (!this.networkType) {
+                this.networkType = cc.sys.getNetworkType();
+            }
+            return this.networkType;
+        }
+        static isBrowser() {
+            return cc.sys.isBrowser;
+        }
+        static isMobile() {
+            return cc.sys.isMobile;
+        }
+        static isNative() {
+            return cc.sys.isNative;
+        }
+        static getOsInfo() {
+            let osInfo = {
+                type: this.getOS(),
+                version: cc.sys.osVersion,
+                mainVersion: cc.sys.osMainVersion,
+            };
+            return osInfo;
+        }
+        ;
+        static getBrowserInfo() {
+            let browserInfo = {
+                type: this.getBrowerType(),
+                version: cc.sys.browserVersion,
+            };
+            return browserInfo;
+        }
+    }
+    cu_Platform.language = undefined;
+    cu_Platform.os = undefined;
+    cu_Platform.platform = undefined;
+    cu_Platform.browserType = undefined;
+    cu_Platform.networkType = undefined;
+    exports.cu_Platform = cu_Platform;
+});
+define("utils/cu.Pool", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_Pool {
+        constructor(prefab, component, initNum) {
+            this.prefab = null;
+            this.component = null;
+            this.initNum = 1;
+            this.pool = null;
+            this.prefab = prefab;
+            this.component = component;
+            this.initNum = initNum;
+            this.pool = new cc.NodePool();
+            this.init();
+        }
+        init() {
+            for (let i = 0; i < this.initNum; i++) {
+                let node = this.createNode();
+                this.pool.put(node);
+            }
+        }
+        createNode() {
+            let node = cc.instantiate(this.prefab);
+            let component = node.getComponent(this.component);
+            if (component && typeof component.reuse == "function") {
+                component.reuse();
+            }
+            return node;
+        }
+        clear() {
+            this.pool.clear();
+        }
+        get() {
+            let node = this.pool.get() || null;
+            if (!node) {
+                node = this.createNode();
+            }
+            return node;
+        }
+        put(node) {
+            this.pool.put(node);
+        }
+    }
+    exports.cu_Pool = cu_Pool;
+    ;
+});
+define("utils/cu.PopUp", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.POP_UP_TYPE = cc.Enum({
+        NONE: 0,
+        SCALE: 1,
+        SCALE_X: 2,
+        SCALE_Y: 3,
+    });
+    const { ccclass, property } = cc._decorator;
+    let cu_PopUp = class cu_PopUp extends cc.Component {
+        constructor() {
+            super(...arguments);
+            this.target = this.node;
+            this.popUpType = exports.POP_UP_TYPE.NONE;
+        }
+        reset() {
+            switch (this.popUpType) {
+                case exports.POP_UP_TYPE.NONE: {
+                    break;
+                }
+                case exports.POP_UP_TYPE.SCALE: {
+                    this.target.scale = 0;
+                    break;
+                }
+                case exports.POP_UP_TYPE.SCALE_Y: {
+                    this.target.scaleY = 0;
+                    break;
+                }
+                case exports.POP_UP_TYPE.SCALE: {
+                    this.target.scale = 0;
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+        ;
+        action() {
+            let sequnce = null;
+            switch (this.popUpType) {
+                case exports.POP_UP_TYPE.NONE: {
+                    console.warn("there is nothing to do.", this.target && this.target.name);
+                    break;
+                }
+                case exports.POP_UP_TYPE.SCALE: {
+                    sequnce = cc.sequence(cc.scaleTo(0.3, 1.1), cc.scaleTo(0.1, 1.0));
+                    break;
+                }
+                case exports.POP_UP_TYPE.SCALE_Y: {
+                    sequnce = cc.sequence(cc.scaleTo(0.3, 1.0, 1.1), cc.scaleTo(0.1, 1.0, 1.0));
+                    break;
+                }
+                case exports.POP_UP_TYPE.SCALE: {
+                    sequnce = cc.sequence(cc.scaleTo(0.3, 1.1), cc.scaleTo(0.1, 1.0));
+                    break;
+                }
+                default: {
+                    console.error("not find ", this.popUpType);
+                    break;
+                }
+            }
+            if (sequnce) {
+                this.target.runAction(sequnce);
+            }
+        }
+        onLoad() {
+            this.reset();
+        }
+        onEnable() {
+            this.action();
+        }
+    };
+    __decorate([
+        property({ type: cc.Node })
+    ], cu_PopUp.prototype, "target", void 0);
+    __decorate([
+        property({ type: exports.POP_UP_TYPE })
+    ], cu_PopUp.prototype, "popUpType", void 0);
+    cu_PopUp = __decorate([
+        ccclass
+    ], cu_PopUp);
+    exports.default = cu_PopUp;
+    ;
+});
+define("utils/cu.Register", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class cu_TouchRegister {
+        static register(node, touchBegin, touchMove, touchEnded, touchCancel) {
+            if (!node) {
+                console.error("invlid node.");
+                return;
+            }
+            node.touchBeginCallback = (event) => {
+                let pos = event.getLocation();
+                if (typeof touchBegin == "function") {
+                    touchBegin(pos);
+                }
+            };
+            node.touchMoveCallback = (event) => {
+                let pos = event.getLocation();
+                let delta = event.getDelta();
+                if (typeof touchMove == "function") {
+                    touchMove(pos, delta);
+                }
+            };
+            node.touchEnededCallback = (event) => {
+                let pos = event.getLocation();
+                if (typeof touchEnded == "function") {
+                    touchEnded(pos);
+                }
+            };
+            node.touchCancelCallback = (event) => {
+                let pos = event.getLocation();
+                if (typeof touchCancel == "function") {
+                    touchCancel(pos);
+                }
+            };
+            node.on(cc.Node.EventType.TOUCH_START, node.touchBeginCallback, node);
+            node.on(cc.Node.EventType.TOUCH_MOVE, node.touchMoveCallback, node);
+            node.on(cc.Node.EventType.TOUCH_END, node.touchEnededCallback, node);
+            node.on(cc.Node.EventType.TOUCH_CANCEL, node.touchCancelCallback, node);
+        }
+        static unregister(node) {
+            if (!node) {
+                console.error("invlid node.");
+                return;
+            }
+            if (typeof node.touchBeginCallback == "function") {
+                node.off(cc.Node.EventType.TOUCH_START, node.touchBeginCallback, node);
+                node.touchBeginCallback = null;
+            }
+            if (typeof node.touchMoveCallback == "function") {
+                node.off(cc.Node.EventType.TOUCH_MOVE, node.touchMoveCallback, node);
+                node.touchMoveCallback = null;
+            }
+            if (typeof node.touchEnededCallback == "function") {
+                node.off(cc.Node.EventType.TOUCH_END, node.touchEnededCallback, node);
+                node.touchEnededCallback = null;
+            }
+            if (typeof node.touchCancelCallback == "function") {
+                node.off(cc.Node.EventType.TOUCH_CANCEL, node.touchCancelCallback, node);
+                node.touchCancelCallback = null;
+            }
+        }
+        ;
+    }
+    exports.cu_TouchRegister = cu_TouchRegister;
+    ;
+    class cu_MouseRegister {
+        constructor() {
+            this.unregister = function (node) {
+                if (!node) {
+                    console.error("invlid node.");
+                    return;
+                }
+                if (typeof node.mouseDown == "function") {
+                    node.off(cc.Node.EventType.MOUSE_DOWN, node.mouseDown, node);
+                    node.mouseDown = null;
+                }
+                if (typeof node.mouseUp == "function") {
+                    node.off(cc.Node.EventType.MOUSE_UP, node.mouseUp, node);
+                    node.mouseUp = null;
+                }
+                if (typeof node.mouseMove == "function") {
+                    node.off(cc.Node.EventType.MOUSE_MOVE, node.mouseMove, node);
+                    node.mouseMove = null;
+                }
+                if (typeof node.mouseWheel == "function") {
+                    node.off(cc.Node.EventType.MOUSE_WHEEL, node.mouseWheel, node);
+                    node.mouseWheel = null;
+                }
+            };
+        }
+        static register(node, leftDown, leftUp, midDown, midUp, rightDown, rigthUp, mouseMove, wheelScroll) {
+            if (!node) {
+                console.error("invlid node.");
+                return;
+            }
+            node.mouseDown = (event) => {
+                let mouseBtnType = event.getButton();
+                let pos = event.getLocation();
+                if (mouseBtnType == cc.Event.EventMouse.BUTTON_LEFT) {
+                    if (typeof leftDown == "function") {
+                        leftDown(pos);
+                    }
+                }
+                else if (mouseBtnType == cc.Event.EventMouse.BUTTON_RIGHT) {
+                    if (typeof rightDown == "function") {
+                        rightDown(pos);
+                    }
+                }
+                else if (mouseBtnType == cc.Event.EventMouse.BUTTON_MIDDLE) {
+                    if (typeof midDown == "function") {
+                        midDown(pos);
+                    }
+                }
+                else {
+                    console.error("mouseDown:", mouseBtnType);
+                }
+            };
+            node.mouseUp = (event) => {
+                let mouseBtnType = event.getButton();
+                let pos = event.getLocation();
+                if (mouseBtnType == cc.Event.EventMouse.BUTTON_LEFT) {
+                    if (typeof leftUp == "function") {
+                        leftUp(pos);
+                    }
+                }
+                else if (mouseBtnType == cc.Event.EventMouse.BUTTON_RIGHT) {
+                    if (typeof rigthUp == "function") {
+                        rigthUp(pos);
+                    }
+                }
+                else if (mouseBtnType == cc.Event.EventMouse.BUTTON_MIDDLE) {
+                    if (typeof midUp == "function") {
+                        midUp(pos);
+                    }
+                }
+                else {
+                    console.error("mouseUp:", mouseBtnType);
+                }
+            };
+            node.mouseMove = (event) => {
+                let pos = event.getLocation();
+                let delta = event.getDelta();
+                if (typeof mouseMove == "function") {
+                    mouseMove(pos, delta);
+                }
+            };
+            node.mouseWheel = (event) => {
+                let scrollY = event.getScrollY();
+                if (typeof wheelScroll == "function") {
+                    wheelScroll(scrollY);
+                }
+            };
+            node.on(cc.Node.EventType.MOUSE_DOWN, node.mouseDown, node);
+            node.on(cc.Node.EventType.MOUSE_UP, node.mouseUp, node);
+            node.on(cc.Node.EventType.MOUSE_MOVE, node.mouseMove, node);
+            node.on(cc.Node.EventType.MOUSE_WHEEL, node.mouseWheel, node);
+        }
+    }
+    exports.cu_MouseRegister = cu_MouseRegister;
+    ;
+    class cu_BackgroundRegister {
+        static register(node, hide, show) {
+            if (!node) {
+                console.error("invlid node.");
+                return;
+            }
+            node.hideCallback = () => {
+                if (typeof hide == "function") {
+                    hide();
+                }
+            };
+            node.showCallback = () => {
+                if (typeof show == "function") {
+                    show();
+                }
+            };
+            cc.game.on(cc.game.EVENT_HIDE, node.hideCallback, node);
+            cc.game.on(cc.game.EVENT_SHOW, node.showCallback, node);
+        }
+        static unregister(node) {
+            if (!node) {
+                console.error("invlid node.");
+                return;
+            }
+            if (typeof node.hideCallback == "function") {
+                cc.game.off(cc.game.EVENT_HIDE, node.hideCallback, node);
+                node.hideCallback = null;
+            }
+            if (typeof node.showCallback == "function") {
+                cc.game.off(cc.game.EVENT_SHOW, node.showCallback, node);
+                node.showCallback = null;
+            }
+        }
+    }
+    exports.cu_BackgroundRegister = cu_BackgroundRegister;
+    ;
+    class cu_AndroidRegister {
+        static register(backCallback, homeCallback, menuCallback) {
+            let node = cc.Canvas.instance.node;
+            node.keyUp = (event) => {
+                if (event.keyCode == cc.macro.KEY.back) {
+                    if (typeof backCallback == "function") {
+                        backCallback();
+                    }
+                }
+                else if (event.keyCode == cc.macro.KEY.home) {
+                    if (typeof homeCallback == "function") {
+                        homeCallback();
+                    }
+                }
+                else if (event.keyCode == cc.macro.KEY.menu) {
+                    if (typeof menuCallback == "function") {
+                        menuCallback();
+                    }
+                }
+                else {
+                    console.error("UtilEvent - keyCode:", event.keyCode);
+                }
+            };
+            cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, node.keyUp, cc.Canvas.instance);
+        }
+        static unregister() {
+            let node = cc.Canvas.instance.node;
+            if (typeof node.keyUp == "function") {
+                cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, node.keyUp, cc.Canvas.instance);
+            }
+        }
+    }
+    exports.cu_AndroidRegister = cu_AndroidRegister;
+    ;
+});
+define("utils/cu.Sign", ["require", "exports", "base/storage/cu.Storage", "base/type/cu.Object"], function (require, exports, cu_Storage_2, cu_Object_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let _SIGN_KEY = "cu.sign.object";
+    let _SIGN_LIFECYCLE = 7;
+    let _IS_NEED_CONTINUOUS = true;
+    class cu_Sign {
+        constructor() {
+            this.signObj = {
+                _inited: false,
+                lastDay: 0,
+                continuous: 0,
+            };
+        }
+        getSignObj() {
+            if (!this.signObj._inited) {
+                let str = cu_Storage_2.cu_Storage.get(_SIGN_KEY);
+                if (!str) {
+                    this.signObj._inited = true;
+                    this.saveSignObj(this.signObj);
+                }
+                else {
+                    let signObj = JSON.parse(str);
+                    cu_Object_3.cu_Object.copy(this.signObj, signObj);
+                    this.signObj._inited = true;
+                }
+            }
+            return this.signObj;
+        }
+        saveSignObj(obj) {
+            setTimeout(() => {
+                let str = JSON.stringify(obj);
+                cu_Storage_2.cu_Storage.set(_SIGN_KEY, str);
+            }, 1);
+        }
+        ;
+        getLastDay() {
+            this.signObj = this.getSignObj();
+            return this.signObj.lastDay;
+        }
+        setLastDay(day) {
+            this.signObj = this.getSignObj();
+            this.signObj.lastDay = day;
+            this.saveSignObj(this.signObj);
+        }
+        getContinuous() {
+            this.signObj = this.getSignObj();
+            return this.signObj.continuous;
+        }
+        setContinuous(continuous) {
+            this.signObj = this.getSignObj();
+            this.signObj.continuous = continuous;
+            this.saveSignObj(this.signObj);
+        }
+        isNeedSign() {
+            let day = new Date().getDate();
+            let lastDay = this.getLastDay();
+            let isNeedSign = day != lastDay;
+            if (isNeedSign) {
+                let isReset = false;
+                let continuous = this.getContinuous();
+                if (continuous >= _SIGN_LIFECYCLE) {
+                    isReset = true;
+                }
+                if (_IS_NEED_CONTINUOUS) {
+                    let offset = day - lastDay;
+                    if (offset > 1) {
+                        isReset = true;
+                    }
+                }
+                if (isReset) {
+                    this.setContinuous(0);
+                }
+            }
+            return isNeedSign;
+        }
+        getSignDays() {
+            let continuous = this.getContinuous();
+            return continuous;
+        }
+        sign() {
+            let day = new Date().getDate();
+            this.setLastDay(day);
+            let continuous = this.getContinuous();
+            continuous += 1;
+            this.setContinuous(continuous);
+        }
+    }
+    exports.cu_Sign = cu_Sign;
+    ;
+});
+define("utils/cu.Statistics", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let _REPORT_URL = "https://www.baidu.com";
+    class cu_Track {
+        constructor(msg = "") {
+            this.track = {
+                time: 0,
+                msg: "",
+            };
+            this.track.time = new Date().getTime();
+            this.track.msg = msg;
+        }
+        toString() {
+            let str = JSON.stringify(this.track);
+            return str;
+        }
+    }
+    exports.cu_Track = cu_Track;
+    class cu_Statistics {
+        constructor() {
+            this.statisticsObj = {
+                _inited: false,
+                time: 0,
+                tracks: [],
+            };
+        }
+        static getStatisticsObj() {
+        }
+        static setStatisticsObj() {
+        }
+        static record(track) {
+        }
+        static report() {
+        }
+    }
+    exports.cu_Statistics = cu_Statistics;
+    ;
+});
+define("utils/cu.Toast", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let nodeToast = null;
+    class cu_Toast {
+        static show(message, parent) {
+            parent = parent instanceof cc.Node ? parent : cc.Canvas.instance.node;
+            let nodeSp = new cc.Node();
+            nodeSp.parent = parent;
+            nodeSp.active = true;
+            nodeToast = nodeSp;
+            let sp = nodeSp.addComponent(cc.Sprite);
+            sp.type = cc.Sprite.Type.SLICED;
+            sp.sizeMode = cc.Sprite.SizeMode.CUSTOM;
+            cc.loader.loadRes("lobby/common/lobby_toastBg", cc.SpriteFrame, (err, res) => {
+                if (err) {
+                    console.error(err);
+                }
+                else {
+                    sp.spriteFrame = res;
+                    let nodeLab = new cc.Node();
+                    nodeLab.parent = nodeSp;
+                    nodeLab.active = true;
+                    let label = nodeLab.addComponent(cc.Label);
+                    label.string = message;
+                    label.horizontalAlign = cc.Label.HorizontalAlign.CENTER;
+                    label.verticalAlign = cc.Label.VerticalAlign.CENTER;
+                    label.fontSize = 40;
+                    label.lineHeight = 50;
+                    label.fontFamily = 'Arial';
+                    label._forceUpdateRenderData(true);
+                    nodeSp.width = label.node.width + 100;
+                    nodeSp.height = label.node.height + 60;
+                    nodeSp.setPosition(0, 0);
+                    nodeSp.parent = parent;
+                    setTimeout(() => {
+                        nodeSp.removeFromParent(true);
+                        nodeToast = null;
+                    }, 1500);
+                }
+            });
+        }
+    }
+    exports.cu_Toast = cu_Toast;
+    ;
+});
+define("utils/cu.User", ["require", "exports", "base/storage/cu.Storage", "base/type/cu.Object"], function (require, exports, cu_Storage_3, cu_Object_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let _USER_KEY = "cu.user.object";
+    var cu_GENDER;
+    (function (cu_GENDER) {
+        cu_GENDER[cu_GENDER["FEMALE"] = 0] = "FEMALE";
+        cu_GENDER[cu_GENDER["MALE"] = 1] = "MALE";
+        cu_GENDER[cu_GENDER["UNKNOWN"] = 2] = "UNKNOWN";
+    })(cu_GENDER = exports.cu_GENDER || (exports.cu_GENDER = {}));
+    class cu_User {
+        constructor() {
+            this.userObj = {
+                _inited: false,
+                name: "",
+                avaterUrl: "",
+                age: 0,
+                gender: cu_GENDER.UNKNOWN,
+                motto: "",
+            };
+        }
+        getUserObj() {
+            if (!this.userObj._inited) {
+                let str = cu_Storage_3.cu_Storage.get(_USER_KEY);
+                if (str) {
+                    this.userObj._inited = true;
+                    this.saveUserObj(this.userObj);
+                }
+                else {
+                    let userObj = cu_Storage_3.cu_Storage.get(_USER_KEY);
+                    cu_Object_4.cu_Object.copy(this.userObj, userObj);
+                    this.userObj._inited = true;
+                }
+            }
+            return this.userObj;
+        }
+        saveUserObj(obj) {
+            let str = JSON.stringify(obj);
+            cu_Storage_3.cu_Storage.set(_USER_KEY, str);
+        }
+        getName() {
+            this.userObj = this.getUserObj();
+            return this.userObj.name;
+        }
+        setName(name) {
+            this.userObj = this.getUserObj();
+            if (this.userObj.name != name) {
+                this.userObj.name = name;
+                this.saveUserObj(this.userObj);
+            }
+        }
+        getAvatarUrl() {
+            this.userObj = this.getUserObj();
+            return this.userObj.avaterUrl;
+        }
+        setAvatarUrl(avatarUrl) {
+            this.userObj = this.getUserObj();
+            if (this.userObj.avaterUrl != avatarUrl) {
+                this.userObj.avaterUrl = avatarUrl;
+                this.saveUserObj(this.userObj);
+            }
+        }
+        getAge() {
+            this.userObj = this.getUserObj();
+            return this.userObj.age;
+        }
+        setAge(age) {
+            this.userObj = this.getUserObj();
+            if (this.userObj.age != age) {
+                this.userObj.age = age;
+                this.saveUserObj(this.userObj);
+            }
+        }
+        getGender() {
+            this.userObj = this.getUserObj();
+            return this.userObj.gender;
+        }
+        setGender(gender) {
+            this.userObj = this.getUserObj();
+            if (this.userObj.gender != gender) {
+                this.userObj.gender = gender;
+                this.saveUserObj(this.userObj);
+            }
+        }
+        getMotto() {
+            this.userObj = this.getUserObj();
+            return this.userObj.motto;
+        }
+        setMotto(motto) {
+            this.userObj = this.getUserObj();
+            if (this.userObj.motto != motto) {
+                this.userObj.motto = motto;
+                this.saveUserObj(this.userObj);
+            }
+        }
+    }
+    exports.cu_User = cu_User;
+    ;
+});

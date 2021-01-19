@@ -1,5 +1,7 @@
-export class cu_Graphics extends cc.Graphics {
+export class cu_Graphics {
+    constructor() {
 
+    }
 };
 
 // let UtilGraphics = {};

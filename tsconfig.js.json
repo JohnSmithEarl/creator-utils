@@ -56,6 +56,7 @@
   //"exclude": ["./runtime"] // 编译器需要排除的文件或文件夹
 
   "compilerOptions": {
+    "module": "amd",
     "target": "es6",
     "allowJs": true,
     "outDir": "./build",
@@ -67,7 +68,8 @@
     "removeComments": true
   },
   "include": [
-    "./runtime/scripts/",
+    "./creator.d.ts",
+    "./runtime/scripts/**/*",
   ],
   "exclude": []
 }
