@@ -8,7 +8,7 @@ Editor.Panel.extend({
 
   // html template for panel
   template: `
-    <h2>cocos-utils</h2>
+    <h2>creator-utils</h2>
     <hr />
     <div>State: <span id="label">--</span></div>
     <hr />
@@ -24,13 +24,13 @@ Editor.Panel.extend({
   // method executed when template and styles are successfully loaded and initialized
   ready() {
     this.$btn.addEventListener('confirm', () => {
-      Editor.Ipc.sendToMain('cocos-utils:clicked');
+      Editor.Ipc.sendToMain('creator-utils:clicked');
     });
   },
 
   // register your ipc messages here
   messages: {
-    'cocos-utils:addInterface'(event) {
+    'creator-utils:addInterface'(event) {
       this.$label.innerText = 'Hello!';
     }
   }

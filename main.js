@@ -16,10 +16,10 @@ module.exports = {
   messages: {
     'open'() {
       // open entry panel registered in package.json
-      Editor.Panel.open('cocos-utils');
+      Editor.Panel.open('creator-utils');
     },
     'addInterface'() {
-      let origination = Editor.Package.packagePath("cocos-utils");
+      let origination = Editor.Package.packagePath("creator-utils");
       let destination = Editor.Project.path;
 
       // remove
@@ -41,7 +41,7 @@ module.exports = {
     'clicked'() {
       Editor.log('Button clicked!');
       // send ipc message to panel
-      Editor.Ipc.sendToPanel('cocos-utils', 'cocos-utils:addInterface');
+      Editor.Ipc.sendToPanel('creator-utils', 'creator-utils:addInterface');
     }
   },
 };

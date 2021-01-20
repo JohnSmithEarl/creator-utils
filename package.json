@@ -1,21 +1,21 @@
 {
-  "name": "cocos-utils",
+  "name": "creator-utils",
   "version": "0.0.1",
   "description": "The package template for getting started.",
   "author": "JohnSmith",
   "main": "main.js",
   "main-menu": {
-    "i18n:MAIN_MENU.package.title/cocos-utils/open": {
-      "message": "cocos-utils:open"
+    "i18n:MAIN_MENU.package.title/creator-utils/open": {
+      "message": "creator-utils:open"
     },
-    "i18n:MAIN_MENU.package.title/cocos-utils/add interface": {
-      "message": "cocos-utils:addInterface"
+    "i18n:MAIN_MENU.package.title/creator-utils/add interface": {
+      "message": "creator-utils:addInterface"
     }
   },
   "panel": {
     "main": "panel/index.js",
     "type": "dockable",
-    "title": "cocos-utils",
+    "title": "creator-utils",
     "width": 400,
     "height": 300
   },
