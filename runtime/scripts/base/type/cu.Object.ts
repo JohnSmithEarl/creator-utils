@@ -1,13 +1,21 @@
 export class cu_Object extends Object {
-    static isValid(obj: any) {
-        let isVal = false;
-        if (obj && typeof obj === "object") {
-            isVal = cc.sys.isObjectValid(obj);
+    public static create(obj?: any): any {
+        function object() { }
+        function createFunc(parent: any) {
+            object.prototype = parent;
+            let son = new object();
+            object.prototype = null;
+            return son;
         }
+        return createFunc(obj);
+    }
+
+    public static isValid(obj: any) {
+        let isVal = cc.sys.isObjectValid(obj);
         return isVal;
     }
 
-    static clone(obj: any) {
+    public static clone(obj: any) {
         let objClone = Array.isArray(obj) ? [] : {};
         if (obj && typeof obj === "object") {
             for (let key in obj) {
@@ -19,22 +27,55 @@ export class cu_Object extends Object {
                     }
                 }
             }
+            // IE won't copy toString using the loop above
+            if (obj.hasOwnProperty('toString')) {
+                this.toString = obj.toString;
+            }
         } else {
             return obj;
         }
         return objClone;
     }
 
-    static copy(toObj: any, fromObj: any, isCopyUnknow = true) {
-        if (typeof toObj == "object" && typeof fromObj == "object") {
-            for (let key in fromObj) {
-                if (fromObj.hasOwnProperty(key)) {
-                    if (isCopyUnknow || toObj.hasOwnProperty(key)) {
-                        let value = fromObj[key];
-                        toObj[key] = value;
-                    }
-                }
+    public static mixIn(to: any, from: any) {
+        for (let key in from) {
+            if (from.hasOwnProperty(key)) {
+                to[key] = from[key];
             }
         }
+        // IE won't copy toString using the loop above
+        if (from.hasOwnProperty('toString')) {
+            to.toString = from.toString;
+        }
     };
+
+    constructor() {
+        super();
+        this.init(arguments);
+    }
+
+    public init(...arg: any) {
+
+    }
+
+    public isValid() {
+        let isVal = cc.sys.isObjectValid(this);
+        return isVal;
+    }
+
+    public clone() {
+        return cu_Object.clone(this);
+    }
+
+    public mixIn(from: any) {
+        for (let propertyName in from) {
+            if (from.hasOwnProperty(propertyName)) {
+                this[propertyName] = from[propertyName];
+            }
+        }
+        // IE won't copy toString using the loop above
+        if (from.hasOwnProperty('toString')) {
+            this.toString = from.toString;
+        }
+    }
 };
