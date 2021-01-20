@@ -1,6 +1,6 @@
-import { cu_Object } from "./cu.Object";
+import {UObject} from "./UObject";
 
-export class Array1 {
+export class UArray1 {
   private data: Array<any> = undefined;
 
   /**
@@ -58,8 +58,8 @@ export class Array1 {
   /**
    * 拷贝 一维数组
    */
-  public clone(): Array1 {
-    let arr1: any = new Array1();
+  public clone(): UArray1 {
+    let arr1: any = new UArray1();
     arr1.copy(this);
     return arr1;
   }
@@ -68,12 +68,12 @@ export class Array1 {
    * 复制一维数组
    * @param arr1
    */
-  public copy(arr1: Array1) {
+  public copy(arr1: UArray1) {
     let data = arr1.getData();
     for (let i = 0; i < data.length; i++) {
       let item = data[i];
       if (item) {
-        let copyItem = cu_Object.clone(item);
+        let copyItem = UObject.clone(item);
         this.data[i] = copyItem;
       }
     }
@@ -109,7 +109,7 @@ export class Array1 {
    * 连接一维数组
    * @param arr1
    */
-  public contact(arr1: Array1) {
+  public contact(arr1: UArray1) {
     let data = arr1.getData();
     this.data = this.data.concat(data);
   }
@@ -118,7 +118,7 @@ export class Array1 {
    * 一维数组 去重复
    * @param arr1
    */
-  public distinct(arr1?: Array1) {
+  public distinct(arr1?: UArray1) {
     let newData = this.data;
     if (arr1) {
       let data = arr1.getData();
@@ -264,7 +264,7 @@ export class Array1 {
   }
 };
 
-export class Array2 {
+export class UArray2 {
   private data: Array<Array<any>> = undefined;
 
   /**
@@ -368,8 +368,8 @@ export class Array2 {
   /**
    * 克隆二维数组
    */
-  public clone(): Array2 {
-    let newArr2 = new Array2();
+  public clone(): UArray2 {
+    let newArr2 = new UArray2();
     newArr2.copy(this);
     return newArr2;
   }
@@ -378,7 +378,7 @@ export class Array2 {
    * 拷贝二维数组数据
    * @param arr2
    */
-  public copy(arr2: Array2) {
+  public copy(arr2: UArray2) {
     let data = arr2.getData();
     for (let j = 0; j < data.length; j++) {
       let items = data[j];
@@ -388,7 +388,7 @@ export class Array2 {
         }
         for (let i = 0; i < items[j]; i++) {
           let item = items[i];
-          let copyItem = cu_Object.clone(item);
+          let copyItem = UObject.clone(item);
           this.data[j][i] = copyItem;
         }
       }
@@ -425,10 +425,10 @@ export class Array2 {
        [1, 4, 7],
     ]
    */
-  rotate90(): Array2 {
+  rotate90(): UArray2 {
     let row = this.getRowCount();
     let col = this.getColCount();
-    let temp = new Array2(col, row);
+    let temp = new UArray2(col, row);
     for (let j = 0; j < col; j++) {
       let k = col - 1 - j;
       for (let i = 0; i < row; i++) {
@@ -452,10 +452,10 @@ export class Array2 {
        [4, 3, 2, 1],
     ]
    */
-  rotate180(): Array2 {
+  rotate180(): UArray2 {
     let row = this.getRowCount();
     let col = this.getColCount();
-    let temp = new Array2(row, col);
+    let temp = new UArray2(row, col);
     for (let j = 0; j < row; j++) {
       for (let i = 0; i < col; i++) {
         temp[j][i] = this.data[row - 1 - j][col - 1 - i];
@@ -479,10 +479,10 @@ export class Array2 {
       [10, 7, 4],
     ]
    */
-  rotate270(): Array2 {
+  rotate270(): UArray2 {
     let row = this.getRowCount();
     let col = this.getColCount();
-    let temp = new Array2(col, row);
+    let temp = new UArray2(col, row);
     for (let j = 0; j < col; j++) {
       for (let i = 0; i < row; i++) {
         temp[j][i] = this.data[row - 1 - i][j];
@@ -611,7 +611,7 @@ export class Array2 {
   flipBackslash() {
     let row = this.getRowCount();
     let col = this.getColCount();
-    let temp = new Array2(col, row);
+    let temp = new UArray2(col, row);
     for (let i = 0; i < col; i++) {
       for (let j = 0; j < row; j++) {
         temp[i][j] = this.data[j][i];
@@ -638,7 +638,7 @@ export class Array2 {
   flipPositiveSlash() {
     let row = this.getRowCount();
     let col = this.getColCount();
-    let temp = new Array2(col, row);
+    let temp = new UArray2(col, row);
     for (let i = 0; i < col; i++) {
       for (let j = 0; j < row; j++) {
         temp[i][j] = this.data[row - 1 - j][col - 1 - i];

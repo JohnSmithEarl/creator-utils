@@ -1,4 +1,4 @@
-export class cu_String  {
+export class UString  {
     private str = "";
 
     constructor(str: string) {
@@ -109,11 +109,11 @@ export class cu_String  {
     }
 
     public rightPad(size: number, padStr: string) {
-        return this.str + cu_String.repeat(padStr, size);
+        return this.str + UString.repeat(padStr, size);
     }
 
     public leftPad(size: number, padStr: string) {
-        return cu_String.repeat(padStr, size) + this.str;
+        return UString.repeat(padStr, size) + this.str;
     }
 
     //首小写字母转大写
@@ -152,7 +152,7 @@ export class cu_String  {
         if (this.isEmpty()) {
             return 0;
         }
-        let Str = new cu_String(sub);
+        let Str = new UString(sub);
         if (Str.isEmpty()) {
             return 0;
         }
@@ -258,7 +258,7 @@ export class cu_String  {
 
     /**
      * 把连续出现多次的字母字符串进行压缩。如输入:aaabbbbcccccd 输出:3a4b5cd
-     * @param {cu_String} input
+     * @param {UString} input
      * @param {Boolean} ignoreCase : true or false
      */
     compressRepeatedStr(ignoreCase: boolean = false) {
@@ -296,14 +296,14 @@ export class cu_String  {
 //  * 校验时排除某些字符串，即不能包含某些字符串
 //  * @param {Object} conditions:里面有多个属性，如下：
 //  *
-//  * @param {cu_String} matcherFlag 匹配标识
+//  * @param {UString} matcherFlag 匹配标识
 //  * 0:数字；1：字母；2：小写字母；3:大写字母；4：特殊字符,指英文状态下的标点符号及括号等；5:中文;
 //  * 6:数字和字母；7：数字和小写字母；8：数字和大写字母；9：数字、字母和特殊字符；10：数字和中文；
 //  * 11：小写字母和特殊字符；12：大写字母和特殊字符；13：字母和特殊字符；14：小写字母和中文；15：大写字母和中文；
 //  * 16：字母和中文；17：特殊字符、和中文；18：特殊字符、字母和中文；19：特殊字符、小写字母和中文；20：特殊字符、大写字母和中文；
 //  * 100：所有字符;
 //  * @param {Array} excludeStrArr 排除的字符串，数组格式
-//  * @param {cu_String} length 长度，可为空。1,2表示长度1到2之间；10，表示10个以上字符；5表示长度为5
+//  * @param {UString} length 长度，可为空。1,2表示长度1到2之间；10，表示10个以上字符；5表示长度为5
 //  * @param {Boolean} ignoreCase 是否忽略大小写
 //  * conditions={matcherFlag:"0",excludeStrArr:[],length:"",ignoreCase:true}
 //  */
@@ -403,17 +403,17 @@ export class cu_String  {
 
 // /**
 //  * 校验必须同时包含某些字符串
-//  * @param {cu_String} input
+//  * @param {UString} input
 //  * @param {Object} conditions:里面有多个属性，如下：
 //  *
-//  * @param {cu_String} matcherFlag 匹配标识
+//  * @param {UString} matcherFlag 匹配标识
 //  * 0:数字；1：字母；2：小写字母；3:大写字母；4：特殊字符,指英文状态下的标点符号及括号等；5:中文;
 //  * 6:数字和字母；7：数字和小写字母；8：数字和大写字母；9：数字、字母和特殊字符；10：数字和中文；
 //  * 11：小写字母和特殊字符；12：大写字母和特殊字符；13：字母和特殊字符；14：小写字母和中文；15：大写字母和中文；
 //  * 16：字母和中文；17：特殊字符、和中文；18：特殊字符、字母和中文；19：特殊字符、小写字母和中文；20：特殊字符、大写字母和中文；
 //  * 100：所有字符;
 //  * @param {Array} excludeStrArr 排除的字符串，数组格式
-//  * @param {cu_String} length 长度，可为空。1,2表示长度1到2之间；10，表示10个以上字符；5表示长度为5
+//  * @param {UString} length 长度，可为空。1,2表示长度1到2之间；10，表示10个以上字符；5表示长度为5
 //  * @param {Boolean} ignoreCase 是否忽略大小写
 //  * conditions={matcherFlag:"0",containStrArr:[],length:"",ignoreCase:true}
 //  *

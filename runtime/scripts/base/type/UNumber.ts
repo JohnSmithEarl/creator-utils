@@ -1,4 +1,4 @@
-export class cu_Number {
+export class UNumber {
     static isOdd(num: number): boolean {
         let isOdd = num % 2 == 1;
         return isOdd;
