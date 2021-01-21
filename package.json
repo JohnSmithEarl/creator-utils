@@ -24,6 +24,19 @@
     "name": "runtime"
   },
   "reload": {
-    "ignore": ["runtime/**/*"]
+    "ignore": [
+      "runtime/**/*"
+    ]
+  },
+  "dependencies": {
+    "@types/mathjs": "^6.0.11",
+    "big.js": "^6.0.3",
+    "bignumber.js": "^9.0.1",
+    "dayjs": "^1.10.3",
+    "decimal.js": "^10.2.1",
+    "lodash": "^4.17.20",
+    "mathjs": "^9.0.0",
+    "qs": "^6.9.6",
+    "ramda": "^0.27.1"
   }
 }
