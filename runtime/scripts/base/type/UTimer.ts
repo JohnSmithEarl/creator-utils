@@ -1,3 +1,8 @@
+/**
+ * @description 计时器
+ * @class UTimer
+ */
+
 export class UTimer {
     startTime: number = 0;
     endTime: number = 0;
