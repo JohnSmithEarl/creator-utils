@@ -1,4 +1,8 @@
-import {UObject} from "./UObject";
+import { UObject } from "./UObject";
+
+export class UArray extends Array {
+
+};
 
 export class UArray1 {
   private data: Array<any> = undefined;
