@@ -1,7 +1,7 @@
 let _NOTCH_RATE = 1.86;
 let _NOTCH_ADJUST_Y = 70;
 
-export class cu_Adapter {
+export class UAdapter {
     /**
      * 游戏屏幕适配
      */
@@ -33,7 +33,7 @@ export class cu_Adapter {
      * @param offsetY
      */
     static adapterNotch = function (nodes: Array<cc.Node> = [], offsetY = _NOTCH_ADJUST_Y): void {
-        let isNotch = cu_Adapter.isNotch();
+        let isNotch = UAdapter.isNotch();
         if (isNotch) {
             if (nodes && nodes.length > 0) {
                 for (let i = 0; i < nodes.length; i++) {

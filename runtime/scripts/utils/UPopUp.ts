@@ -1,4 +1,4 @@
-export let POP_UP_TYPE = cc.Enum({
+export let U_POP_UP_TYPE = cc.Enum({
     NONE: 0,
     SCALE: 1,
     SCALE_X: 2,
@@ -7,26 +7,26 @@ export let POP_UP_TYPE = cc.Enum({
 
 const { ccclass, property } = cc._decorator;
 @ccclass
-export default class cu_PopUp extends cc.Component {
+export default class UPopUp extends cc.Component {
     @property({ type: cc.Node })
     target: cc.Node = this.node;
-    @property({ type: POP_UP_TYPE })
-    popUpType = POP_UP_TYPE.NONE;
+    @property({ type: U_POP_UP_TYPE })
+    popUpType = U_POP_UP_TYPE.NONE;
 
     private reset() {
         switch (this.popUpType) {
-            case POP_UP_TYPE.NONE: {
+            case U_POP_UP_TYPE.NONE: {
                 break;
             }
-            case POP_UP_TYPE.SCALE: {
+            case U_POP_UP_TYPE.SCALE: {
                 this.target.scale = 0;
                 break;
             }
-            case POP_UP_TYPE.SCALE_Y: {
+            case U_POP_UP_TYPE.SCALE_Y: {
                 this.target.scaleY = 0;
                 break;
             }
-            case POP_UP_TYPE.SCALE: {
+            case U_POP_UP_TYPE.SCALE: {
                 this.target.scale = 0;
                 break;
             }
@@ -39,25 +39,25 @@ export default class cu_PopUp extends cc.Component {
     private action() {
         let sequnce = null;
         switch (this.popUpType) {
-            case POP_UP_TYPE.NONE: {
+            case U_POP_UP_TYPE.NONE: {
                 console.warn("there is nothing to do.", this.target && this.target.name);
                 break;
             }
-            case POP_UP_TYPE.SCALE: {
+            case U_POP_UP_TYPE.SCALE: {
                 sequnce = cc.sequence(
                     cc.scaleTo(0.3, 1.1),
                     cc.scaleTo(0.1, 1.0),
                 )
                 break;
             }
-            case POP_UP_TYPE.SCALE_Y: {
+            case U_POP_UP_TYPE.SCALE_Y: {
                 sequnce = cc.sequence(
                     cc.scaleTo(0.3, 1.0, 1.1),
                     cc.scaleTo(0.1, 1.0, 1.0),
                 )
                 break;
             }
-            case POP_UP_TYPE.SCALE: {
+            case U_POP_UP_TYPE.SCALE: {
                 sequnce = cc.sequence(
                     cc.scaleTo(0.3, 1.1),
                     cc.scaleTo(0.1, 1.0),

@@ -1,7 +1,7 @@
 let nodeToast: cc.Node = null;
 
-export class cu_Toast {
-    static show(message, parent?: cc.Node) {
+export class UToast {
+    static show(message: string, parent?: cc.Node) {
         parent = parent instanceof cc.Node ? parent : cc.Canvas.instance.node;
 
         let nodeSp = new cc.Node();

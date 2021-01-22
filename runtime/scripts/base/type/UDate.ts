@@ -1,4 +1,4 @@
-import { COMPARE_TYPE } from "./UConst";
+import { U_COMPARE } from "./UConst";
 
 export class UDate extends Date {
     /**
@@ -406,87 +406,87 @@ export class UDate extends Date {
         return whatDay;
     }
 
-    public compare(udate: UDate): COMPARE_TYPE {
+    public compare(udate: UDate): U_COMPARE {
         let selfTime = this.getTime();
         let otherTime = udate.getTime();
         if (selfTime > otherTime) {
-            return COMPARE_TYPE.GREATER;
+            return U_COMPARE.GREATER;
         } else if (selfTime == otherTime) {
-            return COMPARE_TYPE.EQUAL;
+            return U_COMPARE.EQUAL;
         } else {
-            return COMPARE_TYPE.LESS;
+            return U_COMPARE.LESS;
         }
     }
 
-    public compareYear(udate: UDate): COMPARE_TYPE {
+    public compareYear(udate: UDate): U_COMPARE {
         let selfYear = this.getFullYear();
         let otherYear = udate.getFullYear();
         if (selfYear > otherYear) {
-            return COMPARE_TYPE.GREATER;
+            return U_COMPARE.GREATER;
         } else if (selfYear == otherYear) {
-            return COMPARE_TYPE.EQUAL;
+            return U_COMPARE.EQUAL;
         } else {
-            return COMPARE_TYPE.LESS;
+            return U_COMPARE.LESS;
         }
     }
 
-    public compareMonth(udate: UDate): COMPARE_TYPE {
+    public compareMonth(udate: UDate): U_COMPARE {
         let selfMonth = this.getMonth();
         let otherMonth = udate.getMonth();
         if (selfMonth > otherMonth) {
-            return COMPARE_TYPE.GREATER;
+            return U_COMPARE.GREATER;
         } else if (selfMonth == otherMonth) {
-            return COMPARE_TYPE.EQUAL;
+            return U_COMPARE.EQUAL;
         } else {
-            return COMPARE_TYPE.LESS;
+            return U_COMPARE.LESS;
         }
     }
 
-    public compareDay(uDate: UDate): COMPARE_TYPE {
+    public compareDay(uDate: UDate): U_COMPARE {
         let selfDay = this.getDay();
         let otherDay = uDate.getDate();
         if (selfDay > otherDay) {
-            return COMPARE_TYPE.GREATER;
+            return U_COMPARE.GREATER;
         } else if (selfDay == otherDay) {
-            return COMPARE_TYPE.EQUAL;
+            return U_COMPARE.EQUAL;
         } else {
-            return COMPARE_TYPE.LESS;
+            return U_COMPARE.LESS;
         }
     }
 
-    public compareHour(uDate: UDate): COMPARE_TYPE {
+    public compareHour(uDate: UDate): U_COMPARE {
         let selfHours = this.getHours();
         let otherHours = uDate.getHours();
         if (selfHours > otherHours) {
-            return COMPARE_TYPE.GREATER;
+            return U_COMPARE.GREATER;
         } else if (selfHours == otherHours) {
-            return COMPARE_TYPE.EQUAL;
+            return U_COMPARE.EQUAL;
         } else {
-            return COMPARE_TYPE.LESS;
+            return U_COMPARE.LESS;
         }
     }
 
-    public compareMinutes(uDate: UDate): COMPARE_TYPE {
+    public compareMinutes(uDate: UDate): U_COMPARE {
         let selfMinutes = this.getMinutes();
         let otherMinutes = uDate.getMinutes();
         if (selfMinutes > otherMinutes) {
-            return COMPARE_TYPE.GREATER;
+            return U_COMPARE.GREATER;
         } else if (selfMinutes == otherMinutes) {
-            return COMPARE_TYPE.EQUAL;
+            return U_COMPARE.EQUAL;
         } else {
-            return COMPARE_TYPE.LESS;
+            return U_COMPARE.LESS;
         }
     }
 
-    public compareSecond(uDate: UDate): COMPARE_TYPE {
+    public compareSecond(uDate: UDate): U_COMPARE {
         let selfSeconds = this.getHours();
         let otherSeconds = uDate.getHours();
         if (selfSeconds > otherSeconds) {
-            return COMPARE_TYPE.GREATER;
+            return U_COMPARE.GREATER;
         } else if (selfSeconds == otherSeconds) {
-            return COMPARE_TYPE.EQUAL;
+            return U_COMPARE.EQUAL;
         } else {
-            return COMPARE_TYPE.LESS;
+            return U_COMPARE.LESS;
         }
     }
 };

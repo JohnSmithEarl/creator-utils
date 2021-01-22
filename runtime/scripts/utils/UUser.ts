@@ -1,5 +1,5 @@
-import { cu_Storage } from "../base/storage/cu.Storage";
-import { cu_Object } from "../base/type/cu.Object";
+import { UStorage } from "../base/storage/UStorage";
+import { UObject } from "../base/type/UObject";
 
 let _USER_KEY = "cu.user.object";
 
@@ -21,13 +21,13 @@ export class cu_User {
 
     private getUserObj(): any {
         if (!this.userObj._inited) {
-            let str = cu_Storage.get(_USER_KEY);
+            let str = UStorage.get(_USER_KEY);
             if (str) {
                 this.userObj._inited = true;
                 this.saveUserObj(this.userObj);
             } else {
-                let userObj = cu_Storage.get(_USER_KEY);
-                cu_Object.copy(this.userObj, userObj);
+                let userObj = UStorage.get(_USER_KEY);
+                UObject.mixIn(this.userObj, userObj);
                 this.userObj._inited = true;
             }
         }
@@ -36,7 +36,7 @@ export class cu_User {
 
     private saveUserObj(obj: any): void {
         let str = JSON.stringify(obj);
-        cu_Storage.set(_USER_KEY, str);
+        UStorage.set(_USER_KEY, str);
     }
 
     getName(): string {

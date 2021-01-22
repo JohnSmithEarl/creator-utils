@@ -1,6 +1,6 @@
 let _REPORT_URL = "https://www.baidu.com";
 
-export class cu_Track {
+export class UTrack {
     private track = {
         time: 0,
         msg: "",
@@ -17,7 +17,7 @@ export class cu_Track {
     }
 }
 
-export class cu_Statistics {
+export class UStatistics {
     statisticsObj: any = {
         _inited: false,
         time: 0,
@@ -32,7 +32,7 @@ export class cu_Statistics {
 
     }
 
-    static record(track: cu_Track) {
+    static record(track: UTrack) {
 
     }
 

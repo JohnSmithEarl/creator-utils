@@ -1,4 +1,4 @@
-export class cu_TouchRegister {
+export class UTouchRegister {
     static register(
         node: any,
         touchBegin?: (pos: cc.Vec2) => {},
@@ -67,7 +67,7 @@ export class cu_TouchRegister {
     };
 };
 
-export class cu_MouseRegister {
+export class UMouseRegister {
     static register(
         node: any,
         leftDown?: (pos: cc.Vec2) => {},
@@ -167,7 +167,7 @@ export class cu_MouseRegister {
     };
 };
 
-export class cu_BackgroundRegister {
+export class UBackgroundRegister {
     static register(
         node: any,
         hide?: Function,
@@ -208,7 +208,7 @@ export class cu_BackgroundRegister {
     }
 };
 
-export class cu_AndroidRegister {
+export class UAndroidRegister {
     static register(
         backCallback?: Function,
         homeCallback?: Function,

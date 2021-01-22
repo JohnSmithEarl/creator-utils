@@ -1,12 +1,12 @@
-import { cu_Storage } from "../base/storage/cu.Storage";
-import { cu_Object } from "../base/type/cu.Object";
+import { UStorage } from "../base/storage/UStorage";
+import { UObject } from "../base/type/UObject";
 
 let _SIGN_KEY = "cu.sign.object";
 
 let _SIGN_LIFECYCLE = 7; //签到的周期
 let _IS_NEED_CONTINUOUS = true; // 签到是否需要连续
 
-export class cu_Sign {
+export class USigned {
     private signObj = {
         _inited: false,
         lastDay: 0,
@@ -15,13 +15,13 @@ export class cu_Sign {
 
     private getSignObj(): any {
         if (!this.signObj._inited) {
-            let str = cu_Storage.get(_SIGN_KEY);
+            let str = UStorage.get(_SIGN_KEY);
             if (!str) {
                 this.signObj._inited = true;
                 this.saveSignObj(this.signObj);
             } else {
                 let signObj = JSON.parse(str);
-                cu_Object.copy(this.signObj, signObj);
+                UObject.mixIn(this.signObj, signObj);
                 this.signObj._inited = true;
             }
         }
@@ -31,7 +31,7 @@ export class cu_Sign {
     private saveSignObj(obj: any): void {
         setTimeout(() => {
             let str = JSON.stringify(obj);
-            cu_Storage.set(_SIGN_KEY, str);
+            UStorage.set(_SIGN_KEY, str);
         }, 1);
     };
 

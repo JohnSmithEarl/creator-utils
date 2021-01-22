@@ -1,4 +1,4 @@
-export class cu_Storage {
+export class UStorage {
     static collectGarbage(): void {
         cc.sys.garbageCollect();
     }
@@ -57,14 +57,14 @@ export class cu_Storage {
                 let pair = keysOrPairs[i];
                 let key = pair.key;
                 let value = pair.value;
-                cu_Storage.set(key, value);
+                UStorage.set(key, value);
             }
         } else {
             let minLength = keysOrPairs.length < values.length ? keysOrPairs.length : values.length;
             for (let i = 0; i < minLength; i++) {
                 let key = keysOrPairs[i];
                 let value = values[i];
-                cu_Storage.set(key, value);
+                UStorage.set(key, value);
             }
         }
     };
@@ -74,7 +74,7 @@ export class cu_Storage {
         if (keys && keys.length > 0) {
             for (let i = 0; i < keys.length; i++) {
                 let key = keys[i];
-                let value = cu_Storage.get(key);
+                let value = UStorage.get(key);
                 values.push(value);
             }
         }
@@ -86,7 +86,7 @@ export class cu_Storage {
         if (keys && keys.length > 0) {
             for (let i = 0; i < keys.length; i++) {
                 let key = keys[i];
-                cu_Storage.remove(key);
+                UStorage.remove(key);
             }
         }
     };

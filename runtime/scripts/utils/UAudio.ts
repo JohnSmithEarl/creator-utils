@@ -1,5 +1,5 @@
-import { cu_Storage } from "../base/storage/cu.Storage";
-import { cu_Object } from "../base/type/cu.Object";
+import { UStorage } from "../base/storage/UStorage";
+import { UObject } from "../base/type/UObject";
 
 let _AUDIO_KEY = "cu.audio.object";
 
@@ -15,13 +15,13 @@ export class Audio {
 
     private getAudioObj(): any {
         if (!this.audioObj._inited) {
-            let str = cu_Storage.get(_AUDIO_KEY);
+            let str = UStorage.get(_AUDIO_KEY);
             if (!str) {
                 this.audioObj._inited = true;
                 this.saveAudioObj(this.audioObj);
             } else {
                 let audioObj = JSON.parse(str);
-                cu_Object.copy(this.audioObj, audioObj);
+                UObject.mixIn(this.audioObj, audioObj);
                 this.audioObj._inited = true;
             }
         }
@@ -31,7 +31,7 @@ export class Audio {
     private saveAudioObj(obj: any): void {
         setTimeout(() => {
             let str = JSON.stringify(obj);
-            cu_Storage.set(_AUDIO_KEY, str);
+            UStorage.set(_AUDIO_KEY, str);
         }, 1);
     };
 

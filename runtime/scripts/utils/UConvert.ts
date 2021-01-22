@@ -1,4 +1,4 @@
-export class cu_Convert {
+export class UConvert {
     /**
     * 得到一个节点的世界坐标
     * node的原点在中心
@@ -63,8 +63,8 @@ export class cu_Convert {
             return null;
         }
         //先转成世界坐标
-        let worldPos = cu_Convert.localConvertWorldPoint(node);
-        let pos = cu_Convert.worldConvertLocalPoint(targetNode, worldPos);
+        let worldPos = UConvert.localConvertWorldPoint(node);
+        let pos = UConvert.worldConvertLocalPoint(targetNode, worldPos);
         return pos;
     }
 
@@ -78,8 +78,8 @@ export class cu_Convert {
             return null;
         }
         //先转成世界坐标
-        let worldPos = cu_Convert.localConvertWorldPointAR(node);
-        let pos = cu_Convert.worldConvertLocalPointAR(targetNode, worldPos);
+        let worldPos = UConvert.localConvertWorldPointAR(node);
+        let pos = UConvert.worldConvertLocalPointAR(targetNode, worldPos);
         return pos;
     }
 };

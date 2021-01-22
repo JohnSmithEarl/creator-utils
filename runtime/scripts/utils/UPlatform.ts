@@ -1,4 +1,4 @@
-export enum cu_LANGUAGE {
+export enum U_LANGUAGE {
     /** English language code */
     LANGUAGE_ENGLISH = 0,
     /** Chinese language code */
@@ -40,7 +40,7 @@ export enum cu_LANGUAGE {
     LANGUAGE_UNKNOWN = 19,
 };
 
-export enum cu_OS {
+export enum U_OS {
     OS_IOS = 10001,
     OS_ANDROID = 10002,
     OS_WINDOWS = 10003,
@@ -54,7 +54,7 @@ export enum cu_OS {
     OS_UNKNOWN = 10011,
 };
 
-export enum cu_PLATFORM {
+export enum U_PLATFORM {
     UNKNOWN = 20001,
     WIN32 = 20002,
     LINUX = 20003,
@@ -90,7 +90,7 @@ export enum cu_PLATFORM {
     LINKSURE = 20034,
 }
 
-export enum cu_BROWSER {
+export enum U_BROWSER {
     BROWSER_TYPE_WECHAT = 30035,
     BROWSER_TYPE_ANDROID = 30036,
     BROWSER_TYPE_IE = 30037,
@@ -116,161 +116,161 @@ export enum cu_BROWSER {
     BROWSER_TYPE_UNKNOWN = 30057,
 }
 
-export enum cu_NETWORK {
+export enum U_NETWORK {
     NONE = 40001,
     LAN = 40002,
     WWAN = 40003,
 };
 
-export class cu_Platform {
+export class UPlatform {
     private static language: any = undefined;
     private static os: any = undefined;
     private static platform: any = undefined;
     private static browserType: any = undefined;
     private static networkType: any = undefined;
 
-    static getLanguage(): cu_LANGUAGE {
+    static getLanguage(): U_LANGUAGE {
         if (!this.language) {
             if (cc.sys.languageCode == cc.sys.LANGUAGE_ENGLISH) {
-                this.language = cu_LANGUAGE.LANGUAGE_ENGLISH;
+                this.language = U_LANGUAGE.LANGUAGE_ENGLISH;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_CHINESE) {
-                this.language = cu_LANGUAGE.LANGUAGE_CHINESE;
+                this.language = U_LANGUAGE.LANGUAGE_CHINESE;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_FRENCH) {
-                this.language = cu_LANGUAGE.LANGUAGE_FRENCH;
+                this.language = U_LANGUAGE.LANGUAGE_FRENCH;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_ITALIAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_ITALIAN;
+                this.language = U_LANGUAGE.LANGUAGE_ITALIAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_GERMAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_GERMAN;
+                this.language = U_LANGUAGE.LANGUAGE_GERMAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_SPANISH) {
-                this.language = cu_LANGUAGE.LANGUAGE_SPANISH;
+                this.language = U_LANGUAGE.LANGUAGE_SPANISH;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_DUTCH) {
-                this.language = cu_LANGUAGE.LANGUAGE_DUTCH;
+                this.language = U_LANGUAGE.LANGUAGE_DUTCH;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_RUSSIAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_RUSSIAN;
+                this.language = U_LANGUAGE.LANGUAGE_RUSSIAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_KOREAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_KOREAN;
+                this.language = U_LANGUAGE.LANGUAGE_KOREAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_JAPANESE) {
-                this.language = cu_LANGUAGE.LANGUAGE_JAPANESE;
+                this.language = U_LANGUAGE.LANGUAGE_JAPANESE;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_HUNGARIAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_HUNGARIAN;
+                this.language = U_LANGUAGE.LANGUAGE_HUNGARIAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_PORTUGUESE) {
-                this.language = cu_LANGUAGE.LANGUAGE_PORTUGUESE;
+                this.language = U_LANGUAGE.LANGUAGE_PORTUGUESE;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_ARABIC) {
-                this.language = cu_LANGUAGE.LANGUAGE_ARABIC;
+                this.language = U_LANGUAGE.LANGUAGE_ARABIC;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_NORWEGIAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_NORWEGIAN;
+                this.language = U_LANGUAGE.LANGUAGE_NORWEGIAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_POLISH) {
-                this.language = cu_LANGUAGE.LANGUAGE_POLISH;
+                this.language = U_LANGUAGE.LANGUAGE_POLISH;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_TURKISH) {
-                this.language = cu_LANGUAGE.LANGUAGE_TURKISH;
+                this.language = U_LANGUAGE.LANGUAGE_TURKISH;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_UKRAINIAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_UKRAINIAN;
+                this.language = U_LANGUAGE.LANGUAGE_UKRAINIAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_ROMANIAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_ROMANIAN;
+                this.language = U_LANGUAGE.LANGUAGE_ROMANIAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_BULGARIAN) {
-                this.language = cu_LANGUAGE.LANGUAGE_BULGARIAN;
+                this.language = U_LANGUAGE.LANGUAGE_BULGARIAN;
             } else if (cc.sys.languageCode == cc.sys.LANGUAGE_UNKNOWN) {
-                this.language = cu_LANGUAGE.LANGUAGE_UNKNOWN;
+                this.language = U_LANGUAGE.LANGUAGE_UNKNOWN;
             }
         }
         return this.language;
     }
-    static getOS(): cu_OS {
+    static getOS(): U_OS {
         if (!this.os) {
             if (cc.sys.os == cc.sys.OS_IOS) {
-                this.os = cu_OS.OS_IOS;
+                this.os = U_OS.OS_IOS;
             } else if (cc.sys.os == cc.sys.OS_ANDROID) {
-                this.os = cu_OS.OS_ANDROID;
+                this.os = U_OS.OS_ANDROID;
             } else if (cc.sys.os == cc.sys.OS_WINDOWS) {
-                this.os = cu_OS.OS_WINDOWS;
+                this.os = U_OS.OS_WINDOWS;
             } else if (cc.sys.os == cc.sys.OS_MARMALADE) {
-                this.os = cu_OS.OS_MARMALADE;
+                this.os = U_OS.OS_MARMALADE;
             } else if (cc.sys.os == cc.sys.OS_LINUX) {
-                this.os = cu_OS.OS_LINUX;
+                this.os = U_OS.OS_LINUX;
             } else if (cc.sys.os == cc.sys.OS_BADA) {
-                this.os = cu_OS.OS_BADA;
+                this.os = U_OS.OS_BADA;
             } else if (cc.sys.os == cc.sys.OS_BLACKBERRY) {
-                this.os = cu_OS.OS_BLACKBERRY;
+                this.os = U_OS.OS_BLACKBERRY;
             } else if (cc.sys.os == cc.sys.OS_OSX) {
-                this.os = cu_OS.OS_OSX;
+                this.os = U_OS.OS_OSX;
             } else if (cc.sys.os == cc.sys.OS_WP8) {
-                this.os = cu_OS.OS_WP8;
+                this.os = U_OS.OS_WP8;
             } else if (cc.sys.os == cc.sys.OS_WINRT) {
-                this.os = cu_OS.OS_WINRT;
+                this.os = U_OS.OS_WINRT;
             } else if (cc.sys.os == cc.sys.OS_UNKNOWN) {
-                this.os = cu_OS.OS_UNKNOWN;
+                this.os = U_OS.OS_UNKNOWN;
             }
         }
         return this.os;
     }
-    static getPlatform(): cu_PLATFORM {
+    static getPlatform(): U_PLATFORM {
         if (!this.platform) {
             if (cc.sys.platform == cc.sys.WIN32) {
-                this.platform = cu_PLATFORM.WIN32;
+                this.platform = U_PLATFORM.WIN32;
             } else if (cc.sys.platform == cc.sys.LINUX) {
-                this.platform = cu_PLATFORM.LINUX;
+                this.platform = U_PLATFORM.LINUX;
             } else if (cc.sys.platform == cc.sys.MACOS) {
-                this.platform = cu_PLATFORM.MACOS;
+                this.platform = U_PLATFORM.MACOS;
             } else if (cc.sys.platform == cc.sys.ANDROID) {
-                this.platform = cu_PLATFORM.ANDROID;
+                this.platform = U_PLATFORM.ANDROID;
             } else if (cc.sys.platform == cc.sys.IPHONE) {
-                this.platform = cu_PLATFORM.IPHONE;
+                this.platform = U_PLATFORM.IPHONE;
             } else if (cc.sys.platform == cc.sys.IPAD) {
-                this.platform = cu_PLATFORM.IPAD;
+                this.platform = U_PLATFORM.IPAD;
             } else if (cc.sys.platform == cc.sys.BLACKBERRY) {
-                this.platform = cu_PLATFORM.BLACKBERRY;
+                this.platform = U_PLATFORM.BLACKBERRY;
             } else if (cc.sys.platform == cc.sys.NACL) {
-                this.platform = cu_PLATFORM.NACL;
+                this.platform = U_PLATFORM.NACL;
             } else if (cc.sys.platform == cc.sys.EMSCRIPTEN) {
-                this.platform = cu_PLATFORM.EMSCRIPTEN;
+                this.platform = U_PLATFORM.EMSCRIPTEN;
             } else if (cc.sys.platform == cc.sys.TIZEN) {
-                this.platform = cu_PLATFORM.TIZEN;
+                this.platform = U_PLATFORM.TIZEN;
             } else if (cc.sys.platform == cc.sys.WINRT) {
-                this.platform = cu_PLATFORM.WINRT;
+                this.platform = U_PLATFORM.WINRT;
             } else if (cc.sys.platform == cc.sys.WP8) {
-                this.platform = cu_PLATFORM.WP8;
+                this.platform = U_PLATFORM.WP8;
             } else if (cc.sys.platform == cc.sys.MOBILE_BROWSER) {
-                this.platform = cu_PLATFORM.MOBILE_BROWSER;
+                this.platform = U_PLATFORM.MOBILE_BROWSER;
             } else if (cc.sys.platform == cc.sys.DESKTOP_BROWSER) {
-                this.platform = cu_PLATFORM.DESKTOP_BROWSER;
+                this.platform = U_PLATFORM.DESKTOP_BROWSER;
             } else if (cc.sys.platform == cc.sys.EDITOR_PAGE) {
-                this.platform = cu_PLATFORM.EDITOR_PAGE;
+                this.platform = U_PLATFORM.EDITOR_PAGE;
             } else if (cc.sys.platform == cc.sys.EDITOR_CORE) {
-                this.platform = cu_PLATFORM.EDITOR_CORE;
+                this.platform = U_PLATFORM.EDITOR_CORE;
             } else if (cc.sys.platform == cc.sys.WECHAT_GAME) {
-                this.platform = cu_PLATFORM.WECHAT_GAME;
+                this.platform = U_PLATFORM.WECHAT_GAME;
             } else if (cc.sys.platform == cc.sys.QQ_PLAY) {
-                this.platform = cu_PLATFORM.QQ_PLAY;
+                this.platform = U_PLATFORM.QQ_PLAY;
             } else if (cc.sys.platform == cc.sys.FB_PLAYABLE_ADS) {
-                this.platform = cu_PLATFORM.FB_PLAYABLE_ADS;
+                this.platform = U_PLATFORM.FB_PLAYABLE_ADS;
             } else if (cc.sys.platform == cc.sys.BAIDU_GAME) {
-                this.platform = cu_PLATFORM.BAIDU_GAME;
+                this.platform = U_PLATFORM.BAIDU_GAME;
             } else if (cc.sys.platform == cc.sys.VIVO_GAME) {
-                this.platform = cu_PLATFORM.VIVO_GAME;
+                this.platform = U_PLATFORM.VIVO_GAME;
             } else if (cc.sys.platform == cc.sys.OPPO_GAME) {
-                this.platform = cu_PLATFORM.OPPO_GAME;
+                this.platform = U_PLATFORM.OPPO_GAME;
             } else if (cc.sys.platform == cc.sys.HUAWEI_GAME) {
-                this.platform = cu_PLATFORM.HUAWEI_GAME;
+                this.platform = U_PLATFORM.HUAWEI_GAME;
             } else if (cc.sys.platform == cc.sys.XIAOMI_GAME) {
-                this.platform = cu_PLATFORM.XIAOMI_GAME;
+                this.platform = U_PLATFORM.XIAOMI_GAME;
             } else if (cc.sys.platform == cc.sys.JKW_GAME) {
-                this.platform = cu_PLATFORM.JKW_GAME;
+                this.platform = U_PLATFORM.JKW_GAME;
             } else if (cc.sys.platform == cc.sys.ALIPAY_GAME) {
-                this.platform = cu_PLATFORM.ALIPAY_GAME;
+                this.platform = U_PLATFORM.ALIPAY_GAME;
             } else if (cc.sys.platform == cc.sys.WECHAT_GAME_SUB) {
-                this.platform = cu_PLATFORM.WECHAT_GAME_SUB;
+                this.platform = U_PLATFORM.WECHAT_GAME_SUB;
             } else if (cc.sys.platform == cc.sys.BAIDU_GAME_SUB) {
-                this.platform = cu_PLATFORM.BAIDU_GAME_SUB;
+                this.platform = U_PLATFORM.BAIDU_GAME_SUB;
             } else if (cc.sys.platform == cc.sys.QTT_GAME) {
-                this.platform = cu_PLATFORM.QTT_GAME;
+                this.platform = U_PLATFORM.QTT_GAME;
             } else if (cc.sys.platform == cc.sys.BYTEDANCE_GAME) {
-                this.platform = cu_PLATFORM.BYTEDANCE_GAME;
+                this.platform = U_PLATFORM.BYTEDANCE_GAME;
             } else if (cc.sys.platform == cc.sys.BYTEDANCE_GAME_SUB) {
-                this.platform = cu_PLATFORM.BYTEDANCE_GAME_SUB;
+                this.platform = U_PLATFORM.BYTEDANCE_GAME_SUB;
             } else if (cc.sys.platform == cc.sys.LINKSURE) {
-                this.platform = cu_PLATFORM.LINKSURE;
+                this.platform = U_PLATFORM.LINKSURE;
             } else if (cc.sys.platform == cc.sys.UNKNOWN) {
-                this.platform = cu_PLATFORM.UNKNOWN;
+                this.platform = U_PLATFORM.UNKNOWN;
             }
             return this.platform;
             // BROWSER_TYPE_WECHAT: string;
@@ -300,59 +300,59 @@ export class cu_Platform {
         }
         return this.platform;
     }
-    static getBrowerType(): cu_BROWSER {
+    static getBrowerType(): U_BROWSER {
         if (!this.browserType) {
             if (cc.sys.browserType = cc.sys.BROWSER_TYPE_WECHAT) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_WECHAT;
+                this.browserType = U_BROWSER.BROWSER_TYPE_WECHAT;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_ANDROID) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_ANDROID;
+                this.browserType = U_BROWSER.BROWSER_TYPE_ANDROID;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_IE) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_IE;
+                this.browserType = U_BROWSER.BROWSER_TYPE_IE;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_EDGE) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_EDGE;
+                this.browserType = U_BROWSER.BROWSER_TYPE_EDGE;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_QQ) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_QQ;
+                this.browserType = U_BROWSER.BROWSER_TYPE_QQ;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_MOBILE_QQ) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_MOBILE_QQ;
+                this.browserType = U_BROWSER.BROWSER_TYPE_MOBILE_QQ;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_UC) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_UC;
+                this.browserType = U_BROWSER.BROWSER_TYPE_UC;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_UCBS) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_UCBS;
+                this.browserType = U_BROWSER.BROWSER_TYPE_UCBS;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_360) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_360;
+                this.browserType = U_BROWSER.BROWSER_TYPE_360;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_BAIDU_APP) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_BAIDU_APP;
+                this.browserType = U_BROWSER.BROWSER_TYPE_BAIDU_APP;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_BAIDU) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_BAIDU;
+                this.browserType = U_BROWSER.BROWSER_TYPE_BAIDU;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_MAXTHON) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_MAXTHON;
+                this.browserType = U_BROWSER.BROWSER_TYPE_MAXTHON;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_OPERA) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_OPERA;
+                this.browserType = U_BROWSER.BROWSER_TYPE_OPERA;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_OUPENG) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_OUPENG;
+                this.browserType = U_BROWSER.BROWSER_TYPE_OUPENG;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_MIUI) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_MIUI;
+                this.browserType = U_BROWSER.BROWSER_TYPE_MIUI;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_FIREFOX) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_FIREFOX;
+                this.browserType = U_BROWSER.BROWSER_TYPE_FIREFOX;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_SAFARI) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_SAFARI;
+                this.browserType = U_BROWSER.BROWSER_TYPE_SAFARI;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_CHROME) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_CHROME;
+                this.browserType = U_BROWSER.BROWSER_TYPE_CHROME;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_LIEBAO) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_LIEBAO;
+                this.browserType = U_BROWSER.BROWSER_TYPE_LIEBAO;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_QZONE) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_QZONE;
+                this.browserType = U_BROWSER.BROWSER_TYPE_QZONE;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_SOUGOU) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_SOUGOU;
+                this.browserType = U_BROWSER.BROWSER_TYPE_SOUGOU;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_HUAWEI) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_HUAWEI;
+                this.browserType = U_BROWSER.BROWSER_TYPE_HUAWEI;
             } else if (cc.sys.browserType = cc.sys.BROWSER_TYPE_UNKNOWN) {
-                this.browserType = cu_BROWSER.BROWSER_TYPE_UNKNOWN;
+                this.browserType = U_BROWSER.BROWSER_TYPE_UNKNOWN;
             }
         }
         return this.browserType;
     }
-    static getNetwork(): cu_NETWORK {
+    static getNetwork(): U_NETWORK {
         if (!this.networkType) {
             this.networkType = cc.sys.getNetworkType();
         }
