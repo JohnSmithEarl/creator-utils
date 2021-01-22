@@ -1,4 +1,4 @@
-export class UString  {
+export class UString {
     private str = "";
 
     constructor(str: string) {

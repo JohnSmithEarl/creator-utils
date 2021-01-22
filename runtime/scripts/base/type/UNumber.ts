@@ -1,4 +1,8 @@
-export class UNumber {
+export class UNumber extends Number {
+    constructor() {
+        super();
+    }
+
     static isOdd(num: number): boolean {
         let isOdd = num % 2 == 1;
         return isOdd;

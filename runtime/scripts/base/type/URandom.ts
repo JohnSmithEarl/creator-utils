@@ -1,3 +1,7 @@
+export class URandom {
+
+};
+
 // var GLOBAL_KEY = "Random";
 
 // var imul = (typeof Math.imul !== "function" || Math.imul(0xffffffff, 5) !== -5 ?
