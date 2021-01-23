@@ -1,4 +1,7 @@
-class UTreeNode {
+/**
+ * @description 搜索二叉树节点
+ */
+export class UTreeNode {
     public val: any;
     public left: UTreeNode | null;
     public right: UTreeNode | null;
@@ -10,10 +13,13 @@ class UTreeNode {
     }
 }
 
+/**
+ * @description 搜索二叉树
+ */
 export class UBinarySearchTree {
     public root: UTreeNode | null;
 
-    constructor(compare: Function) {
+    constructor() {
         this.root = null;
     }
 
@@ -180,7 +186,7 @@ export class UBinarySearchTree {
      * @description 从树中移除某个键/值
      * @param key
      */
-    public remove(key: any) {
+    public remove(key: any): UTreeNode {
         return this.removeNode(this.root, key);
     }
 
@@ -192,15 +198,22 @@ export class UBinarySearchTree {
     private removeNode(node: UTreeNode, key: any) {
         if (node === null) return null;
         if (node.val === key) {
-            if (node.left === null && node.right === null) return null
-            if (node.left === null) return node.right;
-            if (node.right === null) return node.left;
-            if (node.left !== null && node.right !== null) {
-                let tNode = this.minNode(node.right);
-                node.val = tNode.val;
-                node.right = this.removeNode(node.right, key);
+            if (node.left === null && node.right === null) {
+                node = null;
                 return node;
             }
+            if (node.left === null) {
+                node = node.right;
+                return node;
+            }
+            if (node.right === null) {
+                node = node.left;
+                return node;
+            }
+            let aux = this.minNode(node.right);
+            node.val = aux.val;
+            node.right = this.removeNode(node.right, aux.val);
+            return node;
         } else if (key < node.val) {
             node.left = this.removeNode(node.left, key);
             return node;
