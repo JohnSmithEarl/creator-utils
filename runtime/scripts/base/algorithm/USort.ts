@@ -1,4 +1,7 @@
 export class USort {
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////       冒泡排序     //////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * 冒泡排序
      * @param arr
@@ -19,9 +22,10 @@ export class USort {
         }
         return arr
     }
-    // var arr=[3,44,38,5,47,15,36,26,27,2,46,4,19,50,48];
-    // console.log(bubbleSort(arr));//[2, 3, 4, 5, 15, 19, 26, 27, 36, 38, 44, 46, 47, 48, 50]
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////       选择排序     //////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * 选择排序
      * @param arr
@@ -42,12 +46,13 @@ export class USort {
         }
         return arr
     }
-    // var arr=[3,44,38,5,47,15,36,26,27,2,46,4,19,50,48];
-    // console.log(selectionSort(arr));//[2, 3, 4, 5, 15, 19, 26, 27, 36, 38, 44, 46, 47, 48, 50]
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////       插入排序     //////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     *
-     * @param arr 插入排序
+     * @description 插入排序
+     * @param arr 
      */
     public static insertSort(arr: Array<any>): Array<any> {
         var len = arr.length
@@ -62,9 +67,10 @@ export class USort {
         }
         return arr
     }
-    // var arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48];
-    // console.log(insertSort(arr));//[2, 3, 4, 5, 15, 19, 26, 27, 36, 38, 44, 46, 47, 48, 50]
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////       希尔排序     //////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * 希尔排序
      * @param arr
@@ -87,9 +93,10 @@ export class USort {
         }
         return arr
     }
-    // var arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48];
-    // console.log(shellSort(arr));//[2, 3, 4, 5, 15, 19, 26, 27, 36, 38, 44, 46, 47, 48, 50]
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////       归并排序     //////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * 归并排序
      * @param arr
@@ -121,9 +128,10 @@ export class USort {
         var right = arr.slice(middle)
         return USort.merge(USort.mergeSort(left), USort.mergeSort(right));
     }
-    // var arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48];
-    // console.log(mergeSort(arr));
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////       快速排序     //////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * 快速排序
      * @param arr
@@ -144,6 +152,81 @@ export class USort {
         }
         return USort.quickSort(left).concat(pivot, USort.quickSort(right));
     }
-    // var arr=[3,44,38,5,47,15,36,26,27,2,46,4,19,50,48];
-    // console.log(qSort(arr));
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////       堆排序     //////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 
+     * @param array 
+     * @param heapSize 
+     * @param index 
+     */
+    private static heapify(array: Array<any>, heapSize: number, index: number) {
+        let largest = index;
+        const left = index * 2 + 1;
+        const right = index * 2 + 2;
+        if (left < heapSize && array[left] > array[index]) {
+            largest = left;
+        }
+        if (right < heapSize && array[right] > array[largest]) {
+            largest = right;
+        }
+        if (largest !== index) {
+            [array[index], array[largest]] = [array[largest], array[index]];
+            USort.heapify(array, heapSize, largest);
+        }
+    };
+
+    /**
+     * 
+     * @param array 
+     */
+    private static buildHeap(array: Array<any>) {
+        let heapSize = array.length;
+        for (let i = heapSize; i >= 0; i--) {
+            USort.heapify(array, heapSize, i);
+        }
+    };
+
+    /**
+     * 堆排序
+     * @param array 
+     */
+    public static heapSort(array: Array<any>): Array<any> {
+        let heapSize = array.length;
+        USort.buildHeap(array);
+
+        while (heapSize > 1) {
+            heapSize--;
+            [array[0], array[heapSize]] = [array[heapSize], array[0]];
+            USort.heapify(array, heapSize, 0);
+        }
+
+        return array;
+    }
+};
+
+export let test = function () {
+    console.log("\n\n冒泡排序:");
+    var arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48];
+    console.log(USort.bubbleSort(arr));
+
+    console.log("\n\n选择排序:");
+    console.log(USort.selectionSort(arr));
+
+    console.log("\n\n插入排序:");
+    console.log(USort.insertSort(arr));
+
+    console.log("\n\n希尔排序:");
+    console.log(USort.shellSort(arr));
+
+    console.log("\n\n归并排序:");
+    console.log(USort.mergeSort(arr));
+
+    console.log("\n\n快速排序:");
+    console.log(USort.quickSort(arr));
+
+    console.log("\n\n堆排序:");
+    console.log(USort.heapSort(arr));
 };

@@ -3,7 +3,7 @@ import { UObject } from "../type/UObject";
 /**
  * @description 字典类
  */
-export class Dictionary {
+export class UDictionary {
     private items: Object = null;
 
     /**

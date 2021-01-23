@@ -1,4 +1,4 @@
-export class NetBase {
+class UNetBase {
     quest(options: any, callback: Function) {
         let url = options.url;
         let method = options.method;
@@ -134,12 +134,12 @@ export class NetBase {
     }
 };
 
-export class Net {
+export class UNet {
     cookie: any = null;
-    netBase: NetBase = null;
+    netBase: UNetBase = null;
 
     constructor() {
-        this.netBase = new NetBase();
+        this.netBase = new UNetBase();
         this.cookie = {};
     }
 
