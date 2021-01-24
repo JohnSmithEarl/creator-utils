@@ -1,4 +1,4 @@
-export class UQueue<T> {
+export class UQueue {
     private data = [];
 
     constructor() { }
@@ -7,7 +7,7 @@ export class UQueue<T> {
      * @description 向队列尾部添加一个(或多个)新的项
      * @param element_elements
      */
-    public enqueue(element_elements: T | Array<T>): void {
+    public enqueue(element_elements: any | Array<any>): void {
         if (element_elements instanceof Array) {
             for (let i = 0; i < element_elements.length; i++) {
                 let element = element_elements[i];
@@ -21,7 +21,7 @@ export class UQueue<T> {
     /**
      * @description 移除队列的第一(即排在队列最前面的)项，并返回被移除的元素
      */
-    public dequeue(): T {
+    public dequeue(): any {
         let element = this.data.shift();
         return element;
     }
@@ -29,7 +29,7 @@ export class UQueue<T> {
     /**
      * @description 返回队列第一个元素，队列不做任何变动
      */
-    public head(): T {
+    public head(): any {
         if (this.isEmpty()) {
             return null;
         } else {
@@ -41,7 +41,7 @@ export class UQueue<T> {
     /**
      * @description 返回队列最后一个元素，队列不做任何变动
      */
-    public tail(): T {
+    public tail(): any {
         if (this.isEmpty()) {
             return null;
         } else {

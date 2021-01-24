@@ -1,4 +1,4 @@
-export class UStack<T> {
+export class UStack {
     private data = [];
 
     constructor() { }
@@ -7,7 +7,7 @@ export class UStack<T> {
      * @description  添加一个（或几个）新元素到栈顶
      * @param element
      */
-    public push(element_elements: T | Array<T>) {
+    public push(element_elements: any | Array<any>) {
         if (element_elements instanceof Array) {
             for (let i = 0; i < element_elements.length; i++) {
                 let element = element_elements[i];
@@ -21,7 +21,7 @@ export class UStack<T> {
     /**
      * 溢出栈顶元素，同时返回被移除的元素
      */
-    public pop(): T {
+    public pop(): any {
         let element = this.data.pop();
         return element;
     }
@@ -29,7 +29,7 @@ export class UStack<T> {
     /**
      * 返回栈顶元素，不对栈做修改
      */
-    public peek(): T {
+    public peek(): any {
         let item = null;
         if (this.data.length > 0) {
             item = this.data[this.data.length - 1];

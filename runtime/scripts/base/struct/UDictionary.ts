@@ -87,7 +87,7 @@ export class UDictionary {
 };
 
 export let test = function () {
-    let dictionary = new Dictionary();
+    let dictionary = new UDictionary();
     dictionary.set('Gandalf', 'gandalf@email.com');
     dictionary.set('John', 'john@email.com');
     dictionary.set('Tyrion', 'tyrion@email.com');
