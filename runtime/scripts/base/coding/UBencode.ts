@@ -1,4 +1,4 @@
-export class cu_Bencode {
+export class UBencode {
 
 };
 

@@ -1,4 +1,4 @@
-export class cu_UTF8 {
+export class UUTF8 {
     public static encode(str: string) {
         str = str.replace(/\r\n/g, "\n");
         var utftext = "";

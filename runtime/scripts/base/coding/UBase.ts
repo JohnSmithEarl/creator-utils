@@ -1,6 +1,6 @@
 
 
-export class cu_Base {
+export class UBase {
 
 };
 
