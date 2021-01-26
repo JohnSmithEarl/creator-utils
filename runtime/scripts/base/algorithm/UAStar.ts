@@ -223,5 +223,3 @@ export let test = function () {
 
     console.log("test UAStar\n\n");
 };
-
-test();

@@ -1,31 +1,36 @@
-export class UObject extends Object {
-    public static create(obj?: any): UObject {
-        function object() { }
-        function createFunc(parent: any) {
-            object.prototype = parent;
-            let son = new object();
-            object.prototype = null;
-            return son;
-        }
-        return createFunc(obj);
-    }
-
+export class UObject {
     public static isValid(obj: any): boolean {
         let isVal = cc.sys.isObjectValid(obj);
         return isVal;
     }
 
-    public static values(obj: any): Array<any> {
-        let keys = Object.keys(obj);
-        let values = [];
-        for (let i = 0; i < keys.length; i++) {
-            let key = keys[i];
-            if (obj.hasOwnProperty(key)) {
-                let val = obj[key];
-                values[values.length] = val;
+    public static keys(obj: any): Array<string> {
+        if (typeof obj == "object") {
+            let keys = [];
+            for (let key in obj) {
+                keys[keys.length] = key;
             }
+            return keys;
+        } else {
+            return obj;
         }
-        return values;
+    }
+
+    public static values(obj: any): Array<any> {
+        if (typeof obj == "object") {
+            let values = [];
+            let keys = UObject.keys(obj);
+            for (let i = 0; i < keys.length; i++) {
+                let key = keys[i];
+                if (obj.hasOwnProperty(key)) {
+                    let val = obj[key];
+                    values[values.length] = val;
+                }
+            }
+            return values;
+        } else {
+            return obj;
+        }
     }
 
     public static clone(obj: any): any {
@@ -62,7 +67,7 @@ export class UObject extends Object {
         }
     }
 
-    public static merge(def: any, obj: any) {
+    public static merge(def: any, obj: any): any {
         if (!obj) {
             return def;
         } else if (!def) {
@@ -71,13 +76,13 @@ export class UObject extends Object {
 
         for (let i in obj) {
             // if its an object
-            if (obj[i] != null && obj[i].constructor == Object) {
+            if (obj[i] != null && obj[i].constructor == UObject) {
                 def[i] = UObject.merge(def[i], obj[i]);
             }
-            // if its an array, simple values need to be joined.  Object values need to be re-merged.
+            // if its an array, simple values need to be joined.  UObject values need to be re-merged.
             else if (obj[i] != null && (obj[i] instanceof Array) && obj[i].length > 0) {
                 // test to see if the first element is an object or not so we know the type of array we're dealing with.
-                if (obj[i][0].constructor == Object) {
+                if (obj[i][0].constructor == UObject) {
                     let newobjs = [];
                     // create an index of all the existing object IDs for quick access.  There is no way to know how many items will be in the arrays.
                     let objids = {}
@@ -122,7 +127,6 @@ export class UObject extends Object {
     }
 
     constructor() {
-        super();
         this.init(arguments);
     }
 
@@ -131,12 +135,17 @@ export class UObject extends Object {
     }
 
     public isValid(): boolean {
-        let isVal = cc.sys.isObjectValid(this);
+        let isVal = UObject.isValid(this);
         return isVal;
     }
 
+    public keys(): Array<string> {
+        let keys = UObject.keys(this);
+        return keys;
+    }
+
     public values(): Array<any> {
-        let keys = Object.keys(this);
+        let keys = UObject.keys(this);
         let values = [];
         for (let i = 0; i < keys.length; i++) {
             let key = keys[i];
@@ -149,7 +158,8 @@ export class UObject extends Object {
     }
 
     public clone(): UObject {
-        return UObject.clone(this);
+        let obj = UObject.clone(this);
+        return obj;
     }
 
     public mixIn(from: any): void {
@@ -167,5 +177,10 @@ export class UObject extends Object {
     public merge(obj: any): UObject {
         UObject.merge(this, obj);
         return this;
+    }
+
+    public toString() {
+        let str = JSON.stringify(this);
+        return str;
     }
 };
