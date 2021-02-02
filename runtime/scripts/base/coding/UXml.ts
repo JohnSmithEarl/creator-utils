@@ -122,7 +122,7 @@ export class UXml {
     }
 
     private getNodeLocalName(node) {
-        var nodeLocalName = node.localName;
+        let nodeLocalName = node.localName;
         if (nodeLocalName == null) // Yeah, this is IE!!
             nodeLocalName = node.baseName;
         if (nodeLocalName == null || nodeLocalName == "") // =="" is IE too
@@ -146,9 +146,9 @@ export class UXml {
     }
 
     private checkInStdFiltersArrayForm(stdFiltersArrayForm, obj, name, path) {
-        var idx = 0;
+        let idx = 0;
         for (; idx < stdFiltersArrayForm.length; idx++) {
-            var filterPath = stdFiltersArrayForm[idx];
+            let filterPath = stdFiltersArrayForm[idx];
             if (typeof filterPath === "string") {
                 if (filterPath == path)
                     break;
@@ -627,13 +627,19 @@ export class UXml {
     }
 }
 
+import { UTest } from "../../utils/UTest";
 export let test = function () {
+    UTest.begin("UXml");
+
     // Basic Usage
     // XML to JSON
     // Create x2js instance with default config
     let x2js1 = new UXml();
     let xmlText1 = "<MyRoot><test>Success</test><test2><item>val1</item><item>val2</item></test2></MyRoot>";
     let jsonObj1 = x2js1.xml_str2json(xmlText1);
+    console.log("jsonObj1:", jsonObj1);
+
+    UTest.line();
 
     // JSON to XML
     // Create x2js instance with default config
@@ -647,6 +653,9 @@ export let test = function () {
         }
     };
     let xmlAsStr2 = x2js2.json2xml_str(jsonObj2);
+    console.log("xmlAsStr2:", xmlAsStr2);
+
+    UTest.line();
 
     // Working with arrays
     // Configure XML structure knowledge beforehand
@@ -655,12 +664,18 @@ export let test = function () {
             "MyArrays.test.item"
         ]
     });
-    let xmlText3 = "<MyArrays>" +
-        "<test><item>success</item><item>second</item></test>" +
+    let xmlText3 =
+        "<MyArrays>" +
+        "<test>" +
+        "<item>success</item>" +
+        "<item>second</item>" +
+        "</test>" +
         "</MyArrays>";
 
     let jsonObj3 = x2js3.xml_str2json(xmlText3);
-    console.log(jsonObj3.MyArrays.test2.item[0]);
+    console.log(jsonObj3.MyArrays.test.item[0]);
+
+    UTest.line();
 
     // Or using the utility function
     let x2js4 = new UXml();
@@ -669,6 +684,8 @@ export let test = function () {
         "</MyArrays>";
     let jsonObj4 = x2js4.xml_str2json(xmlText4);
     console.log(x2js4.asArray(jsonObj4.MyArrays.test.item)[0]);
+
+    UTest.line();
 
     // Working with XML attributes
     // Accessing to XML attributes
@@ -683,6 +700,8 @@ export let test = function () {
     // Or
     console.log(jsonObj5.MyOperation.toString());
 
+    UTest.line();
+
     // Configuring a custom prefix to attributes
     let x2js6 = new UXml({
         attributePrefix: "$"
@@ -691,6 +710,8 @@ export let test = function () {
     let jsonObj6 = x2js6.xml_str2json(xmlText6);
     // Access to attribute
     console.log(jsonObj6.MyOperation.$myAttr);
+
+    UTest.line();
 
     // Working with XML namespaces
     // Parsing XML with namespaces
@@ -704,6 +725,8 @@ export let test = function () {
     let jsonObj7 = x2js7.xml_str2json(xmlText7);
     console.log(jsonObj7.MyOperation.test);
 
+    UTest.line();
+
     // Creating JSON (for XML) with namespaces (Option 1)
     let x2js8 = new UXml({
         attributePrefix: "$"
@@ -716,10 +739,12 @@ export let test = function () {
             'cms:MyAnotherChild': 'vdfd'
         }
     }
-
-    let xmlDocStr = x2js8.json2xml_str(
+    let xmlDocStr8 = x2js8.json2xml_str(
         testObjC8
     );
+    console.log("xmlDocStr", xmlDocStr8);
+
+    UTest.line();
 
     // Creating JSON (for XML) with namespaces (Option 2)
     // Parse JSON object constructed with another NS-style
@@ -738,9 +763,10 @@ export let test = function () {
             }
         }
     }
-    let xmlDocStr9 = x2js9.json2xml_str(
-        testObjNew9
-    );
+    let xmlDocStr9 = x2js9.json2xml_str(testObjNew9);
+    console.log("xmlDocStr9:", xmlDocStr9);
+
+    UTest.line();
 
     // Working with XML DateTime
     // Configuring it beforehand
@@ -753,6 +779,7 @@ export let test = function () {
         "<testds>2002-10-10T12:00:00+04:00</testds>" +
         "</MyDts>";
     let jsonObj10 = x2js10.xml_str2json(xmlText10);
+    console.log("jsonObj10:", jsonObj10);
 
     // Or using the utility function
     let x2js11 = new UXml();
@@ -761,6 +788,8 @@ export let test = function () {
         "</MyDts>";
     let jsonObj11 = x2js11.xml_str2json(xmlText11);
     console.log(x2js11.asDateTime(jsonObj11.MyDts.testds));
+
+    UTest.line();
 
     // Networking samples
     // Parsing AJAX XML response (JQuery sample)
@@ -788,5 +817,8 @@ export let test = function () {
     // var xmlDoc = loadXMLDoc("test.xml");
     // var x2js = new UXml();
     // var jsonObj = x2js.xml2json(xmlDoc);
+
+    UTest.ended("UXml");
 };
 
+test();
