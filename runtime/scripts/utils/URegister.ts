@@ -1,75 +1,75 @@
 export class UTouchRegister {
     static register(
-        node: any,
+        target: any,
         touchBegin?: (pos: cc.Vec2) => {},
         touchMove?: (pos: cc.Vec2, delta: cc.Vec2) => {},
         touchEnded?: (pos: cc.Vec2) => {},
         touchCancel?: (pos: cc.Vec2) => {}): void {
 
-        if (!node) {
-            console.error("invlid node.");
+        if (!target || !target.node) {
+            console.error("UTouchRegister - register - invlid target.");
             return;
         }
 
-        node.touchBeginCallback = (event) => {
+        target.touchBeginCallback = (event) => {
             let pos = event.getLocation();
             if (typeof touchBegin == "function") {
                 touchBegin(pos);
             }
         };
-        node.touchMoveCallback = (event) => {
+        target.touchMoveCallback = (event) => {
             let pos = event.getLocation();
             let delta = event.getDelta();
             if (typeof touchMove == "function") {
                 touchMove(pos, delta);
             }
         };
-        node.touchEnededCallback = (event) => {
+        target.touchEnededCallback = (event) => {
             let pos = event.getLocation();
             if (typeof touchEnded == "function") {
                 touchEnded(pos);
             }
         }
-        node.touchCancelCallback = (event) => {
+        target.touchCancelCallback = (event) => {
             let pos = event.getLocation();
             if (typeof touchCancel == "function") {
                 touchCancel(pos);
             }
         };
 
-        node.on(cc.Node.EventType.TOUCH_START, node.touchBeginCallback, node);
-        node.on(cc.Node.EventType.TOUCH_MOVE, node.touchMoveCallback, node);
-        node.on(cc.Node.EventType.TOUCH_END, node.touchEnededCallback, node);
-        node.on(cc.Node.EventType.TOUCH_CANCEL, node.touchCancelCallback, node);
+        target.node.on(cc.Node.EventType.TOUCH_START, target.touchBeginCallback, target);
+        target.node.on(cc.Node.EventType.TOUCH_MOVE, target.touchMoveCallback, target);
+        target.node.on(cc.Node.EventType.TOUCH_END, target.touchEnededCallback, target);
+        target.node.on(cc.Node.EventType.TOUCH_CANCEL, target.touchCancelCallback, target);
     }
-    static unregister(node: any): void {
-        if (!node) {
-            console.error("invlid node.");
+    static unregister(target: any): void {
+        if (!target || !target.node) {
+            console.error("UTouchRegister - unregister - invlid target.");
             return;
         }
 
-        if (typeof node.touchBeginCallback == "function") {
-            node.off(cc.Node.EventType.TOUCH_START, node.touchBeginCallback, node);
-            node.touchBeginCallback = null;
+        if (typeof target.touchBeginCallback == "function") {
+            target.node.off(cc.Node.EventType.TOUCH_START, target.touchBeginCallback, target);
+            target.touchBeginCallback = null;
         }
-        if (typeof node.touchMoveCallback == "function") {
-            node.off(cc.Node.EventType.TOUCH_MOVE, node.touchMoveCallback, node);
-            node.touchMoveCallback = null;
+        if (typeof target.touchMoveCallback == "function") {
+            target.node.off(cc.Node.EventType.TOUCH_MOVE, target.touchMoveCallback, target);
+            target.touchMoveCallback = null;
         }
-        if (typeof node.touchEnededCallback == "function") {
-            node.off(cc.Node.EventType.TOUCH_END, node.touchEnededCallback, node);
-            node.touchEnededCallback = null;
+        if (typeof target.touchEnededCallback == "function") {
+            target.node.off(cc.Node.EventType.TOUCH_END, target.touchEnededCallback, target);
+            target.touchEnededCallback = null;
         }
-        if (typeof node.touchCancelCallback == "function") {
-            node.off(cc.Node.EventType.TOUCH_CANCEL, node.touchCancelCallback, node);
-            node.touchCancelCallback = null;
+        if (typeof target.touchCancelCallback == "function") {
+            target.node.off(cc.Node.EventType.TOUCH_CANCEL, target.touchCancelCallback, target);
+            target.touchCancelCallback = null;
         }
     };
 };
 
 export class UMouseRegister {
     static register(
-        node: any,
+        target: any,
         leftDown?: (pos: cc.Vec2) => {},
         leftUp?: (pos: cc.Vec2) => {},
         midDown?: (pos: cc.Vec2) => {},
@@ -79,12 +79,12 @@ export class UMouseRegister {
         mouseMove?: (pos: cc.Vec2, delta: cc.Vec2) => {},
         wheelScroll?: (scrollY: number) => {}): void {
 
-        if (!node) {
-            console.error("invlid node.");
+        if (!target || !target.node) {
+            console.error("UMouseRegister - register - invlid node.");
             return;
         }
 
-        node.mouseDown = (event: cc.Event.EventMouse) => {
+        target.mouseDown = (event: cc.Event.EventMouse) => {
             let mouseBtnType = event.getButton();
             let pos = event.getLocation();
             if (mouseBtnType == cc.Event.EventMouse.BUTTON_LEFT) {
@@ -103,7 +103,7 @@ export class UMouseRegister {
                 console.error("mouseDown:", mouseBtnType);
             }
         };
-        node.mouseUp = (event: cc.Event.EventMouse) => {
+        target.mouseUp = (event: cc.Event.EventMouse) => {
             let mouseBtnType = event.getButton();
             let pos = event.getLocation();
 
@@ -123,87 +123,85 @@ export class UMouseRegister {
                 console.error("mouseUp:", mouseBtnType);
             }
         };
-        node.mouseMove = (event: cc.Event.EventMouse) => {
+        target.mouseMove = (event: cc.Event.EventMouse) => {
             let pos = event.getLocation();
             let delta = event.getDelta();
             if (typeof mouseMove == "function") {
                 mouseMove(pos, delta);
             }
         };
-        node.mouseWheel = (event) => {
+        target.mouseWheel = (event) => {
             let scrollY = event.getScrollY();
             if (typeof wheelScroll == "function") {
                 wheelScroll(scrollY);
             }
         };
 
-        node.on(cc.Node.EventType.MOUSE_DOWN, node.mouseDown, node);
-        node.on(cc.Node.EventType.MOUSE_UP, node.mouseUp, node);
-        node.on(cc.Node.EventType.MOUSE_MOVE, node.mouseMove, node);
-        node.on(cc.Node.EventType.MOUSE_WHEEL, node.mouseWheel, node);
+        target.node.on(cc.Node.EventType.MOUSE_DOWN, target.mouseDown, target);
+        target.node.on(cc.Node.EventType.MOUSE_UP, target.mouseUp, target);
+        target.node.on(cc.Node.EventType.MOUSE_MOVE, target.mouseMove, target);
+        target.node.on(cc.Node.EventType.MOUSE_WHEEL, target.mouseWheel, target);
     }
-    unregister = function (node: any): void {
-        if (!node) {
-            console.error("invlid node.");
+    unregister = function (target: any): void {
+        if (!target || !target.node) {
+            console.error("UMouseRegister - unregister - invlid node.");
             return;
         }
 
-        if (typeof node.mouseDown == "function") {
-            node.off(cc.Node.EventType.MOUSE_DOWN, node.mouseDown, node);
-            node.mouseDown = null;
+        if (typeof target.mouseDown == "function") {
+            target.node.off(cc.Node.EventType.MOUSE_DOWN, target.mouseDown, target);
+            target.mouseDown = null;
         }
-        if (typeof node.mouseUp == "function") {
-            node.off(cc.Node.EventType.MOUSE_UP, node.mouseUp, node);
-            node.mouseUp = null;
+        if (typeof target.mouseUp == "function") {
+            target.node.off(cc.Node.EventType.MOUSE_UP, target.mouseUp, target);
+            target.mouseUp = null;
         }
-        if (typeof node.mouseMove == "function") {
-            node.off(cc.Node.EventType.MOUSE_MOVE, node.mouseMove, node);
-            node.mouseMove = null;
+        if (typeof target.mouseMove == "function") {
+            target.node.off(cc.Node.EventType.MOUSE_MOVE, target.mouseMove, target);
+            target.mouseMove = null;
         }
-        if (typeof node.mouseWheel == "function") {
-            node.off(cc.Node.EventType.MOUSE_WHEEL, node.mouseWheel, node);
-            node.mouseWheel = null;
+        if (typeof target.mouseWheel == "function") {
+            target.node.off(cc.Node.EventType.MOUSE_WHEEL, target.mouseWheel, target);
+            target.mouseWheel = null;
         }
     };
 };
 
 export class UBackgroundRegister {
     static register(
-        node: any,
-        hide?: Function,
-        show?: Function,
+        target: any,
+        hide: () => {},
+        show: () => {},
     ): void {
-        if (!node) {
-            console.error("invlid node.");
+        if (!target || !target.node) {
+            console.error("UBackgroundRegister - register - invlid node.");
             return;
         }
-
-        node.hideCallback = () => {
+        target.hideCallback = () => {
             if (typeof hide == "function") {
                 hide();
             }
         };
-        node.showCallback = () => {
+        target.showCallback = () => {
             if (typeof show == "function") {
                 show();
             }
         };
-        cc.game.on(cc.game.EVENT_HIDE, node.hideCallback, node);
-        cc.game.on(cc.game.EVENT_SHOW, node.showCallback, node);
+        cc.game.on(cc.game.EVENT_HIDE, target.hideCallback, target);
+        cc.game.on(cc.game.EVENT_SHOW, target.showCallback, target);
     }
-    static unregister(node: any): void {
-        if (!node) {
-            console.error("invlid node.");
+    static unregister(target: any): void {
+        if (!target || !target.node) {
+            console.error("UBackgroundRegister - unregister - invlid node.");
             return;
         }
-
-        if (typeof node.hideCallback == "function") {
-            cc.game.off(cc.game.EVENT_HIDE, node.hideCallback, node);
-            node.hideCallback = null;
+        if (typeof target.hideCallback == "function") {
+            cc.game.off(cc.game.EVENT_HIDE, target.hideCallback, target);
+            target.hideCallback = null;
         }
-        if (typeof node.showCallback == "function") {
-            cc.game.off(cc.game.EVENT_SHOW, node.showCallback, node);
-            node.showCallback = null;
+        if (typeof target.showCallback == "function") {
+            cc.game.off(cc.game.EVENT_SHOW, target.showCallback, target);
+            target.showCallback = null;
         }
     }
 };
