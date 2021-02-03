@@ -1,83 +1,14 @@
-let create = (function () {
-    function F() { }
-    return function (obj: any = null): any {
-        let subtype = null;
-
-        F.prototype = obj;
-
-        subtype = new F();
-
-        F.prototype = null;
-
-        return subtype;
-    };
-}());
-
+/**
+ * 基础对象
+ */
 export class UObject {
-    /**
-     * Extends this object and runs the init method.
-     * Arguments to create() will be passed to init().
-     * @return {Object} The new object.
-     * @static
-     * @example
-     *
-     *     var instance = MyType.create();
-     */
-    static create(): UObject {
-        let instance = UObject.extend();
-        instance.init.apply(instance, arguments);
-        return instance;
-    }
-
-    /**
-     * Creates a new object that inherits from this object.
-     * @param {Object} overrides Properties to copy into the new object.
-     * @return {Object} The new object.
-     * @static
-     * @example
-     *     var MyType = Base.extend({
-     *         field: 'value',
-     *         method: function () {
-     *         }
-     *     });
-     */
-    static extend(overrides: any = null): UObject {
-        let suptype = new UObject();
-
-        // Spawn
-        let subtype = create(UObject);
-
-        // Augment
-        if (overrides) {
-            subtype.mixIn(overrides);
-        }
-
-        // Create default initializer
-        if (!subtype.hasOwnProperty('init') || suptype.init === subtype.init) {
-            subtype.init = function () {
-                subtype.__proto__.init.apply(suptype, arguments);
-            };
-        }
-
-        // Initializer's prototype is the subtype object
-        subtype.init.prototype = subtype;
-
-        // Reference supertype
-        subtype.__proto__ = suptype;
-
-        return subtype;
-    }
-
-    static isValid(obj: any): boolean {
-        let isVal = cc.sys.isObjectValid(obj);
-        return isVal;
-    }
-
     static keys(obj: any): Array<string> {
         if (typeof obj == "object") {
             let keys = [];
             for (let key in obj) {
-                keys[keys.length] = key;
+                if (obj.hasOwnProperty(key)) {
+                    keys[keys.length] = key;
+                }
             }
             return keys;
         } else {
@@ -102,13 +33,13 @@ export class UObject {
         }
     }
 
-    static clone(obj: any): any {
+    static deepCopy(obj: any): any {
         let objClone = Array.isArray(obj) ? [] : {};
         if (obj && typeof obj === "object") {
             for (let key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     if (obj[key] && typeof obj[key] === "object") {
-                        objClone[key] = UObject.clone(obj[key]);
+                        objClone[key] = UObject.deepCopy(obj[key]);
                     } else {
                         objClone[key] = obj[key];
                     }
@@ -124,7 +55,7 @@ export class UObject {
         return objClone;
     }
 
-    static mixIn(to: any, from: any) {
+    static merge(to: any, from: any) {
         for (let key in from) {
             if (from.hasOwnProperty(key)) {
                 to[key] = from[key];
@@ -136,76 +67,12 @@ export class UObject {
         }
     }
 
-    static merge(def: any, obj: any): any {
-        if (!obj) {
-            return def;
-        } else if (!def) {
-            return obj;
-        }
-
-        for (let i in obj) {
-            // if its an object
-            if (obj[i] != null && obj[i].constructor == UObject) {
-                def[i] = UObject.merge(def[i], obj[i]);
-            }
-            // if its an array, simple values need to be joined.  UObject values need to be re-merged.
-            else if (obj[i] != null && (obj[i] instanceof Array) && obj[i].length > 0) {
-                // test to see if the first element is an object or not so we know the type of array we're dealing with.
-                if (obj[i][0].constructor == UObject) {
-                    let newobjs = [];
-                    // create an index of all the existing object IDs for quick access.  There is no way to know how many items will be in the arrays.
-                    let objids = {}
-                    for (let x = 0, l = def[i].length; x < l; x++) {
-                        objids[def[i][x].id] = x;
-                    }
-
-                    // now walk through the objects in the new array
-                    // if the ID exists, then merge the objects.
-                    // if the ID does not exist, push to the end of the def array
-                    for (let x = 0, l = obj[i].length; x < l; x++) {
-                        let newobj = obj[i][x];
-                        if (objids[newobj.id] !== undefined) {
-                            def[i][x] = UObject.merge(def[i][x], newobj);
-                        }
-                        else {
-                            newobjs.push(newobj);
-                        }
-                    }
-
-                    for (let x = 0, l = newobjs.length; x < l; x++) {
-                        def[i].push(newobjs[x]);
-                    }
-                } else {
-                    for (let x = 0; x < obj[i].length; x++) {
-                        let idxObj = obj[i][x];
-                        if (def[i].indexOf(idxObj) === -1) {
-                            def[i].push(idxObj);
-                        }
-                    }
-                }
-            } else {
-                if (isNaN(obj[i]) || i.indexOf('_key') > -1) {
-                    def[i] = obj[i];
-                }
-                else {
-                    def[i] += obj[i];
-                }
-            }
-        }
-        return def;
-    }
-
-    constructor() {
+    constructor(...args: any[]) {
         this.init(arguments);
     }
 
-    init(...arg: any) {
+    init(...args: any[]) {
 
-    }
-
-    isValid(): boolean {
-        let isVal = UObject.isValid(this);
-        return isVal;
     }
 
     keys(): Array<string> {
@@ -214,47 +81,33 @@ export class UObject {
     }
 
     values(): Array<any> {
-        let keys = UObject.keys(this);
-        let values = [];
-        for (let i = 0; i < keys.length; i++) {
-            let key = keys[i];
-            if (this.hasOwnProperty(key)) {
-                let val = this[key];
-                values[values.length] = val;
-            }
-        }
+        let values = UObject.values(this);
         return values;
     }
 
-    // clone(): UObject {
-    //     let obj = UObject.clone(this);
-    //     return obj;
-    // }
-    /**
-         * Creates a copy of this object.
-         * @return {Object} The clone.
-         * @example
-         *     var clone = instance.clone();
-         */
-    clone(): UObject {
-        return this.init.prototype.extend(this);
+    deepCopy() {
+        let obj = UObject.deepCopy(this);
+        return obj;
     }
 
-    mixIn(from: any): void {
-        for (let propertyName in from) {
-            if (from.hasOwnProperty(propertyName)) {
-                this[propertyName] = from[propertyName];
+    clone(): any {
+        let create: any = this.constructor;
+        let cloneObj = new create();
+        for (let attribute in this) {
+            if (this.hasOwnProperty(attribute)) {
+                if (typeof this[attribute] === "object") {
+                    let obj: any = this[attribute];
+                    cloneObj[attribute] = obj.clone.call(obj);
+                } else {
+                    cloneObj[attribute] = this[attribute];
+                }
             }
         }
-        // IE won't copy toString using the loop above
-        if (from.hasOwnProperty('toString')) {
-            this.toString = from.toString;
-        }
+        return cloneObj;
     }
 
-    merge(obj: any): UObject {
-        UObject.merge(this, obj);
-        return this;
+    merge(from: any): void {
+        UObject.merge(this, from);
     }
 
     toString(encoder = JSON): string {
@@ -367,6 +220,6 @@ let test = function () {
 
 
     console.log("////////////////////////////////////");
-}
+};
 
 test();

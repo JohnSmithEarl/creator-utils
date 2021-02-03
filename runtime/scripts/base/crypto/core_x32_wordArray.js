@@ -147,3 +147,15 @@ var WordArray = Base.extend({
 });
 
 module.exports = WordArray;
+
+let test = function () {
+    console.log("######################################");
+    let wordArray = WordArray.create([0x00010203, 0x04050607]);
+    console.log("wordArray:", wordArray);
+    let wordArray1 = wordArray.clone();
+    console.log("wordArray1:", wordArray1);
+    console.log("wordArray === wordArray1:", wordArray === wordArray1);
+    console.log("######################################");
+}
+
+test();

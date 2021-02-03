@@ -177,10 +177,6 @@ export class UWordX64 extends UObject {
         let newWord = new UWordX64(high, low);
         return newWord;
     }
-
-    toString(): string {
-        return "{ high:" + this.high + ",low:" + this.low + "}";
-    }
 };
 
 import { UTest } from "./UTest";
@@ -193,5 +189,7 @@ UTest.test("UWordX64", [
 
         let w4 = w2.clone();
         console.log("w4:", w4);
+
+        console.log("w3 === w4", w3 === w4);
     }
 ]);
