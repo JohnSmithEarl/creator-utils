@@ -13,7 +13,7 @@ export class UHex {
      *
      *     var hexString =  Hex.stringify(wordArray);
      */
-    stringify(wordArray: UWordArrayX32): string {
+    static stringify(wordArray: UWordArrayX32): string {
         // Shortcuts
         var words = wordArray.words;
         var sigBytes = wordArray.sigBytes;
@@ -38,7 +38,7 @@ export class UHex {
      *
      *     var wordArray =  Hex.parse(hexString);
      */
-    parse(hexStr: string): UWordArrayX32 {
+    static parse(hexStr: string): UWordArrayX32 {
         // Shortcut
         var hexStrLength = hexStr.length;
 
@@ -48,6 +48,6 @@ export class UHex {
             words[i >>> 3] |= parseInt(hexStr.substr(i, 2), 16) << (24 - (i % 8) * 4);
         }
 
-        return new UWordArrayX32().init(words, hexStrLength / 2);
+        return new UWordArrayX32(words, hexStrLength / 2);
     }
 };

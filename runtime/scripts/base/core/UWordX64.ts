@@ -7,11 +7,6 @@ export class UWordX64 extends UObject {
     high: number = 0;
     low: number = 0;
 
-    constructor(high: number, low: number) {
-        super();
-        this.init(high, low);
-    }
-
     /**
      * Initializes a newly created 64-bit word.
      * @param {number} high The high 32 bits.
@@ -21,7 +16,9 @@ export class UWordX64 extends UObject {
      *
      *     let UWordX64 = Word.create(0x00010203, 0x04050607);
      */
-    init(high: number, low: number) {
+    constructor(high: number, low: number) {
+        super(arguments);
+
         this.high = high;
         this.low = low;
     }
@@ -182,14 +179,14 @@ export class UWordX64 extends UObject {
 import { UTest } from "./UTest";
 UTest.test("UWordX64", [
     () => {
-        let w1 = new UWordX64(0, 1);
-        let w2 = new UWordX64(0, 2);
-        let w3 = w1.and(w2);
-        console.log("w3:", w3)
+        let word1 = new UWordX64(0, 1);
+        let word2 = new UWordX64(0, 2);
+        let word3 = word1.and(word2);
+        console.log("word3:", word3)
 
-        let w4 = w2.clone();
-        console.log("w4:", w4);
+        let word4 = word2.clone();
+        console.log("word4:", word4);
 
-        console.log("w3 === w4", w3 === w4);
+        console.log("word2 === word4", word2 === word4);
     }
 ]);

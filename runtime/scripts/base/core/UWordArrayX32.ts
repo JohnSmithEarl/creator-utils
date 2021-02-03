@@ -17,11 +17,13 @@ export class UWordArrayX32 extends UObject {
      *
      * @example
      *
-     *     var wordArray = UWordArrayX32.create();
-     *     var wordArray = UWordArrayX32.create([0x00010203, 0x04050607]);
-     *     var wordArray = UWordArrayX32.create([0x00010203, 0x04050607], 6);
+     *     let wordArray = UWordArrayX32()
+     *     let wordArray = UWordArrayX32([0x00010203, 0x04050607]);
+     *     let wordArray = UWordArrayX32([0x00010203, 0x04050607], 6);
      */
-    init(words: Array<number>, sigBytes: number) {
+    constructor(words?: Array<number>, sigBytes?: number) {
+        super(arguments);
+
         words = this.words = words || [];
         if (sigBytes != undefined) {
             this.sigBytes = sigBytes;
@@ -38,12 +40,12 @@ export class UWordArrayX32 extends UObject {
      *
      * @example
      *
-     *     var string = wordArray + '';
-     *     var string = wordArray.toString();
-     *     var string = wordArray.toString(Utf8);
+     *     let string = wordArray + '';
+     *     let string = wordArray.toString();
+     *     let string = wordArray.toString(Utf8);
      */
-    toString(encoder: any): string {
-        return (encoder || UHex).stringify(this);
+    toString(encoder: any = UHex): string {
+        return super.toString(encoder);
     }
 
     /**
@@ -55,10 +57,10 @@ export class UWordArrayX32 extends UObject {
      */
     concat(wordArray: UWordArrayX32): UWordArrayX32 {
         // Shortcuts
-        var thisWords = this.words;
-        var thatWords = wordArray.words;
-        var thisSigBytes = this.sigBytes;
-        var thatSigBytes = wordArray.sigBytes;
+        let thisWords = this.words;
+        let thatWords = wordArray.words;
+        let thisSigBytes = this.sigBytes;
+        let thatSigBytes = wordArray.sigBytes;
 
         // Clamp excess bits
         this.clamp();
@@ -66,13 +68,13 @@ export class UWordArrayX32 extends UObject {
         // Concat
         if (thisSigBytes % 4) {
             // Copy one byte at a time
-            for (var i = 0; i < thatSigBytes; i++) {
-                var thatByte = (thatWords[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+            for (let i = 0; i < thatSigBytes; i++) {
+                let thatByte = (thatWords[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
                 thisWords[(thisSigBytes + i) >>> 2] |= thatByte << (24 - ((thisSigBytes + i) % 4) * 8);
             }
         } else {
             // Copy one word at a time
-            for (var i = 0; i < thatSigBytes; i += 4) {
+            for (let i = 0; i < thatSigBytes; i += 4) {
                 thisWords[(thisSigBytes + i) >>> 2] = thatWords[i >>> 2];
             }
         }
@@ -89,8 +91,8 @@ export class UWordArrayX32 extends UObject {
      */
     clamp() {
         // Shortcuts
-        var words = this.words;
-        var sigBytes = this.sigBytes;
+        let words = this.words;
+        let sigBytes = this.sigBytes;
 
         // Clamp
         words[sigBytes >>> 2] &= 0xffffffff << (32 - (sigBytes % 4) * 8);
@@ -102,10 +104,10 @@ export class UWordArrayX32 extends UObject {
      * @return {UWordArrayX32} The clone.
      * @example
      *
-     *     var clone = wordArray.clone();
+     *     let clone = wordArray.clone();
      */
     // clone() {
-    //     var clone = Base.clone.call(this);
+    //     let clone = Base.clone.call(this);
     //     clone.words = this.words.slice(0);
     //     return clone;
     // }
@@ -116,33 +118,41 @@ export class UWordArrayX32 extends UObject {
      * @return {UWordArrayX32} The random word array.
      * @static
      * @example
-     *     var wordArray =  UWordArrayX32.random(16);
+     *     let wordArray =  UWordArrayX32.random(16);
      */
     random(nBytes: number): UWordArrayX32 {
-        var words = [];
+        let words = [];
 
-        var r = function (m_w) {
-            var m_w = m_w;
-            var m_z = 0x3ade68b1;
-            var mask = 0xffffffff;
+        let r = function (t_m_w) {
+            let m_w = t_m_w;
+            let m_z = 0x3ade68b1;
+            let mask = 0xffffffff;
 
             return function () {
                 m_z = (0x9069 * (m_z & 0xFFFF) + (m_z >> 0x10)) & mask;
                 m_w = (0x4650 * (m_w & 0xFFFF) + (m_w >> 0x10)) & mask;
-                var result = ((m_z << 0x10) + m_w) & mask;
+                let result = ((m_z << 0x10) + m_w) & mask;
                 result /= 0x100000000;
                 result += 0.5;
                 return result * (Math.random() > 0.5 ? 1 : -1);
             }
         };
 
-        for (var i = 0, rcache; i < nBytes; i += 4) {
-            var _r = r((rcache || Math.random()) * 0x100000000);
+        for (let i = 0, rcache; i < nBytes; i += 4) {
+            let _r = r((rcache || Math.random()) * 0x100000000);
 
             rcache = _r() * 0x3ade67b7;
             words.push((_r() * 0x100000000) | 0);
         }
 
-        return new UWordArrayX32().init(words, nBytes);
+        return new UWordArrayX32(words, nBytes);
     }
 };
+
+import { UTest } from "./UTest";
+UTest.test("UWordX64", [() => {
+    let wordArray1 = new UWordArrayX32([0x00010203, 0x04050607]);
+    let wordArray2 = new UWordArrayX32([0x00010203, 0x04050607], 6);
+    console.log("wordArray1:", wordArray1.toString(), wordArray1);
+    console.log("wordArray2:", wordArray2.toString(), wordArray2);
+}]);

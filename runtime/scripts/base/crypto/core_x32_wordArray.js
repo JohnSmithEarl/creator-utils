@@ -157,5 +157,3 @@ let test = function () {
     console.log("wordArray === wordArray1:", wordArray === wordArray1);
     console.log("######################################");
 }
-
-test();

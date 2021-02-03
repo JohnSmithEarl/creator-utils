@@ -20,19 +20,21 @@ export class UWordArrayX64 extends UObject {
      *
      * @example
      *
-     *     var wordArray = UWordArrayX64.create();
+     *     let wordArray = UWordArrayX64.create();
      *
-     *     var wordArray = UWordArrayX64.create([
+     *     let wordArray = UWordArrayX64.create([
      *         UWordX64.create(0x00010203, 0x04050607),
      *         UWordX64.create(0x18191a1b, 0x1c1d1e1f)
      *     ]);
      *
-     *     var wordArray = UWordArrayX64.create([
+     *     let wordArray = UWordArrayX64.create([
      *         UWordX64.create(0x00010203, 0x04050607),
      *         UWordX64.create(0x18191a1b, 0x1c1d1e1f)
      *     ], 10);
      */
-    init(words: Array<UWordX64>, sigBytes: number) {
+    constructor(words: Array<UWordX64>, sigBytes: number) {
+        super(arguments);
+
         this.words = words || [];
         if (sigBytes != undefined) {
             this.sigBytes = sigBytes;
@@ -49,22 +51,22 @@ export class UWordArrayX64 extends UObject {
      *
      * @example
      *
-     *     var x32WordArray = x64WordArray.toX32();
+     *     let x32WordArray = x64WordArray.toX32();
      */
     toX32(): UWordArrayX32 {
         // Shortcuts
-        var x64Words = this.words;
-        var x64WordsLength = x64Words.length;
+        let x64Words = this.words;
+        let x64WordsLength = x64Words.length;
 
         // Convert
-        var x32Words = [];
-        for (var i = 0; i < x64WordsLength; i++) {
-            var x64Word: UWordX64 = x64Words[i];
+        let x32Words = [];
+        for (let i = 0; i < x64WordsLength; i++) {
+            let x64Word: UWordX64 = x64Words[i];
             x32Words.push(x64Word.high);
             x32Words.push(x64Word.low);
         }
 
-        return UWordArrayX32.create(x32Words, this.sigBytes);
+        return new UWordArrayX32(x32Words, this.sigBytes);
     }
 
     /**
@@ -74,17 +76,17 @@ export class UWordArrayX64 extends UObject {
      *
      * @example
      *
-     *     var clone = x64WordArray.clone();
+     *     let clone = x64WordArray.clone();
      */
     clone(): UWordArrayX64 {
-        var clone = Base.clone.call(this);
+        let clone = super.clone.call(this);
 
         // Clone "words" array
-        var words = clone.words = this.words.slice(0);
+        let words = clone.words = this.words.slice(0);
 
         // Clone each X64Word object
-        var wordsLength = words.length;
-        for (var i = 0; i < wordsLength; i++) {
+        let wordsLength = words.length;
+        for (let i = 0; i < wordsLength; i++) {
             words[i] = words[i].clone();
         }
 
