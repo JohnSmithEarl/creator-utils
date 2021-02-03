@@ -10,20 +10,15 @@ export class UTest {
         console.log("--------------------");
     }
 
+    public static test(testName: string, exec: Function) {
+        console.log("--------------------\n");
+        exec(this);
+    }
+
     static ended(title: string): void {
         console.log("<====================\n");
         console.log("ended ->>> ", title, "\n")
         console.log("<====================\n");
         console.log("\n");
-    }
-
-    public static test(testName: string, exec: Function) {
-        console.log("====================>\n");
-        console.log("start ->>> ", testName, "\n");
-
-        exec();
-
-        console.log("ended ->>> ", testName, "\n")
-        console.log("<====================\n");
     }
 };

@@ -3,9 +3,9 @@ import { UObject } from "./UObject";
 /**
  * A 64-bit word.
  */
-export class UWordx64 extends UObject {
-    protected high: number = 0;
-    protected low: number = 0;
+export class UWordX64 extends UObject {
+    public high: number = 0;
+    public low: number = 0;
 
     constructor(high: number, low: number) {
         super();
@@ -19,7 +19,7 @@ export class UWordx64 extends UObject {
      *
      * @example
      *
-     *     let UWordx64 = Word.create(0x00010203, 0x04050607);
+     *     let UWordX64 = Word.create(0x00010203, 0x04050607);
      */
     init(high: number, low: number) {
         this.high = high;
@@ -28,77 +28,77 @@ export class UWordx64 extends UObject {
 
     /**
      * Bitwise NOTs this word.
-     * @return {UWordx64} A new x64-Word object after negating.
+     * @return {UWordX64} A new x64-Word object after negating.
      * @example
      *
-     *     let negated = UWordx64.not();
+     *     let negated = UWordX64.not();
      */
-    not(): UWordx64 {
+    not(): UWordX64 {
         let high = ~this.high;
         let low = ~this.low;
-        let word = new UWordx64(high, low);
+        let word = new UWordX64(high, low);
         return word;
     }
 
     /**
      * Bitwise ANDs this word with the passed word.
-     * @param {UWordx64} word The x64-Word to AND with this word.
-     * @return {UWordx64} A new x64-Word object after ANDing.
+     * @param {UWordX64} word The x64-Word to AND with this word.
+     * @return {UWordX64} A new x64-Word object after ANDing.
      *
      * @example
      *
-     *     let anded = UWordx64.and(anotherUX64Word);
+     *     let anded = UWordX64.and(anotherUX64Word);
      */
-    and(word: UWordx64): UWordx64 {
+    and(word: UWordX64): UWordX64 {
         let high = this.high & word.high;
         let low = this.low & word.low;
 
-        let newWord = new UWordx64(high, low);
+        let newWord = new UWordX64(high, low);
         return newWord;
     }
 
     /**
      * Bitwise ORs this word with the passed word.
-     * @param {UWordx64} word The x64-Word to OR with this word.
-     * @return {UWordx64} A new x64-Word object after ORing.
+     * @param {UWordX64} word The x64-Word to OR with this word.
+     * @return {UWordX64} A new x64-Word object after ORing.
      *
      * @example
      *
-     *     let ored = UWordx64.or(anotherUX64Word);
+     *     let ored = UWordX64.or(anotherUX64Word);
      */
-    or(word: UWordx64): UWordx64 {
+    or(word: UWordX64): UWordX64 {
         let high = this.high | word.high;
         let low = this.low | word.low;
 
-        let newWord = new UWordx64(high, low);
+        let newWord = new UWordX64(high, low);
         return newWord;
     }
 
     /**
      * Bitwise XORs this word with the passed word.
-     * @param {UWordx64} word The x64-Word to XOR with this word.
-     * @return {UWordx64} A new x64-Word object after XORing.
+     * @param {UWordX64} word The x64-Word to XOR with this word.
+     * @return {UWordX64} A new x64-Word object after XORing.
      * @example
      *
-     *     let xored = UWordx64.xor(anotherUX64Word);
+     *     let xored = UWordX64.xor(anotherUX64Word);
      */
-    xor(word: UWordx64): UWordx64 {
+    xor(word: UWordX64): UWordX64 {
         let high = this.high ^ word.high;
         let low = this.low ^ word.low;
 
-        let newWord = new UWordx64(high, low);
+        let newWord = new UWordX64(high, low);
         return newWord;
     }
 
     /**
      * Shifts this word n bits to the left.
      * @param {number} n The number of bits to shift.
-     * @return {UWordx64} A new x64-Word object after shifting.
+     * @return {UWordX64} A new x64-Word object after shifting.
      * @example
      *
-     *     let shifted = UWordx64.shiftL(25);
+     *     let shifted = UWordX64.shiftL(25);
      */
-    shiftL(n: number): UWordx64 {
+    shiftL(n: number): UWordX64 {
         let high = 0;
         let low = 0;
         if (n < 32) {
@@ -109,19 +109,19 @@ export class UWordx64 extends UObject {
             low = 0;
         }
 
-        let newWord = new UWordx64(high, low);
+        let newWord = new UWordX64(high, low);
         return newWord;
     }
 
     /**
      * Shifts this word n bits to the right.
      * @param {number} n The number of bits to shift.
-     * @return {UWordx64} A new x64-Word object after shifting.
+     * @return {UWordX64} A new x64-Word object after shifting.
      * @example
      *
-     *     let shifted = UWordx64.shiftR(7);
+     *     let shifted = UWordX64.shiftR(7);
      */
-    shiftR(n: number): UWordx64 {
+    shiftR(n: number): UWordX64 {
         let low = 0;
         let high = 0;
         if (n < 32) {
@@ -132,49 +132,49 @@ export class UWordx64 extends UObject {
             high = 0;
         }
 
-        let newWord = new UWordx64(high, low);
+        let newWord = new UWordX64(high, low);
         return newWord;
     }
 
     /**
      * Rotates this word n bits to the left.
      * @param {number} n The number of bits to rotate.
-     * @return {UWordx64} A new x64-Word object after rotating.
+     * @return {UWordX64} A new x64-Word object after rotating.
      * @example
      *
-     *     let rotated = UWordx64.rotL(25);
+     *     let rotated = UWordX64.rotL(25);
      */
-    rotL(n: number): UWordx64 {
+    rotL(n: number): UWordX64 {
         return this.shiftL(n).or(this.shiftR(64 - n));
     }
 
     /**
      * Rotates this word n bits to the right.
      * @param {number} n The number of bits to rotate.
-     * @return {UWordx64} A new x64-Word object after rotating.
+     * @return {UWordX64} A new x64-Word object after rotating.
      *
      * @example
      *
-     *     let rotated = UWordx64.rotR(7);
+     *     let rotated = UWordX64.rotR(7);
      */
-    rotR(n: number): UWordx64 {
+    rotR(n: number): UWordX64 {
         return this.shiftR(n).or(this.shiftL(64 - n));
     }
 
     /**
      * Adds this word with the passed word.
-     * @param {UWordx64} word The x64-Word to add with this word.
-     * @return {UWordx64} A new x64-Word object after adding.
+     * @param {UWordX64} word The x64-Word to add with this word.
+     * @return {UWordX64} A new x64-Word object after adding.
      * @example
      *
-     *     let added = UWordx64.add(anotherUX64Word);
+     *     let added = UWordX64.add(anotherUX64Word);
      */
-    add(word: UWordx64): UWordx64 {
+    add(word: UWordX64): UWordX64 {
         let low = (this.low + word.low) | 0;
         let carry = (low >>> 0) < (this.low >>> 0) ? 1 : 0;
         let high = (this.high + word.high + carry) | 0;
 
-        let newWord = new UWordx64(high, low);
+        let newWord = new UWordX64(high, low);
         return newWord;
     }
 
@@ -186,12 +186,10 @@ export class UWordx64 extends UObject {
 export let test = function () {
     console.log("test UX64World");
 
-    let w1 = new UWordx64(0, 1);
-    let w2 = new UWordx64(0, 2);
+    let w1 = new UWordX64(0, 1);
+    let w2 = new UWordX64(0, 2);
     let w3 = w1.and(w2);
     console.log("w3:", w3.toString())
 
     console.log("test UX64World");
 };
-
-test();

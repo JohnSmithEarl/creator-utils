@@ -1,4 +1,11 @@
 export class UObject {
+    public static create() {
+        let obj = new UObject();
+        obj.init.apply(this, arguments);
+
+        return obj;
+    }
+
     public static isValid(obj: any): boolean {
         let isVal = cc.sys.isObjectValid(obj);
         return isVal;

@@ -627,7 +627,7 @@ export class UXml {
     }
 }
 
-import { UTest } from "../../utils/UTest";
+import { UTest } from "../core/UTest";
 export let test = function () {
     UTest.begin("UXml");
 
