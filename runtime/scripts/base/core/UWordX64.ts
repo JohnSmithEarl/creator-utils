@@ -4,8 +4,8 @@ import { UObject } from "./UObject";
  * A 64-bit word.
  */
 export class UWordX64 extends UObject {
-    public high: number = 0;
-    public low: number = 0;
+    high: number = 0;
+    low: number = 0;
 
     constructor(high: number, low: number) {
         super();
@@ -183,18 +183,15 @@ export class UWordX64 extends UObject {
     }
 };
 
-export let test = function () {
-    console.log("test UX64World");
+import { UTest } from "./UTest";
+UTest.test("UWordX64", [
+    () => {
+        let w1 = new UWordX64(0, 1);
+        let w2 = new UWordX64(0, 2);
+        let w3 = w1.and(w2);
+        console.log("w3:", w3)
 
-    let w1 = new UWordX64(0, 1);
-    let w2 = new UWordX64(0, 2);
-    let w3 = w1.and(w2);
-    console.log("w3:", w3)
-
-    let w4 = w2.clone();
-    console.log("w4:", w4);
-
-    console.log("test UX64World");
-};
-
-test();
+        let w4 = w2.clone();
+        console.log("w4:", w4);
+    }
+]);

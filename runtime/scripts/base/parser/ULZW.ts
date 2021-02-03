@@ -240,26 +240,21 @@ export class ULZW {
 };
 
 import { UTest } from "../core/UTest";
-export let test = function () {
-    UTest.begin("ULZW");
-
-    let str1 = "一个JS实现的LZW压缩算法方法实现字符串的压缩和解压";
-    let cStr1 = ULZW.compress(str1);
-    let dStr1 = ULZW.decompress(cStr1);
-    console.log("str:", str1.length, str1);
-    console.log("cStr:", cStr1.length, cStr1);
-    console.log("dStr:", dStr1.length, dStr1);
-
-    UTest.line();
-
-    let str2 = "Legendary French fashion designer Pierre Cardin has died at the age of 98, France's Fine Arts Academy announced on Tuesday in a statement on Twitter.";
-    let cStr2 = ULZW.compress(str2);
-    let dStr2 = ULZW.decompress(cStr2);
-    console.log("str:", str2.length, str2);
-    console.log("cStr:", cStr2.length, cStr2);
-    console.log("dStr:", dStr2.length, dStr2);
-
-    UTest.ended("ULZW");
-};
-
-test();
+UTest.test("ULZW", [
+    () => {
+        let str1 = "一个JS实现的LZW压缩算法方法实现字符串的压缩和解压";
+        let cStr1 = ULZW.compress(str1);
+        let dStr1 = ULZW.decompress(cStr1);
+        console.log("str:", str1.length, str1);
+        console.log("cStr:", cStr1.length, cStr1);
+        console.log("dStr:", dStr1.length, dStr1);
+    },
+    () => {
+        let str2 = "Legendary French fashion designer Pierre Cardin has died at the age of 98, France's Fine Arts Academy announced on Tuesday in a statement on Twitter.";
+        let cStr2 = ULZW.compress(str2);
+        let dStr2 = ULZW.decompress(cStr2);
+        console.log("str:", str2.length, str2);
+        console.log("cStr:", cStr2.length, cStr2);
+        console.log("dStr:", dStr2.length, dStr2);
+    }
+]);

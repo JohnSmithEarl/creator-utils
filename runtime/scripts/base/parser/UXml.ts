@@ -628,197 +628,182 @@ export class UXml {
 }
 
 import { UTest } from "../core/UTest";
-export let test = function () {
-    UTest.begin("UXml");
+UTest.test("UXml", [
+    () => {
+        // Basic Usage
+        // XML to JSON
+        // Create x2js instance with default config
+        let x2js1 = new UXml();
+        let xmlText1 = "<MyRoot><test>Success</test><test2><item>val1</item><item>val2</item></test2></MyRoot>";
+        let jsonObj1 = x2js1.xml_str2json(xmlText1);
+        console.log("jsonObj1:", jsonObj1);
+    },
+    () => {
+        // JSON to XML
+        // Create x2js instance with default config
+        let x2js2 = new UXml();
+        let jsonObj2 = {
+            MyRoot: {
+                test: 'success',
+                test2: {
+                    item: ['val1', 'val2']
+                }
+            }
+        };
+        let xmlAsStr2 = x2js2.json2xml_str(jsonObj2);
+        console.log("xmlAsStr2:", xmlAsStr2);
+    },
+    () => {
+        // Working with arrays
+        // Configure XML structure knowledge beforehand
+        let x2js3 = new UXml({
+            arrayAccessFormPaths: [
+                "MyArrays.test.item"
+            ]
+        });
+        let xmlText3 =
+            "<MyArrays>" +
+            "<test>" +
+            "<item>success</item>" +
+            "<item>second</item>" +
+            "</test>" +
+            "</MyArrays>";
 
-    // Basic Usage
-    // XML to JSON
-    // Create x2js instance with default config
-    let x2js1 = new UXml();
-    let xmlText1 = "<MyRoot><test>Success</test><test2><item>val1</item><item>val2</item></test2></MyRoot>";
-    let jsonObj1 = x2js1.xml_str2json(xmlText1);
-    console.log("jsonObj1:", jsonObj1);
+        let jsonObj3 = x2js3.xml_str2json(xmlText3);
+        console.log(jsonObj3.MyArrays.test.item[0]);
+    },
+    () => {
+        // Or using the utility function
+        let x2js4 = new UXml();
+        let xmlText4 = "<MyArrays>" +
+            "<test><item>success</item><item>second</item></test>" +
+            "</MyArrays>";
+        let jsonObj4 = x2js4.xml_str2json(xmlText4);
+        console.log(x2js4.asArray(jsonObj4.MyArrays.test.item)[0]);
+    },
+    () => {
+        // Working with XML attributes
+        // Accessing to XML attributes
+        // Create x2js instance with default config
+        let x2js5 = new UXml();
+        let xmlText5 = "<MyOperation myAttr='SuccessAttrValue'>MyText</MyOperation>";
+        let jsonObj5 = x2js5.xml_str2json(xmlText5);
+        // Access to attribute
+        console.log(jsonObj5.MyOperation._myAttr);
+        // Access to text
+        console.log(jsonObj5.MyOperation.__text);
+        // Or
+        console.log(jsonObj5.MyOperation.toString());
+    },
+    () => {
+        // Configuring a custom prefix to attributes
+        let x2js6 = new UXml({
+            attributePrefix: "$"
+        });
+        let xmlText6 = "<MyOperation myAttr='SuccessAttrValue'>MyText</MyOperation>";
+        let jsonObj6 = x2js6.xml_str2json(xmlText6);
+        // Access to attribute
+        console.log(jsonObj6.MyOperation.$myAttr);
+    },
+    () => {
+        // Working with XML namespaces
+        // Parsing XML with namespaces
+        let x2js7 = new UXml({
+            attributePrefix: "$"
+        });
+        let xmlText7 = "<testns:MyOperation xmlns:testns='http://www.example.org'>" +
+            "<test>Success</test><test2 myAttr='SuccessAttrValueTest2'>" +
+            "<item>ddsfg</item><item>dsdgfdgfd</item><item2>testArrSize</item2></test2></testns:MyOperation>";
 
-    UTest.line();
-
-    // JSON to XML
-    // Create x2js instance with default config
-    let x2js2 = new UXml();
-    let jsonObj2 = {
-        MyRoot: {
-            test: 'success',
-            test2: {
-                item: ['val1', 'val2']
+        let jsonObj7 = x2js7.xml_str2json(xmlText7);
+        console.log(jsonObj7.MyOperation.test);
+    },
+    () => {
+        // Creating JSON (for XML) with namespaces (Option 1)
+        let x2js8 = new UXml({
+            attributePrefix: "$"
+        });
+        let testObjC8 = {
+            'm:TestAttrRoot': {
+                '_tns:m': 'http://www.example.org',
+                '_tns:cms': 'http://www.example.org',
+                MyChild: 'my_child_value',
+                'cms:MyAnotherChild': 'vdfd'
             }
         }
-    };
-    let xmlAsStr2 = x2js2.json2xml_str(jsonObj2);
-    console.log("xmlAsStr2:", xmlAsStr2);
-
-    UTest.line();
-
-    // Working with arrays
-    // Configure XML structure knowledge beforehand
-    let x2js3 = new UXml({
-        arrayAccessFormPaths: [
-            "MyArrays.test.item"
-        ]
-    });
-    let xmlText3 =
-        "<MyArrays>" +
-        "<test>" +
-        "<item>success</item>" +
-        "<item>second</item>" +
-        "</test>" +
-        "</MyArrays>";
-
-    let jsonObj3 = x2js3.xml_str2json(xmlText3);
-    console.log(jsonObj3.MyArrays.test.item[0]);
-
-    UTest.line();
-
-    // Or using the utility function
-    let x2js4 = new UXml();
-    let xmlText4 = "<MyArrays>" +
-        "<test><item>success</item><item>second</item></test>" +
-        "</MyArrays>";
-    let jsonObj4 = x2js4.xml_str2json(xmlText4);
-    console.log(x2js4.asArray(jsonObj4.MyArrays.test.item)[0]);
-
-    UTest.line();
-
-    // Working with XML attributes
-    // Accessing to XML attributes
-    // Create x2js instance with default config
-    let x2js5 = new UXml();
-    let xmlText5 = "<MyOperation myAttr='SuccessAttrValue'>MyText</MyOperation>";
-    let jsonObj5 = x2js5.xml_str2json(xmlText5);
-    // Access to attribute
-    console.log(jsonObj5.MyOperation._myAttr);
-    // Access to text
-    console.log(jsonObj5.MyOperation.__text);
-    // Or
-    console.log(jsonObj5.MyOperation.toString());
-
-    UTest.line();
-
-    // Configuring a custom prefix to attributes
-    let x2js6 = new UXml({
-        attributePrefix: "$"
-    });
-    let xmlText6 = "<MyOperation myAttr='SuccessAttrValue'>MyText</MyOperation>";
-    let jsonObj6 = x2js6.xml_str2json(xmlText6);
-    // Access to attribute
-    console.log(jsonObj6.MyOperation.$myAttr);
-
-    UTest.line();
-
-    // Working with XML namespaces
-    // Parsing XML with namespaces
-    let x2js7 = new UXml({
-        attributePrefix: "$"
-    });
-    let xmlText7 = "<testns:MyOperation xmlns:testns='http://www.example.org'>" +
-        "<test>Success</test><test2 myAttr='SuccessAttrValueTest2'>" +
-        "<item>ddsfg</item><item>dsdgfdgfd</item><item2>testArrSize</item2></test2></testns:MyOperation>";
-
-    let jsonObj7 = x2js7.xml_str2json(xmlText7);
-    console.log(jsonObj7.MyOperation.test);
-
-    UTest.line();
-
-    // Creating JSON (for XML) with namespaces (Option 1)
-    let x2js8 = new UXml({
-        attributePrefix: "$"
-    });
-    let testObjC8 = {
-        'm:TestAttrRoot': {
-            '_tns:m': 'http://www.example.org',
-            '_tns:cms': 'http://www.example.org',
-            MyChild: 'my_child_value',
-            'cms:MyAnotherChild': 'vdfd'
-        }
-    }
-    let xmlDocStr8 = x2js8.json2xml_str(
-        testObjC8
-    );
-    console.log("xmlDocStr", xmlDocStr8);
-
-    UTest.line();
-
-    // Creating JSON (for XML) with namespaces (Option 2)
-    // Parse JSON object constructed with another NS-style
-    let x2js9 = new UXml({
-        attributePrefix: "$"
-    });
-    let testObjNew9 = {
-        TestAttrRoot: {
-            __prefix: 'm',
-            '_tns:m': 'http://www.example.org',
-            '_tns:cms': 'http://www.example.org',
-            MyChild: 'my_child_value',
-            MyAnotherChild: {
-                __prefix: 'cms',
-                __text: 'vdfd'
+        let xmlDocStr8 = x2js8.json2xml_str(
+            testObjC8
+        );
+        console.log("xmlDocStr", xmlDocStr8);
+    },
+    () => {
+        // Creating JSON (for XML) with namespaces (Option 2)
+        // Parse JSON object constructed with another NS-style
+        let x2js9 = new UXml({
+            attributePrefix: "$"
+        });
+        let testObjNew9 = {
+            TestAttrRoot: {
+                __prefix: 'm',
+                '_tns:m': 'http://www.example.org',
+                '_tns:cms': 'http://www.example.org',
+                MyChild: 'my_child_value',
+                MyAnotherChild: {
+                    __prefix: 'cms',
+                    __text: 'vdfd'
+                }
             }
         }
+        let xmlDocStr9 = x2js9.json2xml_str(testObjNew9);
+        console.log("xmlDocStr9:", xmlDocStr9);
+    },
+    () => {
+        // Working with XML DateTime
+        // Configuring it beforehand
+        let x2js10 = new UXml({
+            datetimeAccessFormPaths: [
+                "MyDts.testds" /* Configure it beforehand */
+            ]
+        });
+        let xmlText10 = "<MyDts>" +
+            "<testds>2002-10-10T12:00:00+04:00</testds>" +
+            "</MyDts>";
+        let jsonObj10 = x2js10.xml_str2json(xmlText10);
+        console.log("jsonObj10:", jsonObj10);
+
+        // Or using the utility function
+        let x2js11 = new UXml();
+        let xmlText11 = "<MyDts>" +
+            "<testds>2002-10-10T12:00:00+04:00</testds>" +
+            "</MyDts>";
+        let jsonObj11 = x2js11.xml_str2json(xmlText11);
+        console.log(x2js11.asDateTime(jsonObj11.MyDts.testds));
+
+        // Networking samples
+        // Parsing AJAX XML response (JQuery sample)
+        // $.ajax({
+        //     type: "GET",
+        //     url: "/test",
+        //     dataType: "xml",
+        //     success: function(xmlDoc) {
+        //         let x2js = new UXml();
+        //         let jsonObj = x2js.xml2json(xmlDoc);
+        //     }
+        // });
+        // Loading XML and converting to JSON
+        // function loadXMLDoc(dname) {
+        //     if (window.XMLHttpRequest) {
+        //         xhttp = new XMLHttpRequest();
+        //     }
+        //     else {
+        //         xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        //     }
+        //     xhttp.open("GET", dname, false);
+        //     xhttp.send();
+        //     return xhttp.responseXML;
+        // }
+        // var xmlDoc = loadXMLDoc("test.xml");
+        // var x2js = new UXml();
+        // var jsonObj = x2js.xml2json(xmlDoc);
     }
-    let xmlDocStr9 = x2js9.json2xml_str(testObjNew9);
-    console.log("xmlDocStr9:", xmlDocStr9);
-
-    UTest.line();
-
-    // Working with XML DateTime
-    // Configuring it beforehand
-    let x2js10 = new UXml({
-        datetimeAccessFormPaths: [
-            "MyDts.testds" /* Configure it beforehand */
-        ]
-    });
-    let xmlText10 = "<MyDts>" +
-        "<testds>2002-10-10T12:00:00+04:00</testds>" +
-        "</MyDts>";
-    let jsonObj10 = x2js10.xml_str2json(xmlText10);
-    console.log("jsonObj10:", jsonObj10);
-
-    // Or using the utility function
-    let x2js11 = new UXml();
-    let xmlText11 = "<MyDts>" +
-        "<testds>2002-10-10T12:00:00+04:00</testds>" +
-        "</MyDts>";
-    let jsonObj11 = x2js11.xml_str2json(xmlText11);
-    console.log(x2js11.asDateTime(jsonObj11.MyDts.testds));
-
-    UTest.line();
-
-    // Networking samples
-    // Parsing AJAX XML response (JQuery sample)
-    // $.ajax({
-    //     type: "GET",
-    //     url: "/test",
-    //     dataType: "xml",
-    //     success: function(xmlDoc) {
-    //         let x2js = new UXml();
-    //         let jsonObj = x2js.xml2json(xmlDoc);
-    //     }
-    // });
-    // Loading XML and converting to JSON
-    // function loadXMLDoc(dname) {
-    //     if (window.XMLHttpRequest) {
-    //         xhttp = new XMLHttpRequest();
-    //     }
-    //     else {
-    //         xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    //     }
-    //     xhttp.open("GET", dname, false);
-    //     xhttp.send();
-    //     return xhttp.responseXML;
-    // }
-    // var xmlDoc = loadXMLDoc("test.xml");
-    // var x2js = new UXml();
-    // var jsonObj = x2js.xml2json(xmlDoc);
-
-    UTest.ended("UXml");
-};
-
-test();
+]);

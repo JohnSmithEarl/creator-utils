@@ -131,21 +131,17 @@ export class UCRC32 {
  */
 
 import { UTest } from "../core/UTest";
-export let test = function () {
-    UTest.begin("CRC32");
+UTest.test("CRC32", [
+    () => {
+        console.log(UCRC32.str("SheetJS")); // -1647298270
+        console.log(UCRC32.bstr("SheetJS")); // -1647298270
+        console.log(UCRC32.buf([83, 104, 101, 101, 116, 74, 83])); // -1647298270
 
-    console.log(UCRC32.str("SheetJS")); // -1647298270
-    console.log(UCRC32.bstr("SheetJS")); // -1647298270
-    console.log(UCRC32.buf([83, 104, 101, 101, 116, 74, 83])); // -1647298270
-
-    let crc32 = UCRC32.buf([83, 104]); // -1826163454  "Sh"
-    console.log("str1:", crc32);
-    crc32 = UCRC32.str("eet", crc32); //  1191034598  "Sheet"
-    console.log("str2:", crc32);
-    crc32 = UCRC32.bstr("JS", crc32); // -1647298270  "SheetJS"
-    console.log("str2:", crc32);
-
-    UTest.ended("CRC32");
-};
-
-test();
+        let crc32 = UCRC32.buf([83, 104]); // -1826163454  "Sh"
+        console.log("str1:", crc32);
+        crc32 = UCRC32.str("eet", crc32); //  1191034598  "Sheet"
+        console.log("str2:", crc32);
+        crc32 = UCRC32.bstr("JS", crc32); // -1647298270  "SheetJS"
+        console.log("str2:", crc32);
+    }
+]);
