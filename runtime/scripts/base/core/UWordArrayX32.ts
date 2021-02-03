@@ -100,19 +100,6 @@ export class UWordArrayX32 extends UObject {
     }
 
     /**
-     * Creates a copy of this word array.
-     * @return {UWordArrayX32} The clone.
-     * @example
-     *
-     *     let clone = wordArray.clone();
-     */
-    // clone() {
-    //     let clone = Base.clone.call(this);
-    //     clone.words = this.words.slice(0);
-    //     return clone;
-    // }
-
-    /**
      * Creates a word array filled with random bytes.
      * @param {number} nBytes The number of random bytes to generate.
      * @return {UWordArrayX32} The random word array.

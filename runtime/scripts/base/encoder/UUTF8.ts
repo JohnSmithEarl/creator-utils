@@ -1,47 +1,35 @@
-export class UUTF8 {
-    public static encode(str: string) {
-        str = str.replace(/\r\n/g, "\n");
-        var utftext = "";
-        for (var n = 0; n < str.length; n++) {
-            var c = str.charCodeAt(n);
-            if (c < 128) {
-                utftext += String.fromCharCode(c);
-            } else if ((c > 127) && (c < 2048)) {
-                utftext += String.fromCharCode((c >> 6) | 192);
-                utftext += String.fromCharCode((c & 63) | 128);
+import { ULatin1 } from "./ULatin1";
+import { UWordArrayX32 } from "../core/UWordArrayX32";
 
-            } else {
-                utftext += String.fromCharCode((c >> 12) | 224);
-                utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-                utftext += String.fromCharCode((c & 63) | 128);
-            }
+/**
+ * UTF-8 encoding strategy.
+ */
+export class Utf8 {
+    /**
+     * Converts a word array to a UTF-8 string.
+     * @param {UWordArrayX32} wordArray The word array.
+     * @return {string} The UTF-8 string.
+     * @static
+     * @example
+     *     var utf8String =  Utf8.stringify(wordArray);
+     */
+    static tringify(wordArray: UWordArrayX32): string {
+        try {
+            return decodeURIComponent(escape(ULatin1.stringify(wordArray)));
+        } catch (e) {
+            throw new Error('Malformed UTF-8 data');
         }
-        return utftext;
     }
 
-    public static decode(utftext: string) {
-        let str = "";
-        let i = 0;
-        let c = 0;
-        let c1 = 0;
-        let c2 = 0;
-        let c3 = 0;
-        while (i < utftext.length) {
-            c = utftext.charCodeAt(i);
-            if (c < 128) {
-                str += String.fromCharCode(c);
-                i++;
-            } else if ((c > 191) && (c < 224)) {
-                c2 = utftext.charCodeAt(i + 1);
-                str += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-                i += 2;
-            } else {
-                c2 = utftext.charCodeAt(i + 1);
-                c3 = utftext.charCodeAt(i + 2);
-                str += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-                i += 3;
-            }
-        }
-        return str;
+    /**
+     * Converts a UTF-8 string to a word array.
+     * @param {string} utf8Str The UTF-8 string.
+     * @return {UWordArrayX32} The word array.
+     * @static
+     * @example
+     *     var wordArray =  Utf8.parse(utf8String);
+     */
+    static parse(utf8Str: string): UWordArrayX32 {
+        return ULatin1.parse(unescape(encodeURIComponent(utf8Str)));
     }
 };

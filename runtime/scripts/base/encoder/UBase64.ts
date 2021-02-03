@@ -1,57 +1,116 @@
-import { UUTF8 } from "./UUTF8";
+import { UWordArrayX32 } from "../core/UWordArrayX32";
 
-let KEY_STR = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-export class UBase64 {
-    public static encode(input: string) {
-        let output = "";
-        let chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-        let i = 0;
-        input = UUTF8.encode(input);
-        while (i < input.length) {
-            chr1 = input.charCodeAt(i++);
-            chr2 = input.charCodeAt(i++);
-            chr3 = input.charCodeAt(i++);
-            enc1 = chr1 >> 2;
-            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-            enc4 = chr3 & 63;
-            if (isNaN(chr2)) {
-                enc3 = enc4 = 64;
-            } else if (isNaN(chr3)) {
-                enc4 = 64;
+/**
+ * Base64 encoding strategy.
+ */
+export class Base64 {
+    private static _map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    private static _reverseMap = [];
+
+    private static parseLoop(base64Str: string, base64StrLength: number, reverseMap: Array<number>) {
+        var words = [];
+        var nBytes = 0;
+        for (var i = 0; i < base64StrLength; i++) {
+            if (i % 4) {
+                var bits1 = reverseMap[base64Str.charCodeAt(i - 1)] << ((i % 4) * 2);
+                var bits2 = reverseMap[base64Str.charCodeAt(i)] >>> (6 - (i % 4) * 2);
+                var bitsCombined = bits1 | bits2;
+                words[nBytes >>> 2] |= bitsCombined << (24 - (nBytes % 4) * 8);
+                nBytes++;
             }
-            output = output +
-                KEY_STR.charAt(enc1) +
-                KEY_STR.charAt(enc2) +
-                KEY_STR.charAt(enc3) +
-                KEY_STR.charAt(enc4);
         }
-        return output;
+        return new UWordArrayX32(words, nBytes);
     }
 
-    public static decode(input: string) {
-        let output = "";
-        let chr1, chr2, chr3;
-        let enc1, enc2, enc3, enc4;
-        let i = 0;
-        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-        while (i < input.length) {
-            enc1 = KEY_STR.indexOf(input.charAt(i++));
-            enc2 = KEY_STR.indexOf(input.charAt(i++));
-            enc3 = KEY_STR.indexOf(input.charAt(i++));
-            enc4 = KEY_STR.indexOf(input.charAt(i++));
-            chr1 = (enc1 << 2) | (enc2 >> 4);
-            chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-            chr3 = ((enc3 & 3) << 6) | enc4;
-            output = output + String.fromCharCode(chr1);
-            if (enc3 != 64) {
-                output = output + String.fromCharCode(chr2);
-            }
-            if (enc4 != 64) {
-                output = output + String.fromCharCode(chr3);
+
+    /**
+     * Converts a word array to a Base64 string.
+     *
+     * @param {UWordArrayX32} wordArray The word array.
+     *
+     * @return {string} The Base64 string.
+     *
+     * @static
+     *
+     * @example
+     *
+     *     var base64String = Base64.stringify(wordArray);
+     */
+    static stringify(wordArray: UWordArrayX32): string {
+        // Shortcuts
+        var words = wordArray.words;
+        var sigBytes = wordArray.sigBytes;
+        var map = Base64._map;
+
+        // Clamp excess bits
+        wordArray.clamp();
+
+        // Convert
+        var base64Chars = [];
+        for (var i = 0; i < sigBytes; i += 3) {
+            var byte1 = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+            var byte2 = (words[(i + 1) >>> 2] >>> (24 - ((i + 1) % 4) * 8)) & 0xff;
+            var byte3 = (words[(i + 2) >>> 2] >>> (24 - ((i + 2) % 4) * 8)) & 0xff;
+
+            var triplet = (byte1 << 16) | (byte2 << 8) | byte3;
+
+            for (var j = 0;
+                (j < 4) && (i + j * 0.75 < sigBytes); j++) {
+                base64Chars.push(map.charAt((triplet >>> (6 * (3 - j))) & 0x3f));
             }
         }
-        output = UUTF8.decode(output);
-        return output;
+
+        // Add padding
+        var paddingChar = map.charAt(64);
+        if (paddingChar) {
+            while (base64Chars.length % 4) {
+                base64Chars.push(paddingChar);
+            }
+        }
+
+        return base64Chars.join('');
+    }
+
+    /**
+     * Converts a Base64 string to a word array.
+     * @param {string} base64Str The Base64 string.
+     * @return {UWordArrayX32} The word array.
+     * @static
+     * @example
+     *
+     *     var wordArray = CryptoJS.enc.Base64.parse(base64String);
+     */
+    static parse(base64Str: string): UWordArrayX32 {
+        // Shortcuts
+        var base64StrLength = base64Str.length;
+        var map = Base64._map;
+        var reverseMap = this._reverseMap;
+
+        if (!reverseMap) {
+            reverseMap = this._reverseMap = [];
+            for (var j = 0; j < map.length; j++) {
+                reverseMap[map.charCodeAt(j)] = j;
+            }
+        }
+
+        // Ignore padding
+        var paddingChar = map.charAt(64);
+        if (paddingChar) {
+            var paddingIndex = base64Str.indexOf(paddingChar);
+            if (paddingIndex !== -1) {
+                base64StrLength = paddingIndex;
+            }
+        }
+
+        // Convert
+        return Base64.parseLoop(base64Str, base64StrLength, reverseMap);
     }
 };
+
+import { UTest } from "../core/UTest";
+UTest.test("UBase64", [
+    () => {
+        let str = "hello, world!;;你好, 世界！";
+
+    }
+]);
