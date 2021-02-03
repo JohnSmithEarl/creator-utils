@@ -1,7 +1,7 @@
 import { UUTF8 } from "./UUTF8";
 
-export class  UBase64 {
-    private static keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+let KEY_STR = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+export class UBase64 {
     public static encode(input: string) {
         let output = "";
         let chr1, chr2, chr3, enc1, enc2, enc3, enc4;
@@ -21,10 +21,10 @@ export class  UBase64 {
                 enc4 = 64;
             }
             output = output +
-                 UBase64.keyStr.charAt(enc1) +
-                 UBase64.keyStr.charAt(enc2) +
-                 UBase64.keyStr.charAt(enc3) +
-                 UBase64.keyStr.charAt(enc4);
+                KEY_STR.charAt(enc1) +
+                KEY_STR.charAt(enc2) +
+                KEY_STR.charAt(enc3) +
+                KEY_STR.charAt(enc4);
         }
         return output;
     }
@@ -36,10 +36,10 @@ export class  UBase64 {
         let i = 0;
         input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
         while (i < input.length) {
-            enc1 =  UBase64.keyStr.indexOf(input.charAt(i++));
-            enc2 =  UBase64.keyStr.indexOf(input.charAt(i++));
-            enc3 =  UBase64.keyStr.indexOf(input.charAt(i++));
-            enc4 =  UBase64.keyStr.indexOf(input.charAt(i++));
+            enc1 = KEY_STR.indexOf(input.charAt(i++));
+            enc2 = KEY_STR.indexOf(input.charAt(i++));
+            enc3 = KEY_STR.indexOf(input.charAt(i++));
+            enc4 = KEY_STR.indexOf(input.charAt(i++));
             chr1 = (enc1 << 2) | (enc2 >> 4);
             chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
             chr3 = ((enc3 & 3) << 6) | enc4;

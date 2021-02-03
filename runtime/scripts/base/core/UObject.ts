@@ -179,8 +179,8 @@ export class UObject {
         return this;
     }
 
-    public toString() {
-        let str = JSON.stringify(this);
+    public toString(encoder = JSON) {
+        let str = encoder.stringify(this);
         return str;
     }
 };

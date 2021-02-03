@@ -1,4 +1,4 @@
-export class cu_Graphics {
+export class UGraphics {
     constructor() {
 
     }
