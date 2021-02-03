@@ -1,4 +1,4 @@
-import { UObject } from "../type/UObject";
+import { UObject } from "../core/UObject";
 
 export class USet {
     protected items: Object = null;
@@ -9,7 +9,7 @@ export class USet {
 
     /**
      * @description 向集合中添加元素
-     * @param value 
+     * @param value
      */
     public add(value: any): boolean {
         if (!this.has(value)) {
@@ -21,7 +21,7 @@ export class USet {
 
     /**
      * @description 从集合中删除对应的元素
-     * @param value 
+     * @param value
      */
     public delete(value: any): boolean {
         if (this.has(value)) {
@@ -33,7 +33,7 @@ export class USet {
 
     /**
      * @description 判断给定的元素在集合中是否存在
-     * @param value 
+     * @param value
      */
     public has(value: any): boolean {
         return this.items.hasOwnProperty(value);
@@ -62,7 +62,7 @@ export class USet {
 
     /**
      * @description 并集
-     * @param otherSet 
+     * @param otherSet
      */
     public union(otherSet: USet) {
         let unionSet = new USet();
@@ -73,7 +73,7 @@ export class USet {
 
     /**
      * @description 交集
-     * @param otherSet 
+     * @param otherSet
      */
     public intersection(otherSet: USet): USet {
         let intersectionSet = new USet();
@@ -85,7 +85,7 @@ export class USet {
 
     /**
      * @description 差集
-     * @param otherSet 
+     * @param otherSet
      */
     public difference(otherSet: USet): USet {
         let differenceSet = new USet();
@@ -97,7 +97,7 @@ export class USet {
 
     /**
      * @description 子集
-     * @param otherSet 
+     * @param otherSet
      */
     public subset(otherSet: USet): boolean {
         if (this.size() > otherSet.size()) {

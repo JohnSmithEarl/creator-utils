@@ -70,13 +70,13 @@ export class UWordArrayX64 extends UObject {
     /**
      * Creates a copy of this word array.
      *
-     * @return {X64WordArray} The clone.
+     * @return {UWordArrayX64} The clone.
      *
      * @example
      *
      *     var clone = x64WordArray.clone();
      */
-    clone() {
+    clone(): UWordArrayX64 {
         var clone = Base.clone.call(this);
 
         // Clone "words" array

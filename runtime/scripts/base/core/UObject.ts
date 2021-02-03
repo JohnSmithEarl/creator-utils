@@ -1,17 +1,17 @@
 export class UObject {
-    public static create() {
+    static create() {
         let obj = new UObject();
         obj.init.apply(this, arguments);
 
         return obj;
     }
 
-    public static isValid(obj: any): boolean {
+    static isValid(obj: any): boolean {
         let isVal = cc.sys.isObjectValid(obj);
         return isVal;
     }
 
-    public static keys(obj: any): Array<string> {
+    static keys(obj: any): Array<string> {
         if (typeof obj == "object") {
             let keys = [];
             for (let key in obj) {
@@ -23,7 +23,7 @@ export class UObject {
         }
     }
 
-    public static values(obj: any): Array<any> {
+    static values(obj: any): Array<any> {
         if (typeof obj == "object") {
             let values = [];
             let keys = UObject.keys(obj);
@@ -40,7 +40,7 @@ export class UObject {
         }
     }
 
-    public static clone(obj: any): any {
+    static clone(obj: any): any {
         let objClone = Array.isArray(obj) ? [] : {};
         if (obj && typeof obj === "object") {
             for (let key in obj) {
@@ -62,7 +62,7 @@ export class UObject {
         return objClone;
     }
 
-    public static mixIn(to: any, from: any) {
+    static mixIn(to: any, from: any) {
         for (let key in from) {
             if (from.hasOwnProperty(key)) {
                 to[key] = from[key];
@@ -74,7 +74,7 @@ export class UObject {
         }
     }
 
-    public static merge(def: any, obj: any): any {
+    static merge(def: any, obj: any): any {
         if (!obj) {
             return def;
         } else if (!def) {
@@ -137,21 +137,21 @@ export class UObject {
         this.init(arguments);
     }
 
-    public init(...arg: any) {
+    init(...arg: any) {
 
     }
 
-    public isValid(): boolean {
+    isValid(): boolean {
         let isVal = UObject.isValid(this);
         return isVal;
     }
 
-    public keys(): Array<string> {
+    keys(): Array<string> {
         let keys = UObject.keys(this);
         return keys;
     }
 
-    public values(): Array<any> {
+    values(): Array<any> {
         let keys = UObject.keys(this);
         let values = [];
         for (let i = 0; i < keys.length; i++) {
@@ -164,12 +164,12 @@ export class UObject {
         return values;
     }
 
-    public clone(): UObject {
+    clone(): UObject {
         let obj = UObject.clone(this);
         return obj;
     }
 
-    public mixIn(from: any): void {
+    mixIn(from: any): void {
         for (let propertyName in from) {
             if (from.hasOwnProperty(propertyName)) {
                 this[propertyName] = from[propertyName];
@@ -181,12 +181,12 @@ export class UObject {
         }
     }
 
-    public merge(obj: any): UObject {
+    merge(obj: any): UObject {
         UObject.merge(this, obj);
         return this;
     }
 
-    public toString(encoder = JSON) {
+    toString(encoder = JSON): string {
         let str = encoder.stringify(this);
         return str;
     }

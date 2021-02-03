@@ -1,4 +1,4 @@
-import { UObject } from "../type/UObject";
+import { UObject } from "../core/UObject";
 
 /**
  * @description 字典类
@@ -15,8 +15,8 @@ export class UDictionary {
 
     /**
      * @description 向字典中添加或修改元素
-     * @param key 
-     * @param value 
+     * @param key
+     * @param value
      */
     set(key: any, value: any): void {
         this.items[key] = value;
@@ -24,7 +24,7 @@ export class UDictionary {
 
     /**
      * @description 通过键值查找字典中的值
-     * @param key 
+     * @param key
      */
     public get(key: any): any {
         return this.items[key];
@@ -32,7 +32,7 @@ export class UDictionary {
 
     /**
      * @description 通过使用键值来从字典中删除对应的元素
-     * @param key 
+     * @param key
      */
     public delete(key: any) {
         if (this.has(key)) {
@@ -44,7 +44,7 @@ export class UDictionary {
 
     /**
      * @description 判断给定的键值是否存在于字典中
-     * @param key 
+     * @param key
      */
     public has(key: any): boolean {
         return this.items.hasOwnProperty(key);

@@ -189,7 +189,12 @@ export let test = function () {
     let w1 = new UWordX64(0, 1);
     let w2 = new UWordX64(0, 2);
     let w3 = w1.and(w2);
-    console.log("w3:", w3.toString())
+    console.log("w3:", w3)
+
+    let w4 = w2.clone();
+    console.log("w4:", w4);
 
     console.log("test UX64World");
 };
+
+test();
