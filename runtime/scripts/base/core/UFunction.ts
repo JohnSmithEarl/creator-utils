@@ -34,3 +34,21 @@ export class UFunction extends Function {
         }
     }
 };
+
+let test = function () {
+    function add(a: number) {
+        function sum(b: number) { // 使用闭包
+            a = a + b; // 累加
+            return sum;
+        }
+        sum.toString = function () { // 重写toString()方法
+            return a;
+        }
+        return sum; // 返回一个函数
+    }
+    add(1); // 1
+    add(1)(2); // 3
+    add(1)(2)(3); // 6
+    add(1)(2)(3)(4); // 10
+}
+test();
