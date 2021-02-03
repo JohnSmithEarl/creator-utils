@@ -150,9 +150,18 @@ export class UWordArrayX32 extends UObject {
 };
 
 import { UTest } from "./UTest";
-UTest.test("UWordX64", [() => {
+UTest.test("UWordArrayX32", [() => {
     let wordArray1 = new UWordArrayX32([0x00010203, 0x04050607]);
     let wordArray2 = new UWordArrayX32([0x00010203, 0x04050607], 6);
-    console.log("wordArray1:", wordArray1.toString(), wordArray1);
-    console.log("wordArray2:", wordArray2.toString(), wordArray2);
+    let str1 =  wordArray1.toString();
+    let str2 =  wordArray2.toString();
+    let val1 =  UHex.parse(str1);
+    let val2 =  UHex.parse(str2);
+
+    console.log("wordArray1:", wordArray1);
+    console.log("wordArray2:", wordArray2);
+    console.log("str1:", str1);
+    console.log("str2:", str2);
+    console.log("val1:", val1);
+    console.log("val2:", val2);
 }]);

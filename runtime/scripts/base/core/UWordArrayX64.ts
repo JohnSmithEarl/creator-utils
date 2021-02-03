@@ -20,19 +20,19 @@ export class UWordArrayX64 extends UObject {
      *
      * @example
      *
-     *     let wordArray = UWordArrayX64.create();
+     *     let wordArray = UWordArrayX64();
      *
-     *     let wordArray = UWordArrayX64.create([
+     *     let wordArray = UWordArrayX64([
      *         UWordX64.create(0x00010203, 0x04050607),
      *         UWordX64.create(0x18191a1b, 0x1c1d1e1f)
      *     ]);
      *
-     *     let wordArray = UWordArrayX64.create([
+     *     let wordArray = UWordArrayX64([
      *         UWordX64.create(0x00010203, 0x04050607),
      *         UWordX64.create(0x18191a1b, 0x1c1d1e1f)
      *     ], 10);
      */
-    constructor(words: Array<UWordX64>, sigBytes: number) {
+    constructor(words?: Array<UWordX64>, sigBytes?: number) {
         super(arguments);
 
         this.words = words || [];
@@ -93,3 +93,24 @@ export class UWordArrayX64 extends UObject {
         return clone;
     }
 };
+
+import { UTest } from "./UTest";
+UTest.test("UWordArrayX64", [
+    () => {
+        let wordArray1 = new UWordArrayX64([
+            new UWordX64(0x00010203, 0x04050607),
+            new UWordX64(0x18191a1b, 0x1c1d1e1f)
+        ]);
+        let wordArray2 = new UWordArrayX64([
+            new UWordX64(0x00010203, 0x04050607),
+            new UWordX64(0x18191a1b, 0x1c1d1e1f)
+        ], 10);
+        let str1 = wordArray1.toString();
+        let str2 = wordArray2.toString();
+
+        console.log("wordArray1:", wordArray1);
+        console.log("wordArray2:", wordArray2);
+        console.log("str1:", str1);
+        console.log("str2:", str2);
+    }
+]);
