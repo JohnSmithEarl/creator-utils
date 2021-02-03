@@ -16,4 +16,14 @@ export class UTest {
         console.log("<====================\n");
         console.log("\n");
     }
+
+    public static test(testName: string, exec: Function) {
+        console.log("====================>\n");
+        console.log("start ->>> ", testName, "\n");
+
+        exec();
+
+        console.log("ended ->>> ", testName, "\n")
+        console.log("<====================\n");
+    }
 };
