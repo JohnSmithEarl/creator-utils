@@ -1,7 +1,7 @@
 import { UObject } from "./UObject";
 import { UHex } from "../encoder/UHex";
 
-export class UWordArrayX32 extends UObject {
+export class UWordArray extends UObject {
     /**
      * An array of 32-bit words.          作为“一段连续比特序列”的抽象进行各种位操作。
      * @property {Array} words The array of 32-bit words.
@@ -17,9 +17,9 @@ export class UWordArrayX32 extends UObject {
      *
      * @example
      *
-     *     let wordArray = UWordArrayX32()
-     *     let wordArray = UWordArrayX32([0x00010203, 0x04050607]);
-     *     let wordArray = UWordArrayX32([0x00010203, 0x04050607], 6);
+     *     let wordArray = UWordArray()
+     *     let wordArray = UWordArray([0x00010203, 0x04050607]);
+     *     let wordArray = UWordArray([0x00010203, 0x04050607], 6);
      */
     constructor(words?: Array<number>, sigBytes?: number) {
         super(arguments);
@@ -50,12 +50,12 @@ export class UWordArrayX32 extends UObject {
 
     /**
      * Concatenates a word array to this word array.
-     * @param {UWordArrayX32} wordArray The word array to append.
-     * @return {UWordArrayX32} This word array.
+     * @param {UWordArray} wordArray The word array to append.
+     * @return {UWordArray} This word array.
      * @example
      *     wordArray1.concat(wordArray2);
      */
-    concat(wordArray: UWordArrayX32): UWordArrayX32 {
+    concat(wordArray: UWordArray): UWordArray {
         // Shortcuts
         let thisWords = this.words;
         let thatWords = wordArray.words;
@@ -102,12 +102,12 @@ export class UWordArrayX32 extends UObject {
     /**
      * Creates a word array filled with random bytes.
      * @param {number} nBytes The number of random bytes to generate.
-     * @return {UWordArrayX32} The random word array.
+     * @return {UWordArray} The random word array.
      * @static
      * @example
-     *     let wordArray =  UWordArrayX32.random(16);
+     *     let wordArray =  UWordArray.random(16);
      */
-    random(nBytes: number): UWordArrayX32 {
+    random(nBytes: number): UWordArray {
         let words = [];
 
         let r = function (t_m_w) {
@@ -132,14 +132,14 @@ export class UWordArrayX32 extends UObject {
             words.push((_r() * 0x100000000) | 0);
         }
 
-        return new UWordArrayX32(words, nBytes);
+        return new UWordArray(words, nBytes);
     }
 };
 
 import { UTest } from "./UTest";
-UTest.test("UWordArrayX32", [() => {
-    let wordArray1 = new UWordArrayX32([0x00010203, 0x04050607]);
-    let wordArray2 = new UWordArrayX32([0x00010203, 0x04050607], 6);
+UTest.test("UWordArray", [() => {
+    let wordArray1 = new UWordArray([0x00010203, 0x04050607]);
+    let wordArray2 = new UWordArray([0x00010203, 0x04050607], 6);
     let str1 =  wordArray1.toString();
     let str2 =  wordArray2.toString();
     let val1 =  UHex.parse(str1);

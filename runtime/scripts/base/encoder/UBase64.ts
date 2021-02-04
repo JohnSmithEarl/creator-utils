@@ -1,4 +1,4 @@
-import { UWordArrayX32 } from "../core/UWordArrayX32";
+import { UWordArray } from "../core/UWordArray";
 
 /**
  * Base64 encoding strategy.
@@ -19,14 +19,14 @@ export class Base64 {
                 nBytes++;
             }
         }
-        return new UWordArrayX32(words, nBytes);
+        return new UWordArray(words, nBytes);
     }
 
 
     /**
      * Converts a word array to a Base64 string.
      *
-     * @param {UWordArrayX32} wordArray The word array.
+     * @param {UWordArray} wordArray The word array.
      *
      * @return {string} The Base64 string.
      *
@@ -36,7 +36,7 @@ export class Base64 {
      *
      *     var base64String = Base64.stringify(wordArray);
      */
-    static stringify(wordArray: UWordArrayX32): string {
+    static stringify(wordArray: UWordArray): string {
         // Shortcuts
         var words = wordArray.words;
         var sigBytes = wordArray.sigBytes;
@@ -74,13 +74,13 @@ export class Base64 {
     /**
      * Converts a Base64 string to a word array.
      * @param {string} base64Str The Base64 string.
-     * @return {UWordArrayX32} The word array.
+     * @return {UWordArray} The word array.
      * @static
      * @example
      *
      *     var wordArray = CryptoJS.enc.Base64.parse(base64String);
      */
-    static parse(base64Str: string): UWordArrayX32 {
+    static parse(base64Str: string): UWordArray {
         // Shortcuts
         var base64StrLength = base64Str.length;
         var map = Base64._map;

@@ -1,4 +1,4 @@
-import { UWordArrayX32 } from "../core/UWordArrayX32";
+import { UWordArray } from "../core/UWordArray";
 
 /**
  * Utf16 (Utf16BE) encoding strategy.
@@ -7,7 +7,7 @@ export class UUtf16BE {
     /**
      * Converts a word array to a UTF-16 BE string.
      *
-     * @param {UWordArrayX32} wordArray The word array.
+     * @param {UWordArray} wordArray The word array.
      *
      * @return {string} The UTF-16 BE string.
      *
@@ -17,7 +17,7 @@ export class UUtf16BE {
      *
      *     var utf16String = UUtf16BE.stringify(wordArray);
      */
-    static stringify(wordArray: UWordArrayX32): string {
+    static stringify(wordArray: UWordArray): string {
         // Shortcuts
         var words = wordArray.words;
         var sigBytes = wordArray.sigBytes;
@@ -37,7 +37,7 @@ export class UUtf16BE {
      *
      * @param {string} utf16Str The UTF-16 BE string.
      *
-     * @return {UWordArrayX32} The word array.
+     * @return {UWordArray} The word array.
      *
      * @static
      *
@@ -45,7 +45,7 @@ export class UUtf16BE {
      *
      *     var wordArray = UUtf16BE.parse(utf16String);
      */
-    static parse(utf16Str: string): UWordArrayX32 {
+    static parse(utf16Str: string): UWordArray {
         // Shortcut
         var utf16StrLength = utf16Str.length;
 
@@ -55,6 +55,6 @@ export class UUtf16BE {
             words[i >>> 1] |= utf16Str.charCodeAt(i) << (16 - (i % 2) * 16);
         }
 
-        return new UWordArrayX32(words, utf16StrLength * 2);
+        return new UWordArray(words, utf16StrLength * 2);
     }
 };

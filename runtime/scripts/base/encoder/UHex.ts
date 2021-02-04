@@ -1,4 +1,4 @@
-import { UWordArrayX32 } from "../core/UWordArrayX32";
+import { UWordArray } from "../core/UWordArray";
 
 /**
  * Hex encoding strategy.
@@ -6,14 +6,14 @@ import { UWordArrayX32 } from "../core/UWordArrayX32";
 export class UHex {
     /**
      * Converts a word array to a hex string.
-     * @param {UWordArrayX32} wordArray The word array.
+     * @param {UWordArray} wordArray The word array.
      * @return {string} The hex string.
      * @static
      * @example
      *
      *     var hexString =  Hex.stringify(wordArray);
      */
-    static stringify(wordArray: UWordArrayX32): string {
+    static stringify(wordArray: UWordArray): string {
         // Shortcuts
         var words = wordArray.words;
         var sigBytes = wordArray.sigBytes;
@@ -32,13 +32,13 @@ export class UHex {
     /**
      * Converts a hex string to a word array.
      * @param {string} hexStr The hex string.
-     * @return {UWordArrayX32} The word array.
+     * @return {UWordArray} The word array.
      * @static
      * @example
      *
      *     var wordArray =  Hex.parse(hexString);
      */
-    static parse(hexStr: string): UWordArrayX32 {
+    static parse(hexStr: string): UWordArray {
         // Shortcut
         var hexStrLength = hexStr.length;
 
@@ -48,6 +48,6 @@ export class UHex {
             words[i >>> 3] |= parseInt(hexStr.substr(i, 2), 16) << (24 - (i % 8) * 4);
         }
 
-        return new UWordArrayX32(words, hexStrLength / 2);
+        return new UWordArray(words, hexStrLength / 2);
     }
 };
