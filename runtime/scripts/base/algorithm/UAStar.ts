@@ -1,12 +1,12 @@
 class Sopt {
-    public x = 0;
-    public y = 0;
-    public f = 0;
-    public g = 0
-    public h = 0;
-    public parent = null;
-    public wall = false;
-    public neighbors = [];
+    x = 0;
+    y = 0;
+    f = 0;
+    g = 0
+    h = 0;
+    parent = null;
+    wall = false;
+    neighbors = [];
 
     constructor(x: number, y: number) {
         this.x = x;
@@ -19,7 +19,7 @@ class Sopt {
         this.neighbors = [];
     }
 
-    public addNeighbors(grid: Array<Array<any>>, cols: number, rows: number) {
+    addNeighbors(grid: Array<Array<any>>, cols: number, rows: number) {
         let x = this.x;
         let y = this.y;
         if (y - 1 >= 0) {
@@ -102,7 +102,7 @@ export class UAStar {
         this.openList.push(this.startSopt);
     }
 
-    public getPath() {
+    getPath() {
         if (this.openList.length > 0) {
             let currIndex = 0;
             let curr = null;

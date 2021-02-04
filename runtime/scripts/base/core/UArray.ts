@@ -25,7 +25,7 @@ export class UArray1 {
   /**
    * 获取 一维数组 数据
    */
-  public getData(): any[] {
+  getData(): any[] {
     return this.data;
   }
 
@@ -33,7 +33,7 @@ export class UArray1 {
    * 获取元素值
    * @param idx
    */
-  public get(idx: number): any {
+  get(idx: number): any {
     let item = this.data[idx] || 0;
     return item;
   }
@@ -43,7 +43,7 @@ export class UArray1 {
    * @param idx
    * @param val
    */
-  public set(idx: number, val: any): void {
+  set(idx: number, val: any): void {
     if (this.data[idx]) {
       this.data[idx] = val;
     }
@@ -52,7 +52,7 @@ export class UArray1 {
   /**
    * 序列化
    */
-  public toString(): string {
+  toString(): string {
     let str = JSON.stringify(this.data);
     return str;
   }
@@ -60,7 +60,7 @@ export class UArray1 {
   /**
    * 拷贝 一维数组
    */
-  public clone(): UArray1 {
+  clone(): UArray1 {
     let arr1: any = new UArray1();
     arr1.copy(this);
     return arr1;
@@ -70,12 +70,12 @@ export class UArray1 {
    * 复制一维数组
    * @param arr1
    */
-  public copy(arr1: UArray1) {
+  copy(arr1: UArray1) {
     let data = arr1.getData();
     for (let i = 0; i < data.length; i++) {
       let item = data[i];
       if (item) {
-        let copyItem = UObject.clone(item);
+        let copyItem = UObject.deepCopy(item);
         this.data[i] = copyItem;
       }
     }
@@ -84,14 +84,14 @@ export class UArray1 {
   /**
    * 清空一维数组
    */
-  public clear(): void {
+  clear(): void {
     this.data.splice(0, this.data.length);
   }
 
   /**
    * 反序列化 一维数组
    */
-  public reverse(): void {
+  reverse(): void {
     this.data.reverse();
   }
 
@@ -99,7 +99,7 @@ export class UArray1 {
    * 排序一维数组
    * @param sortFunc
    */
-  public sort(sortFunc?: (a: number, b: number) => number): void {
+  sort(sortFunc?: (a: number, b: number) => number): void {
     if (typeof sortFunc == "function") {
       this.data.sort(sortFunc);
     } else {
@@ -111,7 +111,7 @@ export class UArray1 {
    * 连接一维数组
    * @param arr1
    */
-  public contact(arr1: UArray1) {
+  contact(arr1: UArray1) {
     let data = arr1.getData();
     this.data = this.data.concat(data);
   }
@@ -120,7 +120,7 @@ export class UArray1 {
    * 一维数组 去重复
    * @param arr1
    */
-  public distinct(arr1?: UArray1) {
+  distinct(arr1?: UArray1) {
     let newData = this.data;
     if (arr1) {
       let data = arr1.getData();
@@ -141,7 +141,7 @@ export class UArray1 {
    * 合并多维数组
    * @param arr
    */
-  public flatten(arr: Array<any>) {
+  flatten(arr: Array<any>) {
     let newArr = arr.reduce((pre, cur) => pre.concat(Array.isArray(cur) ? newArr(cur) : cur), []);
     this.copy(newArr);
     return newArr;
@@ -151,7 +151,7 @@ export class UArray1 {
    * 一维数组求和
    * @param sunFunc
    */
-  public sum(sunFunc = (a: number, b: number): number => { return a + b; }) {
+  sum(sunFunc = (a: number, b: number): number => { return a + b; }) {
     let sum = this.data.reduce(sunFunc);
     return sum;
   }
@@ -160,7 +160,7 @@ export class UArray1 {
    * 一维数组求积
    * @param mulFunc
    */
-  public mul(mulFunc = (a: number, b: number): number => { return a * b; }) {
+  mul(mulFunc = (a: number, b: number): number => { return a * b; }) {
     let mul = this.data.reduce(mulFunc);
     return mul;
   }
@@ -187,7 +187,7 @@ export class UArray1 {
    *  [2, 4, 6]
    * ]
    */
-  public linesIdx(row: number = 3, col: number = 3) {
+  linesIdx(row: number = 3, col: number = 3) {
     let lineIdxs = [];
 
     //horizontal
@@ -295,21 +295,21 @@ export class UArray2 {
   /**
    * 获取二位数组原数据
    */
-  public getData(): Array<Array<any>> {
+  getData(): Array<Array<any>> {
     return this.data;
   }
 
   /**
    * 获取行数
    */
-  public getRowCount(): number {
+  getRowCount(): number {
     return this.data.length;
   }
 
   /**
    * 获取列数
    */
-  public getColCount(): number {
+  getColCount(): number {
     for (let i = 0; i < this.data.length; i++) {
       if (this.data[i]) {
         return this.data[i].length;
@@ -323,7 +323,7 @@ export class UArray2 {
    * @param x_pos
    * @param y
    */
-  public get(x_pos: any | number, y: number = 0) {
+  get(x_pos: any | number, y: number = 0) {
     let x = undefined;
     if (typeof x_pos == "object") {
       x = x_pos.x;
@@ -341,7 +341,7 @@ export class UArray2 {
    * @param y_val
    * @param val
    */
-  public set(x_pos: any | number, y_val: number = 0, val: any = 0) {
+  set(x_pos: any | number, y_val: number = 0, val: any = 0) {
     let x = undefined;
     let y = undefined;
     let value = undefined;
@@ -362,7 +362,7 @@ export class UArray2 {
   /**
    * 序列化
    */
-  public toString(): string {
+  toString(): string {
     let str = JSON.stringify(this.data);
     return str;
   }
@@ -370,7 +370,7 @@ export class UArray2 {
   /**
    * 克隆二维数组
    */
-  public clone(): UArray2 {
+  clone(): UArray2 {
     let newArr2 = new UArray2();
     newArr2.copy(this);
     return newArr2;
@@ -380,7 +380,7 @@ export class UArray2 {
    * 拷贝二维数组数据
    * @param arr2
    */
-  public copy(arr2: UArray2) {
+  copy(arr2: UArray2) {
     let data = arr2.getData();
     for (let j = 0; j < data.length; j++) {
       let items = data[j];
@@ -390,7 +390,7 @@ export class UArray2 {
         }
         for (let i = 0; i < items[j]; i++) {
           let item = items[i];
-          let copyItem = UObject.clone(item);
+          let copyItem = UObject.deepCopy(item);
           this.data[j][i] = copyItem;
         }
       }
@@ -400,7 +400,7 @@ export class UArray2 {
   /**
    * 清理二维数组
    */
-  public clear(): void {
+  clear(): void {
     if (this.data instanceof Array) {
       for (let j = 0; j < this.data.length; j++) {
         let items = this.data[j];

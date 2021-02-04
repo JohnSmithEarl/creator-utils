@@ -1,5 +1,3 @@
-import { U_COMPARE } from "./UConst";
-
 export class UDate extends Date {
     /**
      * 日期匹配的正则表达式
@@ -13,17 +11,17 @@ export class UDate extends Date {
      * w:星期(小写的)
      * W:星期(大写的)
      */
-    public static REG_DATE = /([YMDhmsiWw])(\1*)/g;
+    static REG_DATE = /([YMDhmsiWw])(\1*)/g;
 
-    public static STAMP_SECONDS = 1000;
-    public static STAMP_MINUTES = 60 * UDate.STAMP_SECONDS;
-    public static STAMP_HOUR = 60 * UDate.STAMP_MINUTES;
-    public static STAMP_DATE = 24 * UDate.STAMP_HOUR;
+    static STAMP_SECONDS = 1000;
+    static STAMP_MINUTES = 60 * UDate.STAMP_SECONDS;
+    static STAMP_HOUR = 60 * UDate.STAMP_MINUTES;
+    static STAMP_DATE = 24 * UDate.STAMP_HOUR;
 
     /**
      * 星期
      */
-    public static WEEK = ["日", "一", "二", "三", "四", "五", "六"];
+    static WEEK = ["日", "一", "二", "三", "四", "五", "六"];
 
     /**
      * @description 判断 对象obj 是否为 UDate
@@ -32,7 +30,7 @@ export class UDate extends Date {
      *      let obj = 1;
      *      UDate.isUDate(obj);  ==> false
      */
-    public static isUDate(obj: any) {
+    static isUDate(obj: any) {
         return Object.prototype.toString.call(obj) === "[object UDate]";
     };
 
@@ -41,7 +39,7 @@ export class UDate extends Date {
      * @param str 时间字符
      * @param pattern 时间字符格式 "YYYY-MM-DD hh:mm:ss:iii"
      */
-    public static create(str: string = "1970-01-01 00:00:00:000", pattern: string = "YYYY-MM-DD hh:mm:ss:iii") {
+    static create(str: string = "1970-01-01 00:00:00:000", pattern: string = "YYYY-MM-DD hh:mm:ss:iii") {
         try {
             if (!pattern) {
                 if (str.length === 10) {
@@ -100,7 +98,7 @@ export class UDate extends Date {
      * @param {Date} value 目标时间
      * @param {String} pattern 匹配字符串
      */
-    public static format(uDate: UDate, pattern: string) {
+    static format(uDate: UDate, pattern: string) {
         if (!UDate.isUDate(uDate)) {
             return "";
         }
@@ -145,7 +143,7 @@ export class UDate extends Date {
         return "";
     };
 
-    public static clone(uDate: UDate) {
+    static clone(uDate: UDate) {
         let time = uDate.getTime();
         let newUDate = new UDate(time);
         return newUDate;
@@ -156,7 +154,7 @@ export class UDate extends Date {
      * @param timeStampA
      * @param timeStampB
      */
-    public static isSameDate(timeStampA: number, timeStampB: number) {
+    static isSameDate(timeStampA: number, timeStampB: number) {
         let dateA = new Date(timeStampA);
         dateA.setHours(0, 0, 0, 0);
         let dateB = new Date(timeStampB);
@@ -172,7 +170,7 @@ export class UDate extends Date {
      * @param timestamp1
      * @param timestamp2
      */
-    public static isSameWeek(timestamp1: number, timestamp2: number): boolean {
+    static isSameWeek(timestamp1: number, timestamp2: number): boolean {
         let old_count = Math.floor(timestamp1 / UDate.STAMP_DATE);
         let now_other = Math.floor(timestamp2 / UDate.STAMP_DATE);
         let isSameWeek = Math.floor((old_count + 4) / 7) == Math.floor((now_other + 4) / 7);
@@ -183,7 +181,7 @@ export class UDate extends Date {
      * @description 是否是闰年
      * @param year
      */
-    public static isLeapYear(year: number = 1970) {
+    static isLeapYear(year: number = 1970) {
         if (year < 0) {
             year = year % 400 + 400;
         }
@@ -195,7 +193,7 @@ export class UDate extends Date {
      * 获取某一年有多少天
      * @param year
      */
-    public static getYearDays(year: number) {
+    static getYearDays(year: number) {
         let isLeapYear = UDate.isLeapYear(year);
         let yearDays = isLeapYear ? 366 : 365;
         return yearDays;
@@ -205,7 +203,7 @@ export class UDate extends Date {
      * @description 获取某月有多少天
      * @param {Number} month 对应的月份
      */
-    public static getMonthDays(month: number) {
+    static getMonthDays(month: number) {
         if (month < 0) {
             month = month % 12 + 12;
         } else if (month > 12) {
@@ -241,7 +239,7 @@ export class UDate extends Date {
      * @description 获取这周是这个月的第几周
      * @param timestamp
      */
-    public static getWeekOfMonth(timestamp: number) {
+    static getWeekOfMonth(timestamp: number) {
         let date = new Date(timestamp);
         let dayOfMonth = date.getDate()
         let day = date.getDay()
@@ -253,7 +251,7 @@ export class UDate extends Date {
      * @description 获取这周是这一年的第几周
      * @param timestamp
      */
-    public static getWeekOfYear(timestamp: number) {
+    static getWeekOfYear(timestamp: number) {
         let dateNow = new Date(timestamp);
         let dateFirst = new Date(dateNow.getFullYear(), 0, 1);
         let offsetDay = Math.round((dateNow.valueOf() - dateFirst.valueOf()) / UDate.STAMP_DATE);
@@ -265,7 +263,7 @@ export class UDate extends Date {
      * 获取今天是今年的第几天
      * @param timestamp
      */
-    public static getDayOfYear(timestamp?: number) {
+    static getDayOfYear(timestamp?: number) {
         let start = null;
         if (timestamp > 0) {
             start = new Date(timestamp);
@@ -284,7 +282,7 @@ export class UDate extends Date {
      * @description 获取某天最小时间戳
      * @param {Number} timestamp
      */
-    public static getDateTimeMin(timestamp: number) {
+    static getDateTimeMin(timestamp: number) {
         let date = new Date(timestamp);
         date.setHours(0);
         date.setMinutes(0);
@@ -298,7 +296,7 @@ export class UDate extends Date {
      * @description 获取某天的最大时间戳
      * @param {Number} timestamp
      */
-    public static getDateTimeMax(timestamp: number): number {
+    static getDateTimeMax(timestamp: number): number {
         let date = new Date(timestamp);
         date.setHours(23);
         date.setMinutes(59);
@@ -313,29 +311,29 @@ export class UDate extends Date {
         this.init(args);
     }
 
-    public init(...args: any): void {
+    init(...args: any): void {
 
     }
 
-    public toString(): string {
+    toString(): string {
         let str = UDate.format(this, "YYYY-MM-DD hh:mm:ss:iii");
         return str;
     }
 
     //override
-    public getMonth(): number {
+    getMonth(): number {
         let month = super.getMonth() + 1;
         return month;
     }
 
     //override
-    public setMonth(month: number): number {
+    setMonth(month: number): number {
         let newMonth = month - 1;
         super.setMonth(newMonth);
         return newMonth;
     }
 
-    public addFullYear(offset: number): UDate {
+    addFullYear(offset: number): UDate {
         let year = this.getFullYear();
         let newYear = year + offset;
         if (newYear >= 1970) {
@@ -346,7 +344,7 @@ export class UDate extends Date {
         return this;
     }
 
-    public addMonth(offset: number): UDate {
+    addMonth(offset: number): UDate {
         let month = this.getMonth();
         let newMonth = month + offset;
         if (newMonth <= 0) {
@@ -365,25 +363,25 @@ export class UDate extends Date {
         return this;
     }
 
-    public addDate(offset: number): UDate {
+    addDate(offset: number): UDate {
         let offsetTimestamp = offset * UDate.STAMP_DATE;
         this.addMilliseconds(offsetTimestamp);
         return this;
     }
 
-    public addHour(offset: number): UDate {
+    addHour(offset: number): UDate {
         let offsetTimestamp = offset * UDate.STAMP_HOUR;
         this.addMilliseconds(offsetTimestamp);
         return this;
     }
 
-    public addMinutes(offset: number): UDate {
+    addMinutes(offset: number): UDate {
         let offsetTimestamp = offset * UDate.STAMP_MINUTES;
         this.addMilliseconds(offsetTimestamp);
         return this;
     }
 
-    public addMilliseconds(offset: number): UDate {
+    addMilliseconds(offset: number): UDate {
         let currentTimestamp = this.getTime();
         let newTimestamp = currentTimestamp + offset;
         let date = new Date(newTimestamp);
@@ -399,94 +397,52 @@ export class UDate extends Date {
     /**
      * 获取当前时间是星期几
      */
-    public getWhatDay(): number {
+    getWhatDay(): number {
         let week = [7, 1, 2, 3, 4, 5, 6];
         let day = this.getDay();
         let whatDay = week[day];
         return whatDay;
     }
 
-    public compare(udate: UDate): U_COMPARE {
+    compare(udate: UDate): number {
         let selfTime = this.getTime();
         let otherTime = udate.getTime();
-        if (selfTime > otherTime) {
-            return U_COMPARE.GREATER;
-        } else if (selfTime == otherTime) {
-            return U_COMPARE.EQUAL;
-        } else {
-            return U_COMPARE.LESS;
-        }
+        return selfTime - otherTime;
     }
 
-    public compareYear(udate: UDate): U_COMPARE {
+    compareYear(udate: UDate): number {
         let selfYear = this.getFullYear();
         let otherYear = udate.getFullYear();
-        if (selfYear > otherYear) {
-            return U_COMPARE.GREATER;
-        } else if (selfYear == otherYear) {
-            return U_COMPARE.EQUAL;
-        } else {
-            return U_COMPARE.LESS;
-        }
+        return selfYear - otherYear;
     }
 
-    public compareMonth(udate: UDate): U_COMPARE {
+    compareMonth(udate: UDate): number {
         let selfMonth = this.getMonth();
         let otherMonth = udate.getMonth();
-        if (selfMonth > otherMonth) {
-            return U_COMPARE.GREATER;
-        } else if (selfMonth == otherMonth) {
-            return U_COMPARE.EQUAL;
-        } else {
-            return U_COMPARE.LESS;
-        }
+        return selfMonth - otherMonth;
     }
 
-    public compareDay(uDate: UDate): U_COMPARE {
+    compareDay(uDate: UDate): number {
         let selfDay = this.getDay();
         let otherDay = uDate.getDate();
-        if (selfDay > otherDay) {
-            return U_COMPARE.GREATER;
-        } else if (selfDay == otherDay) {
-            return U_COMPARE.EQUAL;
-        } else {
-            return U_COMPARE.LESS;
-        }
+        return selfDay - otherDay;
     }
 
-    public compareHour(uDate: UDate): U_COMPARE {
+    compareHour(uDate: UDate): number {
         let selfHours = this.getHours();
         let otherHours = uDate.getHours();
-        if (selfHours > otherHours) {
-            return U_COMPARE.GREATER;
-        } else if (selfHours == otherHours) {
-            return U_COMPARE.EQUAL;
-        } else {
-            return U_COMPARE.LESS;
-        }
+        return selfHours - otherHours;
     }
 
-    public compareMinutes(uDate: UDate): U_COMPARE {
+    compareMinutes(uDate: UDate): number {
         let selfMinutes = this.getMinutes();
         let otherMinutes = uDate.getMinutes();
-        if (selfMinutes > otherMinutes) {
-            return U_COMPARE.GREATER;
-        } else if (selfMinutes == otherMinutes) {
-            return U_COMPARE.EQUAL;
-        } else {
-            return U_COMPARE.LESS;
-        }
+        return selfMinutes - otherMinutes;
     }
 
-    public compareSecond(uDate: UDate): U_COMPARE {
+    compareSecond(uDate: UDate): number {
         let selfSeconds = this.getHours();
         let otherSeconds = uDate.getHours();
-        if (selfSeconds > otherSeconds) {
-            return U_COMPARE.GREATER;
-        } else if (selfSeconds == otherSeconds) {
-            return U_COMPARE.EQUAL;
-        } else {
-            return U_COMPARE.LESS;
-        }
+        return selfSeconds - otherSeconds;
     }
 };

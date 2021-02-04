@@ -6,7 +6,7 @@ export class USort {
      * 冒泡排序
      * @param arr
      */
-    public static bubbleSort(arr: Array<any>): Array<any> {
+    static bubbleSort(arr: Array<any>): Array<any> {
         var i = arr.length;
         while (i > 0) {
             var pos = 0
@@ -30,7 +30,7 @@ export class USort {
      * 选择排序
      * @param arr
      */
-    public static selectionSort(arr: Array<any>): Array<any> {
+    static selectionSort(arr: Array<any>): Array<any> {
         var len = arr.length;
         var minIndex, temp;
         for (var i = 0; i < len - 1; i++) {
@@ -52,9 +52,9 @@ export class USort {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * @description 插入排序
-     * @param arr 
+     * @param arr
      */
-    public static insertSort(arr: Array<any>): Array<any> {
+    static insertSort(arr: Array<any>): Array<any> {
         var len = arr.length
         for (let i = 1; i < len; i++) {
             var key = arr[i]
@@ -75,7 +75,7 @@ export class USort {
      * 希尔排序
      * @param arr
      */
-    public static shellSort(arr: Array<any>): Array<any> {
+    static shellSort(arr: Array<any>): Array<any> {
         var len = arr.length;
         var temp, gap = 1;
         while (gap < len / 3) {
@@ -118,7 +118,7 @@ export class USort {
         }
         return result
     }
-    public static mergeSort(arr: Array<any>): Array<any> {
+    static mergeSort(arr: Array<any>): Array<any> {
         var len = arr.length
         if (len < 2) {
             return arr
@@ -136,7 +136,7 @@ export class USort {
      * 快速排序
      * @param arr
      */
-    public static quickSort(arr: Array<any>): Array<any> {
+    static quickSort(arr: Array<any>): Array<any> {
         if (arr.length == 0) {
             return []
         }
@@ -157,10 +157,10 @@ export class USort {
     ////////////////////////////////////////       堆排序     //////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * 
-     * @param array 
-     * @param heapSize 
-     * @param index 
+     *
+     * @param array
+     * @param heapSize
+     * @param index
      */
     private static heapify(array: Array<any>, heapSize: number, index: number) {
         let largest = index;
@@ -179,8 +179,8 @@ export class USort {
     };
 
     /**
-     * 
-     * @param array 
+     *
+     * @param array
      */
     private static buildHeap(array: Array<any>) {
         let heapSize = array.length;
@@ -191,9 +191,9 @@ export class USort {
 
     /**
      * 堆排序
-     * @param array 
+     * @param array
      */
-    public static heapSort(array: Array<any>): Array<any> {
+    static heapSort(array: Array<any>): Array<any> {
         let heapSize = array.length;
         USort.buildHeap(array);
 

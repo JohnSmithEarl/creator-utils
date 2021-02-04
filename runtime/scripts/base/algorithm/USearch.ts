@@ -7,7 +7,7 @@ export class USearch {
      * @param arr
      * @param data
      */
-    public static sequentialSearch(arr: Array<any>, data: any) {
+    static sequentialSearch(arr: Array<any>, data: any) {
         for (var i = 0; i < arr.length; i++) {
             if (arr[i] == data) {
                 return i;
@@ -24,7 +24,7 @@ export class USearch {
      * @param arr
      * @param data
      */
-    public static binarySearch(arr: Array<any>, data: any) {
+    static binarySearch(arr: Array<any>, data: any) {
         var low = 0;
         var high = arr.length - 1
         while (low <= high) {

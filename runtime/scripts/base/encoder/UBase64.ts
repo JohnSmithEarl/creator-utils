@@ -1,27 +1,28 @@
 import { UWordArray } from "../core/UWordArray";
 
+let _map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+function parseLoop(base64Str: string, base64StrLength: number, reverseMap: Array<number>) {
+    var words = [];
+    var nBytes = 0;
+    for (var i = 0; i < base64StrLength; i++) {
+        if (i % 4) {
+            var bits1 = reverseMap[base64Str.charCodeAt(i - 1)] << ((i % 4) * 2);
+            var bits2 = reverseMap[base64Str.charCodeAt(i)] >>> (6 - (i % 4) * 2);
+            var bitsCombined = bits1 | bits2;
+            words[nBytes >>> 2] |= bitsCombined << (24 - (nBytes % 4) * 8);
+            nBytes++;
+        }
+    }
+    return new UWordArray(words, nBytes);
+}
+
+
 /**
  * Base64 encoding strategy.
  */
 export class Base64 {
-    private static _map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
     private static _reverseMap = [];
-
-    private static parseLoop(base64Str: string, base64StrLength: number, reverseMap: Array<number>) {
-        var words = [];
-        var nBytes = 0;
-        for (var i = 0; i < base64StrLength; i++) {
-            if (i % 4) {
-                var bits1 = reverseMap[base64Str.charCodeAt(i - 1)] << ((i % 4) * 2);
-                var bits2 = reverseMap[base64Str.charCodeAt(i)] >>> (6 - (i % 4) * 2);
-                var bitsCombined = bits1 | bits2;
-                words[nBytes >>> 2] |= bitsCombined << (24 - (nBytes % 4) * 8);
-                nBytes++;
-            }
-        }
-        return new UWordArray(words, nBytes);
-    }
-
 
     /**
      * Converts a word array to a Base64 string.
@@ -40,7 +41,7 @@ export class Base64 {
         // Shortcuts
         var words = wordArray.words;
         var sigBytes = wordArray.sigBytes;
-        var map = Base64._map;
+        var map = _map;
 
         // Clamp excess bits
         wordArray.clamp();
@@ -83,7 +84,7 @@ export class Base64 {
     static parse(base64Str: string): UWordArray {
         // Shortcuts
         var base64StrLength = base64Str.length;
-        var map = Base64._map;
+        var map = _map;
         var reverseMap = this._reverseMap;
 
         if (!reverseMap) {
@@ -103,7 +104,7 @@ export class Base64 {
         }
 
         // Convert
-        return Base64.parseLoop(base64Str, base64StrLength, reverseMap);
+        return parseLoop(base64Str, base64StrLength, reverseMap);
     }
 };
 
