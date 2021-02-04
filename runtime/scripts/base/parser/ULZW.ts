@@ -239,8 +239,8 @@ export class ULZW {
     }
 };
 
-import { UTest } from "../core/UTest";
-UTest.test("ULZW", [
+import { Test } from "../core/Test";
+Test.test("ULZW", [
     () => {
         let str1 = "一个JS实现的LZW压缩算法方法实现字符串的压缩和解压";
         let cStr1 = ULZW.compress(str1);

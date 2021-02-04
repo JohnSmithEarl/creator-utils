@@ -68,7 +68,8 @@
     "removeComments": true
   },
   "include": [
-    "./creator.d.ts",
+    "./runtime/interface/creator.d.ts",
+    "./runtime/interface/jszip.d.ts",
     "./runtime/scripts/**/*",
   ],
   "exclude": []
