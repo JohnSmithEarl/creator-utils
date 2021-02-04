@@ -12,7 +12,7 @@ import { EncoderUtf8 } from "../encoder/EncoderUtf8";
 export class BufferedBlockAlgorithm extends Base {
     blockSize: number = 0;
     _minBufferSize: number = 0;
-    _data: WordArray = null;
+    _data: WordArray = undefined;
     _nDataBytes: number = 0;
 
     // @interface

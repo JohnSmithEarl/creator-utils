@@ -2,6 +2,20 @@
  * 基础对象
  */
 export class Base {
+    // 交叉类型（Intersection Types）
+    static extend<T, U>(first: T, second: U): T & U {
+        let result = <T & U>{};
+        for (let id in first) {
+            (<any>result)[id] = (<any>first)[id];
+        }
+        for (let id in second) {
+            if (!result.hasOwnProperty(id)) {
+                (<any>result)[id] = (<any>second)[id];
+            }
+        }
+        return result;
+    }
+
     static isInherited(childInstance: any, parentClass: any) {
         let isInherited = childInstance instanceof parentClass;
         return isInherited;
@@ -73,7 +87,7 @@ export class Base {
     }
 
     constructor(...args: any[]) {
-
+        this.merge(args);
     }
 
     isInherited(parentClass: any) {
@@ -112,8 +126,9 @@ export class Base {
         return cloneObj;
     }
 
-    merge(from: any): void {
+    merge(from: any): any {
         Base.merge(this, from);
+        return this;
     }
 
     toString(encoder: any = JSON): string {

@@ -1,7 +1,7 @@
 import { CipherParams } from "../helper/CipherParams";
 import { EncoderHex } from "../encoder/EncoderHex";
 
-export class FormatHex {
+export class FormatterHex {
     /**
      * Converts the ciphertext of a cipher params object to a hexadecimally encoded string.
      *

@@ -107,7 +107,7 @@ export class WordArray extends Base {
      * @example
      *     let wordArray =  UWordArray.random(16);
      */
-    random(nBytes: number): WordArray {
+    static random(nBytes: number): WordArray {
         let words = [];
 
         let r = function (t_m_w) {
@@ -140,10 +140,10 @@ import { Test } from "./Test";
 Test.test("UWordArray", [() => {
     let wordArray1 = new WordArray([0x00010203, 0x04050607]);
     let wordArray2 = new WordArray([0x00010203, 0x04050607], 6);
-    let str1 =  wordArray1.toString();
-    let str2 =  wordArray2.toString();
-    let val1 =  EncoderHex.parse(str1);
-    let val2 =  EncoderHex.parse(str2);
+    let str1 = wordArray1.toString();
+    let str2 = wordArray2.toString();
+    let val1 = EncoderHex.parse(str1);
+    let val2 = EncoderHex.parse(str2);
 
     console.log("wordArray1:", wordArray1);
     console.log("wordArray2:", wordArray2);

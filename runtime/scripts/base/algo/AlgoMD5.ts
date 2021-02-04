@@ -34,7 +34,7 @@ function II(a: number, b: number, c: number, d: number, x: number, s: number, t:
 /**
  * MD5 hash algorithm.
  */
-export class MD5 extends Hasher {
+export class AlgoMD5 extends Hasher {
     _hash: WordArray = null;
 
     _doReset() {

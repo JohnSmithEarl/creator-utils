@@ -16,6 +16,7 @@ import { Base } from "../core/Base";
 export class CipherParams extends Base {
     formatter: any = null;
     ciphertext: any = null;
+    salt: any = null;
 
     /**
      * Initializes a newly created cipher params object.
@@ -49,7 +50,7 @@ export class CipherParams extends Base {
      *     var string = cipherParams.toString();
      *     var string = cipherParams.toString(UOpenSSL);
      */
-    toString(formatter):string {
+    toString(formatter): string {
         return (formatter || this.formatter).stringify(this);
     }
 }
