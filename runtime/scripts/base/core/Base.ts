@@ -228,22 +228,22 @@ Test.test("UWordX64", [
         child.sayName(); // my name is Child
         child.sayAge(); // my age is 18
 
-        console.log("构造器原型链");
-        console.log("Child.prototype === Parent:", Child.prototype === Parent) // false
-        console.log("Child.__proto__ === Parent:", Child.__proto__ === Parent); // true
-        console.log("Parent.__proto__ === Function.prototype:", Parent.__proto__ === Function.prototype); // true
-        console.log("Function.prototype.__proto__ === Object.prototype:", Function.prototype.__proto__ === Object.prototype); // true
-        console.log("Object.prototype.__proto__ === null:", Object.prototype.__proto__ === null); // true
+        // console.log("构造器原型链");
+        // console.log("Child.prototype === Parent:", Child.prototype === Parent) // false
+        // console.log("Child.__proto__ === Parent:", Child.__proto__ === Parent); // true
+        // console.log("Parent.__proto__ === Function.prototype:", Parent.__proto__ === Function.prototype); // true
+        // console.log("Function.prototype.__proto__ === Object.prototype:", Function.prototype.__proto__ === Object.prototype); // true
+        // console.log("Object.prototype.__proto__ === null:", Object.prototype.__proto__ === null); // true
 
-        console.log("实例原型链");
-        console.log("child.__proto__ === Child.prototype:", child.__proto__ === Child.prototype); // true
-        console.log("Child.prototype.__proto__ === Parent.prototype:", Child.prototype.__proto__ === Parent.prototype); // true
-        console.log("Parent.prototype.__proto__ === Object.prototype:", Parent.prototype.__proto__ === Object.prototype); // true
-        console.log("Object.prototype.__proto__ === null:", Object.prototype.__proto__ === null); // true
+        // console.log("实例原型链");
+        // console.log("child.__proto__ === Child.prototype:", child.__proto__ === Child.prototype); // true
+        // console.log("Child.prototype.__proto__ === Parent.prototype:", Child.prototype.__proto__ === Parent.prototype); // true
+        // console.log("Parent.prototype.__proto__ === Object.prototype:", Parent.prototype.__proto__ === Object.prototype); // true
+        // console.log("Object.prototype.__proto__ === null:", Object.prototype.__proto__ === null); // true
 
-        console.log("parent instanceof Parent:", parent instanceof Parent);
-        console.log("child instanceof Parent:", child instanceof Parent);
-        console.log("Child instanceof Parent:", Child instanceof Parent);
+        // console.log("parent instanceof Parent:", parent instanceof Parent);
+        // console.log("child instanceof Parent:", child instanceof Parent);
+        // console.log("Child instanceof Parent:", Child instanceof Parent);
 
         console.log("////////////////////////////////////");
     }

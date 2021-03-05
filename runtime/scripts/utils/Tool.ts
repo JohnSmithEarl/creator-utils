@@ -31,7 +31,7 @@ export class Tool {
     }
 };
 
-import { Test } from "../core/Test";
+import { Test } from "../base/core/Test";
 Test.test("UFunction", [
     () => {
         function add(a: number) {

@@ -3,19 +3,19 @@ import { Base } from "../base/core/Base";
 
 let _USER_KEY = "cu.user.object";
 
-export enum cu_GENDER {
+export enum GENDER {
     FEMALE = 0,
     MALE = 1,
     UNKNOWN = 2,
 }
 
-export class cu_User {
+export class User {
     private userObj = {
         _inited: false,
         name: "",
         avaterUrl: "",
         age: 0,
-        gender: cu_GENDER.UNKNOWN,
+        gender: GENDER.UNKNOWN,
         motto: "",
     }
 
@@ -78,12 +78,12 @@ export class cu_User {
         }
     }
 
-    getGender(): cu_GENDER {
+    getGender(): GENDER {
         this.userObj = this.getUserObj();
         return this.userObj.gender;
     }
 
-    setGender(gender: cu_GENDER) {
+    setGender(gender: GENDER) {
         this.userObj = this.getUserObj();
         if (this.userObj.gender != gender) {
             this.userObj.gender = gender;
