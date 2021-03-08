@@ -1,4 +1,4 @@
-import { Base } from "../core/Base";
+import { Objects } from "../type/Objects";
 
 export class Set {
     protected items: Object = null;
@@ -50,14 +50,14 @@ export class Set {
      * @description 获取集合的长度
      */
     size(): number {
-        return Object.keys(this.items).length;
+        return Objects.keys(this.items).length;
     }
 
     /**
      * @description 返回集合中所有元素的内容
      */
     values(): Array<any> {
-        return Base.values(this.items);
+        return Objects.values(this.items);
     }
 
     /**

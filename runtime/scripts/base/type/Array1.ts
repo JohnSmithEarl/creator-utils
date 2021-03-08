@@ -1,4 +1,4 @@
-import { Base } from "../core/Base";
+import { Objects } from "./Objects";
 
 export class UArray1 {
   private data: Array<any> = undefined;
@@ -73,7 +73,7 @@ export class UArray1 {
     for (let i = 0; i < data.length; i++) {
       let item = data[i];
       if (item) {
-        let copyItem = Base.deepCopy(item);
+        let copyItem = Objects.deepCopy(item);
         this.data[i] = copyItem;
       }
     }

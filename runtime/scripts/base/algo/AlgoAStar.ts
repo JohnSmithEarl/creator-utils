@@ -58,6 +58,7 @@ export class AlgoAStar {
     protected map: Array<Array<any>> = [];
     protected grid: Array<any> = [];
     protected openList: Array<any> = [];
+
     protected closedList: Array<any> = [];
     protected startSopt: Sopt = null;
     protected endSopt: Sopt = null;

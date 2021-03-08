@@ -105,22 +105,22 @@ export class CircularLinkedList {
     }
 }
 
-import { Test } from "../core/Test";
+// import { Test } from "../core/Test";
 
-Test.test("CircularLinkedList", [
-    () => {
-        let circularLinkedList = new CircularLinkedList();
-        circularLinkedList.append(10);
-        circularLinkedList.append(15);
-        circularLinkedList.append(20);
+// Test.test("CircularLinkedList", [
+//     () => {
+//         let circularLinkedList = new CircularLinkedList();
+//         circularLinkedList.append(10);
+//         circularLinkedList.append(15);
+//         circularLinkedList.append(20);
 
-        console.log(circularLinkedList.toString());
+//         console.log(circularLinkedList.toString());
 
-        circularLinkedList.insert(0, 9);
-        circularLinkedList.insert(3, 25);
-        console.log(circularLinkedList.toString());
+//         circularLinkedList.insert(0, 9);
+//         circularLinkedList.insert(3, 25);
+//         console.log(circularLinkedList.toString());
 
-        console.log(circularLinkedList.removeAt(0));
-        console.log(circularLinkedList.toString());
-    }
-]);
+//         console.log(circularLinkedList.removeAt(0));
+//         console.log(circularLinkedList.toString());
+//     }
+// ]);

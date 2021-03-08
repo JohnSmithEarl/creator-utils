@@ -1,5 +1,5 @@
 import { Storage } from "../base/storage/Storage";
-import { Base } from "../base/core/Base";
+import { Objects } from "../base/type/Objects";
 
 let _AUDIO_KEY = "cu.audio.object";
 
@@ -21,7 +21,7 @@ export class Audio {
                 this.saveAudioObj(this.audioObj);
             } else {
                 let audioObj = JSON.parse(str);
-                Base.merge(this.audioObj, audioObj);
+                Objects.merge(this.audioObj, audioObj);
                 this.audioObj._inited = true;
             }
         }

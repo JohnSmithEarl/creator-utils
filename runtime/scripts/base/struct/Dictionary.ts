@@ -1,4 +1,4 @@
-import { Base } from "../core/Base";
+import { Objects } from "../type/Objects";
 
 /**
  * @description 字典类
@@ -61,21 +61,21 @@ export class Dictionary {
      * @description 返回字典中所有元素的数量
      */
     public size(): number {
-        return Object.keys(this.items).length;
+        return Objects.keys(this.items).length;
     }
 
     /**
      * @description 返回字典中所有的键值
      */
     public keys(): Array<string> {
-        return Object.keys(this.items);
+        return Objects.keys(this.items);
     }
 
     /**
      * @description 返回字典中所有的值
      */
     public values(): Array<any> {
-        return Base.values(this.items);
+        return Objects.values(this.items);
     }
 
     /**
@@ -86,39 +86,39 @@ export class Dictionary {
     }
 };
 
-import { Test } from "../core/Test";
-Test.test("Dictionary", [
-    () => {
-        let dictionary = new Dictionary();
-        dictionary.set('Gandalf', 'gandalf@email.com');
-        dictionary.set('John', 'john@email.com');
-        dictionary.set('Tyrion', 'tyrion@email.com');
-        console.log(dictionary.has('Gandalf')); // true
-        console.log(dictionary.size()); // 3
-        console.log(dictionary.keys()); // [ 'Gandalf', 'John', 'Tyrion' ]
-        console.log(dictionary.values()); // [ 'gandalf@email.com', 'john@email.com', 'tyrion@email.com' ]
-        console.log(dictionary.get('Tyrion')); // tyrion@email.com
+// import { Test } from "../core/Test";
+// Test.test("Dictionary", [
+//     () => {
+//         let dictionary = new Dictionary();
+//         dictionary.set('Gandalf', 'gandalf@email.com');
+//         dictionary.set('John', 'john@email.com');
+//         dictionary.set('Tyrion', 'tyrion@email.com');
+//         console.log(dictionary.has('Gandalf')); // true
+//         console.log(dictionary.size()); // 3
+//         console.log(dictionary.keys()); // [ 'Gandalf', 'John', 'Tyrion' ]
+//         console.log(dictionary.values()); // [ 'gandalf@email.com', 'john@email.com', 'tyrion@email.com' ]
+//         console.log(dictionary.get('Tyrion')); // tyrion@email.com
 
-        dictionary.delete('John');
-        console.log(dictionary.keys()); // [ 'Gandalf', 'Tyrion' ]
-        console.log(dictionary.values()); // [ 'gandalf@email.com', 'tyrion@email.com' ]
-        console.log(dictionary.getItems()); // { Gandalf: 'gandalf@email.com', Tyrion: 'tyrion@email.com' }
+//         dictionary.delete('John');
+//         console.log(dictionary.keys()); // [ 'Gandalf', 'Tyrion' ]
+//         console.log(dictionary.values()); // [ 'gandalf@email.com', 'tyrion@email.com' ]
+//         console.log(dictionary.getItems()); // { Gandalf: 'gandalf@email.com', Tyrion: 'tyrion@email.com' }
 
-        console.log("\n\n");
+//         console.log("\n\n");
 
-        let dictionary1 = new Map();
-        dictionary1.set('Gandalf', 'gandalf@email.com');
-        dictionary1.set('John', 'john@email.com');
-        dictionary1.set('Tyrion', 'tyrion@email.com');
-        console.log(dictionary1.has('Gandalf')); // true
-        console.log(dictionary1.size); // 3
-        console.log(dictionary1.keys()); // [Map Iterator] { 'Gandalf', 'John', 'Tyrion' }
-        console.log(dictionary1.values()); // [Map Iterator] { 'gandalf@email.com', 'john@email.com', 'tyrion@email.com' }
-        console.log(dictionary1.get('Tyrion')); // tyrion@email.com
+//         let dictionary1 = new Map();
+//         dictionary1.set('Gandalf', 'gandalf@email.com');
+//         dictionary1.set('John', 'john@email.com');
+//         dictionary1.set('Tyrion', 'tyrion@email.com');
+//         console.log(dictionary1.has('Gandalf')); // true
+//         console.log(dictionary1.size); // 3
+//         console.log(dictionary1.keys()); // [Map Iterator] { 'Gandalf', 'John', 'Tyrion' }
+//         console.log(dictionary1.values()); // [Map Iterator] { 'gandalf@email.com', 'john@email.com', 'tyrion@email.com' }
+//         console.log(dictionary1.get('Tyrion')); // tyrion@email.com
 
-        dictionary1.delete('John');
-        console.log(dictionary1.keys()); // [Map Iterator] { 'Gandalf', 'Tyrion' }
-        console.log(dictionary1.values()); // [Map Iterator] { 'gandalf@email.com', 'tyrion@email.com' }
-        console.log(dictionary1.entries()); // [Map Iterator] { [ Gandalf: 'gandalf@email.com' ], [ Tyrion: 'tyrion@email.com' ] }
-    }
-]);
+//         dictionary1.delete('John');
+//         console.log(dictionary1.keys()); // [Map Iterator] { 'Gandalf', 'Tyrion' }
+//         console.log(dictionary1.values()); // [Map Iterator] { 'gandalf@email.com', 'tyrion@email.com' }
+//         console.log(dictionary1.entries()); // [Map Iterator] { [ Gandalf: 'gandalf@email.com' ], [ Tyrion: 'tyrion@email.com' ] }
+//     }
+// ]);

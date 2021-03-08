@@ -1,5 +1,5 @@
 import { Storage } from "../base/storage/Storage";
-import { Base } from "../base/core/Base";
+import { Objects } from "../base/type/Objects";
 
 let _SIGN_KEY = "cu.sign.object";
 
@@ -21,7 +21,7 @@ export class USigned {
                 this.saveSignObj(this.signObj);
             } else {
                 let signObj = JSON.parse(str);
-                Base.merge(this.signObj, signObj);
+                Objects.merge(this.signObj, signObj);
                 this.signObj._inited = true;
             }
         }

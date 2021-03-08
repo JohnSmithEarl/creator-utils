@@ -1,5 +1,5 @@
 import { Storage } from "../base/storage/Storage";
-import { Base } from "../base/core/Base";
+import { Objects } from "../base/type/Objects";
 
 let _USER_KEY = "cu.user.object";
 
@@ -27,7 +27,7 @@ export class User {
                 this.saveUserObj(this.userObj);
             } else {
                 let userObj = Storage.get(_USER_KEY);
-                Base.merge(this.userObj, userObj);
+                Objects.merge(this.userObj, userObj);
                 this.userObj._inited = true;
             }
         }
