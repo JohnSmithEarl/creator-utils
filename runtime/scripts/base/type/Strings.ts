@@ -29,17 +29,6 @@ export class Strings {
         return Lv
     }
 
-    /**
-     * @param {string} message
-     * @param {Array} arr
-     * 消息格式化
-     */
-    static format(message: string, arr: Array<any>) {
-        return message.replace(/{(\d+)}/g, function (matchStr, group1) {
-            return arr[group1];
-        });
-    }
-
     /*过滤html代码(把<>转换)*/
     static filterTag(str) {
         str = str.replace(/&/ig, "&amp;")
@@ -84,65 +73,65 @@ export class Strings {
         }
     }
 
-    isEmpty(input: string): boolean {
+    static isEmpty(input: string): boolean {
         return input == null || input == "";
     }
 
-    isNotEmpty(input: string): boolean {
+    static isNotEmpty(input: string): boolean {
         return !this.isEmpty(input);
     }
 
-    isBlank(input: string): boolean {
+    static isBlank(input: string): boolean {
         return input == null || /^\s*$/.test(input);
     }
 
-    isNotBlank(input: string): boolean {
+    static isNotBlank(input: string): boolean {
         return !this.isBlank(input);
     }
 
-    trim(input: string): string {
+    static trim(input: string): string {
         // return input.replace(/^\s+|\s+$/, '');
         return input.trim();
     }
 
-    startsWith(input: string, prefix: string) {
+    static startsWith(input: string, prefix: string) {
         return input.indexOf(prefix) === 0;
     }
 
-    endsWith(input: string, suffix: string): boolean {
+    static endsWith(input: string, suffix: string): boolean {
         return input.lastIndexOf(suffix) === 0;
     }
 
-    contains(input: string, searchSeq: string): boolean {
+    static contains(input: string, searchSeq: string): boolean {
         return input.indexOf(searchSeq) >= 0;
     }
 
-    equals(input: string, str: string): boolean {
+    static equals(input: string, str: string): boolean {
         return input == str;
     }
 
-    equalsIgnoreCase(input: string, str: string): boolean {
+    static equalsIgnoreCase(input: string, str: string): boolean {
         return input.toLocaleLowerCase() == str.toLocaleLowerCase();
     }
 
-    containsWhitespace(input: string) {
+    static containsWhitespace(input: string) {
         return this.contains(input, " ");
     }
 
-    deleteWhitespace(input: string) {
+    static deleteWhitespace(input: string) {
         return input.replace(/\s+/g, '');
     }
 
-    rightPad(input: string, size: number, padStr: string) {
+    static rightPad(input: string, size: number, padStr: string) {
         return input + Strings.repeat(padStr, size);
     }
 
-    leftPad(input: string, size: number, padStr: string) {
+    static leftPad(input: string, size: number, padStr: string) {
         return Strings.repeat(padStr, size) + input;
     }
 
     //首小写字母转大写
-    capitalize(input: string) {
+    static capitalize(input: string) {
         if (input == null || input.length == 0) {
             return input;
         }
@@ -152,7 +141,7 @@ export class Strings {
     }
 
     //首大写字母转小写
-    uncapitalize(input: string) {
+    static uncapitalize(input: string) {
         if (input == null || input.length == 0) {
             return input;
         }
@@ -162,7 +151,7 @@ export class Strings {
     }
 
     //大写转小写，小写转大写
-    swapCase(input: string) {
+    static swapCase(input: string) {
         return input.replace(/[a-z]/ig, function (matchStr) {
             if (matchStr >= 'A' && matchStr <= 'Z') {
                 return matchStr.toLocaleLowerCase();
@@ -173,7 +162,7 @@ export class Strings {
     }
 
     //统计含有的子字符串的个数
-    countMatches(input: string, sub: string) {
+    static countMatches(input: string, sub: string) {
         if (this.isEmpty(input)) {
             return 0;
         }
@@ -191,80 +180,80 @@ export class Strings {
     }
 
     //只包含字母
-    isAlpha(input: string) {
+    static isAlpha(input: string) {
         return /^[a-z]+$/i.test(input);
     }
 
     //只包含字母、空格
-    isAlphaSpace(input: string) {
+    static isAlphaSpace(input: string) {
         return /^[a-z\s]*$/i.test(input);
     }
 
     //只包含字母、数字
-    isAlphanumeric(input: string) {
+    static isAlphanumeric(input: string) {
         return /^[a-z0-9]+$/i.test(input);
     }
 
     //只包含字母、数字和空格
-    isAlphanumericSpace(input: string) {
+    static isAlphanumericSpace(input: string) {
         return /^[a-z0-9\s]*$/i.test(input);
     }
 
     //数字
-    isNumeric(input: string) {
+    static isNumeric(input: string) {
         return /^(?:[1-9]\d*|0)(?:\.\d+)?$/.test(input);
     }
 
     //小数
-    isDecimal(input: string) {
+    static isDecimal(input: string) {
         return /^[-+]?(?:0|[1-9]\d*)\.\d+$/.test(input);
     }
 
     //负小数
-    isNegativeDecimal(input: string) {
+    static isNegativeDecimal(input: string) {
         return /^\-?(?:0|[1-9]\d*)\.\d+$/.test(input);
     }
 
     //正小数
-    isPositiveDecimal(input: string) {
+    static isPositiveDecimal(input: string) {
         return /^\+?(?:0|[1-9]\d*)\.\d+$/.test(input);
     }
 
     //整数
-    isInteger(input: string) {
+    static isInteger(input: string) {
         return /^[-+]?(?:0|[1-9]\d*)$/.test(input);
     }
 
     //正整数
-    isPositiveInteger(input: string) {
+    static isPositiveInteger(input: string) {
         return /^\+?(?:0|[1-9]\d*)$/.test(input);
     }
 
     //负整数
-    isNegativeInteger(input: string) {
+    static isNegativeInteger(input: string) {
         return /^\-?(?:0|[1-9]\d*)$/.test(input);
     }
 
 
     //只包含数字和空格
-    isNumericSpace(input: string) {
+    static isNumericSpace(input: string) {
         return /^[\d\s]*$/.test(input);
     }
 
-    isWhitespace(input: string) {
+    static isWhitespace(input: string) {
         return /^\s*$/.test(input);
     }
 
-    isAllLowerCase(input: string) {
+    static isAllLowerCase(input: string) {
         return /^[a-z]+$/.test(input);
     }
 
-    isAllUpperCase(input: string) {
+    static isAllUpperCase(input: string) {
         return /^[A-Z]+$/.test(input);
     }
 
     //字符串反转
-    reverse(input: string) {
+    static reverse(input: string) {
         if (this.isBlank(input)) {
             return input;
         }
@@ -272,12 +261,12 @@ export class Strings {
     }
 
     //删掉特殊字符(英文状态下)
-    removeSpecialCharacter(input: string) {
+    static removeSpecialCharacter(input: string) {
         return input.replace(/[!-/:-@\[-`{-~]/g, "");
     }
 
     //只包含特殊字符、数字和字母（不包括空格，若想包括空格，改为[ -~]）
-    isSpecialCharacterAlphanumeric(input: string) {
+    static isSpecialCharacterAlphanumeric(input: string) {
         return /^[!-~]+$/.test(input);
     }
 
@@ -286,7 +275,7 @@ export class Strings {
      * @param {Array} arr
      * 消息格式化
      */
-    format(message: string, arr: Array<any>) {
+    static format(message: string, arr: Array<any>) {
         return message.replace(/{(\d+)}/g, function (matchStr, group1) {
             return arr[group1];
         });
@@ -297,7 +286,7 @@ export class Strings {
      * @param {UString} input
      * @param {Boolean} ignoreCase : true or false
      */
-    compressRepeatedStr(input: string, ignoreCase: boolean = false) {
+    static compressRepeatedStr(input: string, ignoreCase: boolean = false) {
         let pattern = new RegExp("([a-z])\\1+", ignoreCase ? "ig" : "g");
         return input.replace(pattern, function (matchStr, group1) {
             return matchStr.length + group1;
@@ -305,17 +294,17 @@ export class Strings {
     }
 
     //中文校验
-    isChinese(input: string): boolean {
+    static isChinese(input: string): boolean {
         return /^[\u4E00-\u9FA5]+$/.test(input);
     }
 
     //去掉中文字符
-    removeChinese(input: string) {
+    static removeChinese(input: string) {
         return input.replace(/[\u4E00-\u9FA5]+/gm, "");
     }
 
     //转义元字符
-    escapeMetacharacter(input: string) {
+    static escapeMetacharacter(input: string) {
         var metacharacter = "^$()*+.[]|\\-?{}|";
         if (metacharacter.indexOf(input) >= 0) {
             input = "\\" + input;
@@ -324,7 +313,7 @@ export class Strings {
     }
 
     //转义字符串中的元字符
-    escapeMetacharacterOfStr(input: string) {
+    static escapeMetacharacterOfStr(input: string) {
         return input.replace(/[\^\$\(\)\*\+\.\[\]\|\\\-\?\{\}\|]/gm, "\\$&");
     }
 
@@ -358,7 +347,7 @@ export class Strings {
     * @param {Boolean} ignoreCase 是否忽略大小写
     * conditions={matcherFlag:"0",excludeStrArr:[],length:"",ignoreCase:true}
     */
-    isPatternMustExcludeSomeStr(input, conditions) {
+    static isPatternMustExcludeSomeStr(input, conditions) {
         //参数
         let matcherFlag = conditions.matcherFlag;
         let excludeStrArr = conditions.excludeStrArr;
@@ -452,7 +441,7 @@ export class Strings {
         return pattern.test(input);
     }
 
-    formatUnit(str: string) {
+    static formatUnit(str: string) {
         let unit = ["", "万", "亿", "兆", "京", "垓", "秭", "穰", "沟", "涧", "正", "载", "极", "归", "僧", "那", "思", "猴", "格"];
         let num = parseFloat(str);
         let newStr = "";
