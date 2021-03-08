@@ -1,4 +1,4 @@
-export class Time extends Date {
+export class Times extends Date {
     /**
      * 日期匹配的正则表达式
      * Y:年
@@ -14,9 +14,9 @@ export class Time extends Date {
     static REG_DATE = /([YMDhmsiWw])(\1*)/g;
 
     static STAMP_SECONDS = 1000;
-    static STAMP_MINUTES = 60 * Time.STAMP_SECONDS;
-    static STAMP_HOUR = 60 * Time.STAMP_MINUTES;
-    static STAMP_DATE = 24 * Time.STAMP_HOUR;
+    static STAMP_MINUTES = 60 * Times.STAMP_SECONDS;
+    static STAMP_HOUR = 60 * Times.STAMP_MINUTES;
+    static STAMP_DATE = 24 * Times.STAMP_HOUR;
 
     /**
      * 星期
@@ -24,14 +24,14 @@ export class Time extends Date {
     static WEEK = ["日", "一", "二", "三", "四", "五", "六"];
 
     /**
-     * @description 判断 对象obj 是否为 Time
+     * @description 判断 对象obj 是否为 Times
      * @param obj
      *   例如:
      *      let obj = 1;
-     *      Time.isUDate(obj);  ==> false
+     *      Times.isTimes(obj);  ==> false
      */
-    static isUDate(obj: any) {
-        return Object.prototype.toString.call(obj) === "[object Time]";
+    static isTimes(obj: any) {
+        return Object.prototype.toString.call(obj) === "[object Times]";
     };
 
     /**
@@ -53,7 +53,7 @@ export class Time extends Date {
                 }
             }
             pattern = (pattern || (str.length === 10 ? "YYYY-MM-DD" : (str.length === 19 ? "YYYY-MM-DD hh:mm:ss" : "YYYY-MM-DD hh:mm:ss:iii")));
-            let matchs1 = pattern.match(Time.REG_DATE);
+            let matchs1 = pattern.match(Times.REG_DATE);
             let matchs2 = str.match(/(\d)+/g);
             if (matchs1.length > 0) {
                 let date = new Date(1970, 0, 1);
@@ -98,8 +98,8 @@ export class Time extends Date {
      * @param {Date} value 目标时间
      * @param {String} pattern 匹配字符串
      */
-    static format(uDate: Time, pattern: string) {
-        if (!Time.isUDate(uDate)) {
+    static format(times: Times, pattern: string) {
+        if (!Times.isTimes(times)) {
             return "";
         }
         function leftPad0(num: any = 0, len: number = 0): string {
@@ -112,30 +112,30 @@ export class Time extends Date {
         function replacer(match: string): string {
             switch (match.charAt(0)) {
                 case "Y":
-                    return leftPad0(uDate.getFullYear(), match.length);
+                    return leftPad0(times.getFullYear(), match.length);
                 case "M":
-                    return leftPad0(uDate.getMonth() + 1, match.length);
+                    return leftPad0(times.getMonth() + 1, match.length);
                 case "D":
-                    return leftPad0(uDate.getDate(), match.length);
+                    return leftPad0(times.getDate(), match.length);
                 case "h":
-                    return leftPad0(uDate.getHours(), match.length);
+                    return leftPad0(times.getHours(), match.length);
                 case "m":
-                    return leftPad0(uDate.getMinutes(), match.length);
+                    return leftPad0(times.getMinutes(), match.length);
                 case "s":
-                    return leftPad0(uDate.getSeconds(), match.length);
+                    return leftPad0(times.getSeconds(), match.length);
                 case "i":
-                    return leftPad0(uDate.getMilliseconds(), match.length);
+                    return leftPad0(times.getMilliseconds(), match.length);
                 case "w":
-                    return "" + uDate.getDay();
+                    return "" + times.getDay();
                 case "W":
-                    return leftPad0(Time.WEEK[uDate.getDay()], match.length);
+                    return leftPad0(Times.WEEK[times.getDay()], match.length);
                 default:
                     return "";
             }
         }
         try {
             pattern = pattern || "YYYY-MM-DD hh:mm:ss:iii";
-            let timeStr = pattern.replace(Time.REG_DATE, replacer);
+            let timeStr = pattern.replace(Times.REG_DATE, replacer);
             return timeStr;
         } catch (err) {
             console.error(err);
@@ -143,9 +143,9 @@ export class Time extends Date {
         return "";
     };
 
-    static clone(uDate: Time) {
-        let time = uDate.getTime();
-        let newUDate = new Time(time);
+    static clone(times: Times) {
+        let time = times.getTime();
+        let newUDate = new Times(time);
         return newUDate;
     }
 
@@ -171,8 +171,8 @@ export class Time extends Date {
      * @param timestamp2
      */
     static isSameWeek(timestamp1: number, timestamp2: number): boolean {
-        let old_count = Math.floor(timestamp1 / Time.STAMP_DATE);
-        let now_other = Math.floor(timestamp2 / Time.STAMP_DATE);
+        let old_count = Math.floor(timestamp1 / Times.STAMP_DATE);
+        let now_other = Math.floor(timestamp2 / Times.STAMP_DATE);
         let isSameWeek = Math.floor((old_count + 4) / 7) == Math.floor((now_other + 4) / 7);
         return isSameWeek;
     };
@@ -194,7 +194,7 @@ export class Time extends Date {
      * @param year
      */
     static getYearDays(year: number) {
-        let isLeapYear = Time.isLeapYear(year);
+        let isLeapYear = Times.isLeapYear(year);
         let yearDays = isLeapYear ? 366 : 365;
         return yearDays;
     }
@@ -224,7 +224,7 @@ export class Time extends Date {
             case 11:
                 return 30;
             case 2:
-                if (Time.isLeapYear()) {
+                if (Times.isLeapYear()) {
                     return 29;
                 } else {
                     return 28;
@@ -254,7 +254,7 @@ export class Time extends Date {
     static getWeekOfYear(timestamp: number) {
         let dateNow = new Date(timestamp);
         let dateFirst = new Date(dateNow.getFullYear(), 0, 1);
-        let offsetDay = Math.round((dateNow.valueOf() - dateFirst.valueOf()) / Time.STAMP_DATE);
+        let offsetDay = Math.round((dateNow.valueOf() - dateFirst.valueOf()) / Times.STAMP_DATE);
         let weekId = Math.ceil((offsetDay + ((dateFirst.getDay() + 1) - 1)) / 7);
         return weekId;
     }
@@ -274,7 +274,7 @@ export class Time extends Date {
         start.setDate(1);
         let now = new Date();
         let timeOffset = now.getTime() - start.getTime();
-        let dayOffset = Math.ceil(timeOffset / Time.STAMP_DATE);
+        let dayOffset = Math.ceil(timeOffset / Times.STAMP_DATE);
         return dayOffset;
     }
 
@@ -316,7 +316,7 @@ export class Time extends Date {
     }
 
     toString(): string {
-        let str = Time.format(this, "YYYY-MM-DD hh:mm:ss:iii");
+        let str = Times.format(this, "YYYY-MM-DD hh:mm:ss:iii");
         return str;
     }
 
@@ -333,7 +333,7 @@ export class Time extends Date {
         return newMonth;
     }
 
-    addFullYear(offset: number): Time {
+    addFullYear(offset: number): Times {
         let year = this.getFullYear();
         let newYear = year + offset;
         if (newYear >= 1970) {
@@ -344,7 +344,7 @@ export class Time extends Date {
         return this;
     }
 
-    addMonth(offset: number): Time {
+    addMonth(offset: number): Times {
         let month = this.getMonth();
         let newMonth = month + offset;
         if (newMonth <= 0) {
@@ -363,25 +363,25 @@ export class Time extends Date {
         return this;
     }
 
-    addDate(offset: number): Time {
-        let offsetTimestamp = offset * Time.STAMP_DATE;
+    addDate(offset: number): Times {
+        let offsetTimestamp = offset * Times.STAMP_DATE;
         this.addMilliseconds(offsetTimestamp);
         return this;
     }
 
-    addHour(offset: number): Time {
-        let offsetTimestamp = offset * Time.STAMP_HOUR;
+    addHour(offset: number): Times {
+        let offsetTimestamp = offset * Times.STAMP_HOUR;
         this.addMilliseconds(offsetTimestamp);
         return this;
     }
 
-    addMinutes(offset: number): Time {
-        let offsetTimestamp = offset * Time.STAMP_MINUTES;
+    addMinutes(offset: number): Times {
+        let offsetTimestamp = offset * Times.STAMP_MINUTES;
         this.addMilliseconds(offsetTimestamp);
         return this;
     }
 
-    addMilliseconds(offset: number): Time {
+    addMilliseconds(offset: number): Times {
         let currentTimestamp = this.getTime();
         let newTimestamp = currentTimestamp + offset;
         let date = new Date(newTimestamp);
@@ -404,45 +404,45 @@ export class Time extends Date {
         return whatDay;
     }
 
-    compare(udate: Time): number {
+    compare(udate: Times): number {
         let selfTime = this.getTime();
         let otherTime = udate.getTime();
         return selfTime - otherTime;
     }
 
-    compareYear(udate: Time): number {
+    compareYear(udate: Times): number {
         let selfYear = this.getFullYear();
         let otherYear = udate.getFullYear();
         return selfYear - otherYear;
     }
 
-    compareMonth(udate: Time): number {
+    compareMonth(udate: Times): number {
         let selfMonth = this.getMonth();
         let otherMonth = udate.getMonth();
         return selfMonth - otherMonth;
     }
 
-    compareDay(uDate: Time): number {
+    compareDay(times: Times): number {
         let selfDay = this.getDay();
-        let otherDay = uDate.getDate();
+        let otherDay = times.getDate();
         return selfDay - otherDay;
     }
 
-    compareHour(uDate: Time): number {
+    compareHour(times: Times): number {
         let selfHours = this.getHours();
-        let otherHours = uDate.getHours();
+        let otherHours = times.getHours();
         return selfHours - otherHours;
     }
 
-    compareMinutes(uDate: Time): number {
+    compareMinutes(times: Times): number {
         let selfMinutes = this.getMinutes();
-        let otherMinutes = uDate.getMinutes();
+        let otherMinutes = times.getMinutes();
         return selfMinutes - otherMinutes;
     }
 
-    compareSecond(uDate: Time): number {
+    compareSecond(times: Times): number {
         let selfSeconds = this.getHours();
-        let otherSeconds = uDate.getHours();
+        let otherSeconds = times.getHours();
         return selfSeconds - otherSeconds;
     }
 };
