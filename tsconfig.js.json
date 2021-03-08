@@ -68,6 +68,7 @@
     "removeComments": true
   },
   "include": [
+    "./runtime/interface/crypto-js.d.ts",
     "./runtime/interface/creator.d.ts",
     "./runtime/interface/jszip.d.ts",
     "./runtime/scripts/**/*",

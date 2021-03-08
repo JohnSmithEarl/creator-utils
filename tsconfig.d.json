@@ -72,7 +72,7 @@
   "include": [
     "./runtime/interface/creator.d.ts",
     "./runtime/interface/jszip.d.ts",
-    // "./runtime/scripts/**/*"
+    "./runtime/interface/crypto-js.d.ts",
   ],
   "files": [
     "./runtime/scripts/cu.All.ts"

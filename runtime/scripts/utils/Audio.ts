@@ -1,5 +1,5 @@
-import { Storage } from "../base/storage/Storage";
-import { Objects } from "../base/type/Objects";
+import { Storage } from "./Storage";
+import { Objects } from "../type/Objects";
 
 let _AUDIO_KEY = "cu.audio.object";
 

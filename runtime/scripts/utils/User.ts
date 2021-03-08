@@ -1,5 +1,5 @@
-import { Storage } from "../base/storage/Storage";
-import { Objects } from "../base/type/Objects";
+import { Storage } from "./Storage";
+import { Objects } from "../type/Objects";
 
 let _USER_KEY = "cu.user.object";
 
