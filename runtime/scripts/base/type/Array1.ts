@@ -1,6 +1,6 @@
 import { Objects } from "./Objects";
 
-export class UArray1 {
+export class Array1 {
   private data: Array<any> = undefined;
 
   /**
@@ -58,8 +58,8 @@ export class UArray1 {
   /**
    * 拷贝 一维数组
    */
-  clone(): UArray1 {
-    let arr1: any = new UArray1();
+  clone(): Array1 {
+    let arr1: any = new Array1();
     arr1.copy(this);
     return arr1;
   }
@@ -68,7 +68,7 @@ export class UArray1 {
    * 复制一维数组
    * @param arr1
    */
-  copy(arr1: UArray1) {
+  copy(arr1: Array1) {
     let data = arr1.getData();
     for (let i = 0; i < data.length; i++) {
       let item = data[i];
@@ -109,7 +109,7 @@ export class UArray1 {
    * 连接一维数组
    * @param arr1
    */
-  contact(arr1: UArray1) {
+  contact(arr1: Array1) {
     let data = arr1.getData();
     this.data = this.data.concat(data);
   }
@@ -118,7 +118,7 @@ export class UArray1 {
    * 一维数组 去重复
    * @param arr1
    */
-  distinct(arr1?: UArray1) {
+  distinct(arr1?: Array1) {
     let newData = this.data;
     if (arr1) {
       let data = arr1.getData();

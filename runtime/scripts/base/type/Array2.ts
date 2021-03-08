@@ -1,6 +1,6 @@
 import { Objects } from "./Objects";
 
-export class UArray2 {
+export class Array2 {
     private data: Array<Array<any>> = undefined;
 
     /**
@@ -104,8 +104,8 @@ export class UArray2 {
     /**
      * 克隆二维数组
      */
-    clone(): UArray2 {
-        let newArr2 = new UArray2();
+    clone(): Array2 {
+        let newArr2 = new Array2();
         newArr2.copy(this);
         return newArr2;
     }
@@ -114,7 +114,7 @@ export class UArray2 {
      * 拷贝二维数组数据
      * @param arr2
      */
-    copy(arr2: UArray2) {
+    copy(arr2: Array2) {
         let data = arr2.getData();
         for (let j = 0; j < data.length; j++) {
             let items = data[j];
@@ -161,10 +161,10 @@ export class UArray2 {
          [1, 4, 7],
       ]
      */
-    rotate90(): UArray2 {
+    rotate90(): Array2 {
         let row = this.getRowCount();
         let col = this.getColCount();
-        let temp = new UArray2(col, row);
+        let temp = new Array2(col, row);
         for (let j = 0; j < col; j++) {
             let k = col - 1 - j;
             for (let i = 0; i < row; i++) {
@@ -188,10 +188,10 @@ export class UArray2 {
          [4, 3, 2, 1],
       ]
      */
-    rotate180(): UArray2 {
+    rotate180(): Array2 {
         let row = this.getRowCount();
         let col = this.getColCount();
-        let temp = new UArray2(row, col);
+        let temp = new Array2(row, col);
         for (let j = 0; j < row; j++) {
             for (let i = 0; i < col; i++) {
                 temp[j][i] = this.data[row - 1 - j][col - 1 - i];
@@ -215,10 +215,10 @@ export class UArray2 {
         [10, 7, 4],
       ]
      */
-    rotate270(): UArray2 {
+    rotate270(): Array2 {
         let row = this.getRowCount();
         let col = this.getColCount();
-        let temp = new UArray2(col, row);
+        let temp = new Array2(col, row);
         for (let j = 0; j < col; j++) {
             for (let i = 0; i < row; i++) {
                 temp[j][i] = this.data[row - 1 - i][j];
@@ -347,7 +347,7 @@ export class UArray2 {
     flipBackslash() {
         let row = this.getRowCount();
         let col = this.getColCount();
-        let temp = new UArray2(col, row);
+        let temp = new Array2(col, row);
         for (let i = 0; i < col; i++) {
             for (let j = 0; j < row; j++) {
                 temp[i][j] = this.data[j][i];
@@ -374,7 +374,7 @@ export class UArray2 {
     flipPositiveSlash() {
         let row = this.getRowCount();
         let col = this.getColCount();
-        let temp = new UArray2(col, row);
+        let temp = new Array2(col, row);
         for (let i = 0; i < col; i++) {
             for (let j = 0; j < row; j++) {
                 temp[i][j] = this.data[row - 1 - j][col - 1 - i];
